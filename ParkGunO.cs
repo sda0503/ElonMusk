@@ -147,7 +147,7 @@ namespace ElonMusk
                     Battleprepare();
                     break;
                 case 3:
-
+                    Game.game.ChangeScene(new UsePotion());
                     break;
             }
         }
@@ -257,7 +257,8 @@ namespace ElonMusk
                                         if (spawnlist[act - 1].IsDead)
                                         {
                                             Console.WriteLine("이미 죽은 몬스터입니다.");
-                                            Game.game.ChangeScene(new BattleAttack());
+                                            Console.ReadKey();
+                                            Game.game.ChangeScene(new BattleAttack()); //어차피 루프 돌아서 안걸어도되는데 Console.Clear때문에 걸어야겠다.
                                         }
                                         else
                                         {
@@ -480,11 +481,13 @@ namespace ElonMusk
         {
             public override void ShowInfo()
             {
+                Console.Clear();
                 Console.WriteLine("회복");
                 Console.WriteLine("포션을 사용하면 체력을 30 회복 할 수 있습니다.  (남은 포션 : {0})", potion); 
                 Console.WriteLine();
                 Console.WriteLine("1. 사용하기");
                 Console.WriteLine("0. 나가기");
+                Console.WriteLine();
             }
 
             public override void GetAction(int act)
@@ -493,19 +496,31 @@ namespace ElonMusk
                 {
                     case 0:
                         Game.game.ChangeScene(new Battle());
-                        break;
+                        break;                        
                     case 1:
-                        if (potion > 0)
+                        if (potion > 0 && Game.game.player.CurHP != 100)
                         {
+                            Console.Clear();
                             potion--;
                             int temp = Game.game.player.CurHP;
                             Game.game.player.UsePotion();
                             Console.WriteLine($"체력을 회복하였습니다. (남은 포션 : {potion})");
-                            Console.WriteLine($"HP : {temp} -> {Game.game.player.CurHP}");                            
+                            Console.WriteLine($"HP : {temp} -> {Game.game.player.CurHP}");
+                            Console.ReadLine();
                             Game.game.ChangeScene(new Battle());
                         }
-                        else
+                        else if (potion < 1)
+                        {
+                            Console.Clear();
                             Console.WriteLine($"사용 가능한 포션이 부족합니다.");
+                            Console.ReadLine();
+                        }
+                        else if (potion > 0 && Game.game.player.CurHP == 100)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("이미 체력이 가득 차 있습니다.");
+                            Console.ReadLine();
+                        }
                         break;
                     default:
                         Console.WriteLine("유효한 입력이 아닙니다!");
