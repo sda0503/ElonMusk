@@ -22,6 +22,8 @@ namespace ElonMusk
         string Name { get; set; }
         int Health { get; set; }
         int ATK { get; set; }
+        int ACC { get; set; }
+        int Evaed { get; set; }
         bool IsDead { get; set; }
         void TakeDamage(int damage);
     }
@@ -32,6 +34,8 @@ namespace ElonMusk
         public int Level { get; set; }
         public int Health { get; set; }
         public int ATK { get; set; }
+        public int ACC { get; set; }
+        public int Evaed { get; set; }
         public bool IsDead { get; set; }
 
         public void TakeDamage(int damage)
@@ -47,34 +51,40 @@ namespace ElonMusk
 
     public class Minion : Monster
     {
-        public Minion()
+        public Minion() //밸런스 잡힌 타입
         {
             Name = "미니언";
             Level = 2;
             Health = 15;
             ATK = 6;
+            ACC = 5;
+            Evaed = 5;
         }
     }
 
     public class CanonMinion : Monster
     {
-        public CanonMinion()
+        public CanonMinion() //체력, 공격력 높은 대신 명중,회피가 낮음
         {
             Name = "대포미니언";
             Level = 5;
             Health = 25;
-            ATK = 10;
+            ATK = 15;
+            ACC = 3;
+            Evaed = 0;
         }
     }
 
     public class VoidInsect : Monster
     {
-        public VoidInsect()
+        public VoidInsect() //체력, 공격력 낮은 대신 명중,회피가 높음
         {
             Name = "공허충";
             Level = 3;
             Health = 10;
             ATK = 3;
+            ACC = 7;
+            Evaed = 7;
         }
     }
 
@@ -189,7 +199,7 @@ namespace ElonMusk
                             break;
                         // Scene을 이동할 때에는 Game.game.ChangeScene(new 씬이름()); 을 사용하면 됨                
                         case int:
-                            Battleprepare.spawnlist[act - 1].TakeDamage(attack(/*플레이어 공격력*/), Battleprepare.spawnlist[act-1]);                            
+                            //Battleprepare.spawnlist[act - 1].TakeDamage(attack(/*플레이어 공격력*/), Battleprepare.spawnlist[act-1]);                            
                             foreach (Monster mob in Battleprepare.spawnlist)
                             {
                                 isalive = mob.IsDead;
@@ -213,21 +223,28 @@ namespace ElonMusk
             Random rand = new Random();
             int error = (int)MathF.Ceiling(PlayerATK / 10f);
             int damage = rand.Next(PlayerATK - error, PlayerATK + error);
-            if (rand.Next(100) > 84)
-            {
-                damage = (int)MathF.Ceiling(damage * 1.6f);
-                Console.WriteLine("플레이어의 공격!");
-                Console.WriteLine($"Lv.{mob.Level} {mob.Name} 을(를) 맞췄습니다. [데미지 : {damage} - 치명타 공격!!");
-                Console.WriteLine($"Lv.{mob.Level} {mob.Name}");
-                Console.WriteLine($"HP {mob.Health} {(mob.IsDead ? "Dead" : mob.Health-damage)}");
-            }
+            /*
+            if (Player.ACC+rand.Next(20) > mob.Evade+rand.Next(20)){
+                if (rand.Next(100) > 84)
+                {
+                    damage = (int)MathF.Ceiling(damage * 1.6f);
+                    Console.WriteLine("플레이어의 공격!");
+                    Console.WriteLine($"Lv.{mob.Level} {mob.Name} 을(를) 맞췄습니다. [데미지 : {damage} - 치명타 공격!!");
+                    Console.WriteLine($"Lv.{mob.Level} {mob.Name}");
+                    Console.WriteLine($"HP {mob.Health} {(mob.IsDead ? "Dead" : mob.Health-damage)}");
+                }
+                else
+                {
+                    Console.WriteLine("플레이어의 공격!");
+                    Console.WriteLine($"Lv.{mob.Level} {mob.Name} 을(를) 맞췄습니다. [데미지 : {damage}");
+                    Console.WriteLine($"Lv.{mob.Level} {mob.Name}");
+                    Console.WriteLine($"HP {mob.Health} {(mob.IsDead ? "Dead" : mob.Health-damage)}");
+                }
+                }
             else
-            {
-                Console.WriteLine("플레이어의 공격!");
-                Console.WriteLine($"Lv.{mob.Level} {mob.Name} 을(를) 맞췄습니다. [데미지 : {damage}");
-                Console.WriteLine($"Lv.{mob.Level} {mob.Name}");
-                Console.WriteLine($"HP {mob.Health} {(mob.IsDead ? "Dead" : mob.Health-damage)}");
-            }
+                Console.WriteLine("공격이 빗나갔습니다.");
+             */
+
             return damage;
         }
     }
@@ -247,14 +264,13 @@ namespace ElonMusk
 
     public class Battle_enemyturn : Scene
     {
-        public static int turn = 0;
+        static Random rand = new Random();
         public override void ShowInfo()
         {
             int temp; //enemyattack 들어가기 전 플레이어 체력
             Console.WriteLine("Battle!! - 적 턴");
             Console.WriteLine();
             enemyattack();
-
 
             Console.WriteLine($"Lv.playerlevel playername");
             Console.WriteLine($"HP temp -> playerhealth");
@@ -282,10 +298,18 @@ namespace ElonMusk
             {
                 if (mob.IsDead != true)
                 {
-                    //player.Takedamage(mob.ATK);
-                    Console.WriteLine($"Lv.{mob.Level} {mob.Name}의 공격!");
-                    Console.WriteLine($"Player 을(를) 맞췄습니다. [데미지 : {mob.ATK}]");
-                    Console.WriteLine();                    
+                    /*
+                    if (Player.Evade + rand.Next(20) < mob.ACC + rand.Next(20))
+                    {
+                        player.Takedamage(mob.ATK);
+                        Console.WriteLine($"Lv.{mob.Level} {mob.Name}의 공격!");
+                        Console.WriteLine($"Player 을(를) 맞췄습니다. [데미지 : {mob.ATK}]");
+                        Console.WriteLine();
+                    }
+                    else
+                        Console.WriteLine($"Lv.{mob.Level} {mob.Name}의 공격이 빗나갔습니다!");
+                    */
+
                 }
             }
         }
