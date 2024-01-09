@@ -91,11 +91,11 @@ namespace ElonMusk
     public class Battleprepare //던전에서 이동해서 전투 나왔을 때 안에 함수들 한번만 실행되게 작성
     {
         static Random rand = new Random();
+        static public List<Monster> spawnlist = new List<Monster>(4);
         //필수구현할 때 전투시작전 체력도 저장해야될듯
-        public void sethealth()
-        {
-            //int temp = player.health;
-        }
+
+        //int temp = player.health;
+
 
         //static List<Type> MonsterList = new List<Type>();
         //public void showMonsterlist()
@@ -106,10 +106,9 @@ namespace ElonMusk
         //                   select type).ToList();
 
         //    MonsterList.Remove(typeof(Monster));            
-        //}        
+        //}     
 
-        static public List<Monster> spawnlist = new List<Monster>(4);
-        public static void SpawnMosnter(int many)
+        public void SpawnMosnter(int many)
         {            
             for (int i = 0; i < many; i++)
             {
@@ -126,8 +125,12 @@ namespace ElonMusk
                         break;
                 }
                //Monster newmob = Activator.CreateInstance(MonsterList[rand.Next(1,MonsterList.Count)]);
-            }
-            
+            }            
+        }
+        public void Battlestart()
+        {
+            SpawnMosnter(rand.Next(1,5));
+            Game.game.ChangeScene(new Battle_myturn());
         }
     }
    
