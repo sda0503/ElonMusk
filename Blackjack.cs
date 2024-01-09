@@ -84,21 +84,6 @@ M#########M                                88
                     break;
             }
         }
-
-        public void PrintGameTitle()
-        {
-            Console.WriteLine(
-@"
-M#""""""""""""""'M  dP                   dP       oo                   dP       
-##  mmmm. `M 88                   88                            88       
-#'        .M 88 .d8888b. .d8888b. 88  .dP  dP .d8888b. .d8888b. 88  .dP  
-M#  MMMb.'YM 88 88'  `88 88'  `"""" 88888""   88 88'  `88 88'  `"""" 88888""   
-M#  MMMM'  M 88 88.  .88 88.  ... 88  `8b. 88 88.  .88 88.  ... 88  `8b. 
-M#       .;M dP `88888P8 `88888P' dP   `YP 88 `88888P8 `88888P' dP   `YP 
-M#########M                                88                            
-                                           dP                            
-");
-        }
     }
 
     public class BlackJackGame : Scene
@@ -118,6 +103,8 @@ M#########M                                88
 
         public override void ShowInfo()
         {
+            BlackJackLobby.PrintGameTitle();
+            Console.WriteLine();
             Console.WriteLine("1. 배팅 금액 입력하기");
             Console.WriteLine("0. 나가기");
         }
@@ -139,9 +126,10 @@ M#########M                                88
             int bet = -1;
             do
             {
+                Console.Clear();
                 BlackJackLobby.PrintGameTitle();
                 Console.WriteLine();
-                Console.WriteLine("현재 소지 금액 {Game.game.player.GOLD}");
+                Console.WriteLine($"현재 소지 금액 {Game.game.player.GOLD}");
                 Console.WriteLine("배팅할 금액을 입력해주세요. (0은 나가기)");
                 bet = Game.GetPlayerInputInt();
                 if (bet > Game.game.player.GOLD)
@@ -180,6 +168,11 @@ M#########M                                88
             int playerScore = CountScore(playerHand);
             int dealerScore = CountScore(dealerHand);
 
+            Console.WriteLine();
+            Console.WriteLine("승패를 가립니다");
+            Console.WriteLine($"플레이어의 스코어는 {playerScore}, 딜러의 스코어는 {dealerScore}");
+            Console.WriteLine();
+
             if (playerScore > 21 || (dealerScore <= 21 && dealerScore >= playerScore))
             {
                 Console.WriteLine("딜러가 승리했습니다! 베팅한 골드를 잃습니다.");
@@ -196,6 +189,8 @@ M#########M                                88
                 Game.game.player.gainGold(betGold);
                 betGold = 0;
             }
+
+            RegameOrExit();
         }
 
         void PlayerTurn()
@@ -203,12 +198,13 @@ M#########M                                88
             int act = -1;
             do
             {
+                Console.Clear();
+                BlackJackLobby.PrintGameTitle();
+                Console.WriteLine();
                 ShowCards();
                 Console.WriteLine("당신의 턴입니다. 당신의 행동을 선택하세요.");
                 Console.WriteLine("1. 카드 뽑기");
                 Console.WriteLine("0. 멈추기");
-                Console.WriteLine();
-                Console.Write(">> ");
 
                 act = Game.GetPlayerInputInt();
 
@@ -222,16 +218,43 @@ M#########M                                88
 
         void DealerTurn()
         {
-            Console.WriteLine("딜러의 턴입니다.");
+            Console.Clear();
+            BlackJackLobby.PrintGameTitle();
+            Console.WriteLine();
             ShowCards();
+
+            Console.WriteLine("딜러의 턴입니다.");
             while (CountScore(dealerHand) < 17)
             {
+                Console.Clear();
+                BlackJackLobby.PrintGameTitle();
+                Console.WriteLine();
+                ShowCards();
                 Console.WriteLine("딜러가 카드를 뽑습니다.");
                 dealerHand.Add(DrawCard());
                 Thread.Sleep(1000);
-                Console.Clear();
                 ShowCards();
             }
+            Console.WriteLine("딜러가 턴을 종료합니다.");
+        }
+
+        void RegameOrExit() 
+        {
+            Console.WriteLine();
+            Console.WriteLine("1. 다시하기");
+            Console.WriteLine("0. 카지노로 돌아가기");
+
+            int act = -1;
+            do
+            {
+                act = Game.GetPlayerInputInt();
+            }
+            while (act != 1 || act != 0);
+
+            if (act == 1)
+                Bet();
+            else if (act == 0)
+                Game.game.ChangeScene(new BlackJackLobby());
         }
 
         void ShowCards()

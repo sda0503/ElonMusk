@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ElonMusk;
+using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Data;
@@ -27,6 +28,13 @@ namespace Elonmusk
         Scene curScene;
 
         public Player player { get; private set; }
+
+        public Idle idle { get; private set; }
+        public Inventory inventory { get; private set; }
+        public Equipment equipment { get; private set; }
+        public Buy buy { get; private set; }
+        public Shop shop { get; private set; }
+
         
         public Game()
         {
@@ -41,9 +49,9 @@ namespace Elonmusk
 
         void Init()
         {
-            // player = new Player();
+            player = new Player();
 
-            curScene = new Idle();
+            curScene = new Casino();
         }
 
         void Loop()
@@ -51,11 +59,6 @@ namespace Elonmusk
             while (true)
             {
                 curScene.ShowInfo();
-
-                Console.WriteLine();
-                Console.WriteLine("원하시는 행동을 선택해주세요.");
-                Console.Write(">> ");
-
                 int input = GetPlayerInputInt();
                 curScene.GetAction(input);
             }
@@ -64,17 +67,22 @@ namespace Elonmusk
         public static int GetPlayerInputInt()
         {
             int input = -1;
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 선택해주세요.");
+            Console.Write(">> ");
             while (!int.TryParse(Console.ReadLine(), out input))
             {
-                Console.Clear();
+                Console.WriteLine("잘못된 입력입니다. 다시 입력해주세요.");
+                Console.WriteLine();
+                Console.WriteLine("원하시는 행동을 선택해주세요.");
+                Console.Write(">> ");
             }
-
-            Console.Clear();
             return input;
         }
 
         public void ChangeScene(Scene scene)
         {
+            Console.Clear();
             this.curScene = scene;
         }
     }
