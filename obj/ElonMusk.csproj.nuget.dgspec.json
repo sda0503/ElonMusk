@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\S\\Documents\\GitHub\\ElonMusk\\ElonMusk.csproj": {}
+    "C:\\Siryu\\Fork\\ElonMusk\\ElonMusk.csproj": {}
   },
   "projects": {
-    "C:\\Users\\S\\Documents\\GitHub\\ElonMusk\\ElonMusk.csproj": {
+    "C:\\Siryu\\Fork\\ElonMusk\\ElonMusk.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\S\\Documents\\GitHub\\ElonMusk\\ElonMusk.csproj",
+        "projectUniqueName": "C:\\Siryu\\Fork\\ElonMusk\\ElonMusk.csproj",
         "projectName": "ElonMusk",
-        "projectPath": "C:\\Users\\S\\Documents\\GitHub\\ElonMusk\\ElonMusk.csproj",
-        "packagesPath": "C:\\Users\\S\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\S\\Documents\\GitHub\\ElonMusk\\obj\\",
+        "projectPath": "C:\\Siryu\\Fork\\ElonMusk\\ElonMusk.csproj",
+        "packagesPath": "C:\\Users\\siryu\\.nuget\\packages\\",
+        "outputPath": "C:\\Siryu\\Fork\\ElonMusk\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\S\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\siryu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
