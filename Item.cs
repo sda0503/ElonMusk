@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using static Elonmusk.Item;
 
 namespace Elonmusk 
 {
@@ -77,7 +78,6 @@ namespace Elonmusk
     public class Shop : Scene
     {
         string itemType;
-        string classType;
 
         // bool 변수는 팔렸는지의 여부(true면 구매불가)
         public List<(Item, bool)> items { get; protected set; }
@@ -106,7 +106,13 @@ namespace Elonmusk
             Console.WriteLine("[아이템 목록]");
             foreach (var item in items)
             {
-                Console.WriteLine($"- [{changeType(item.Item1.itemType)}]{item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD} G | [{changeType(item.Item1.classType)}]");
+                //Console.WriteLine($"- [{changeType(item.Item1.itemType)}]{item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD} G | [{changeType(item.Item1.classType)}]");
+                Console.WriteLine(" - " + string.Format("{0,5}{1,-5:NO}{2,-9} | {3,-4} | {4,-4}", "[" + changeType(item.Item1.itemType) + "]", "["+changeType(item.Item1.classType)+"] ", item.Item1.name, item.Item1.GetEffectScript(), item.Item1.GOLD + "G"));
+                Console.WriteLine("   "+ item.Item1.desc);
+                Console.WriteLine();
+                //Console.WriteLine(" - "+string.Format("{0,5}{1,-10:NO}{2,-10}{3,-30}{4,7}{5,14}", "["+changeType(item.Item1.itemType)+"] ", item.Item1.name, item.Item1.GetEffectScript(), item.Item1.desc, item.Item1.GOLD+"G", changeType(item.Item1.classType)));
+                // string.Format("{0,10}{0,10}", str, str2);
+
             }
             Console.WriteLine();
             Console.WriteLine("1.아이템 구매");
@@ -185,6 +191,7 @@ namespace Elonmusk
 
     public class Buy : Scene
     {
+        string itemType;
         public override void ShowInfo()
         {
             Console.WriteLine("상점");
@@ -199,8 +206,9 @@ namespace Elonmusk
             for (int i = 0; i < Game.game.shop.items.Count; i++)
             {
                 (Item, bool) item = Game.game.shop.items[i];
-                String strSold = (item.Item2) ? "구매완료" : $"{item.Item1.GOLD}";
-                Console.WriteLine($"- {i + 1} {item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {strSold}");
+                String strSold = (item.Item2) ? "구매완료" : $"{item.Item1.GOLD}G";
+                Console.WriteLine(" - " + (i + 1) + string.Format(" {0,5}{1,-5:NO}{2,-12} | {3,-4} | {4,-4}", "[" + changeType(item.Item1.itemType) + "]", "[" + changeType(item.Item1.classType) + "] ", item.Item1.name, item.Item1.GetEffectScript(), strSold));
+                //Console.WriteLine($"- {i + 1} {item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {strSold}");
             }
             
             
@@ -226,5 +234,37 @@ namespace Elonmusk
             }
         }
 
+        string changeType(Item.ItemType item)
+        {
+            switch (item)
+            {
+                case Item.ItemType.NONE:
+                    itemType = "소모품";
+                    break;
+                case Item.ItemType.WEAPON:
+                    itemType = "무기류";
+                    break;
+                case Item.ItemType.ARMOR:
+                    itemType = "방어구";
+                    break;
+            }
+            return itemType;
+        }
+        string changeType(Item.ClassType item)
+        {
+            switch (item)
+            {
+                case Item.ClassType.ALL:
+                    itemType = "제한없음";
+                    break;
+                case Item.ClassType.WARRIOR:
+                    itemType = "전사전용";
+                    break;
+                case Item.ClassType.ARCHER:
+                    itemType = "궁수전용";
+                    break;
+            }
+            return itemType;
+        }
     }
 }
