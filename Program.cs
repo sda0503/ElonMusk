@@ -26,9 +26,16 @@ namespace Elonmusk
         public static Game game;
         Scene curScene;
 
-        // public Player player { get; private set; }
-        // public Player player { get; private set; }
-        
+        public Player player { get; private set; }
+
+        public PlayerInfo playerInfo { get; private set; }
+        public Shop shop { get; private set; }
+        public Buy buy { get; private set; }
+        public Inventory inventory { get; private set; }
+
+        public Idle idle { get; private set; }
+        public Equipment equipment { get; private set; }
+
         public Game()
         {
             game = this;
@@ -42,7 +49,13 @@ namespace Elonmusk
 
         void Init()
         {
-            // player = new Player();
+            player = new Player();
+            playerInfo = new PlayerInfo();
+            shop = new Shop();
+            inventory = new Inventory();
+            idle = new Idle();
+            equipment = new Equipment();
+            buy = new Buy();
 
             curScene = new Idle();
         }
@@ -103,13 +116,13 @@ namespace Elonmusk
             {
                 // Scene을 이동할 때에는 Game.game.ChangeScene(new 씬이름()); 을 사용하면 됨
                 case 0:
-                    Game.game.ChangeScene(new Idle());
+                    Game.game.ChangeScene(new PlayerInfo());
                     break;
                 case 1:
-                    Game.game.ChangeScene(new Idle());
+                    Game.game.ChangeScene(new Inventory());
                     break;
                 case 2:
-                    Game.game.ChangeScene(new Idle());
+                    Game.game.ChangeScene(new Shop());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -132,7 +145,7 @@ namespace Elonmusk
             switch (act)
             {
                 case 0:
-                    Game.game.ChangeScene(Game.game.idle);
+                    Game.game.ChangeScene(new Idle());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -143,14 +156,7 @@ namespace Elonmusk
 
     public class Inventory : Scene
     {
-        public List<(Item, bool)> items { get; private set; }
-
-        public Inventory()
-        {
-            items = new List<(Item, bool)>();
-        }
-
-
+        
         public override void ShowInfo()
         {
             Console.WriteLine("인벤토리");
@@ -158,10 +164,11 @@ namespace Elonmusk
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
             Console.WriteLine();
-            foreach (var item in items)
+            for (int i = 0; i < Game.game.player.items.Count; i++)
             {
+                (Item, bool) item = Game.game.player.items[i];
                 String strEquipped = (item.Item2) ? "[E]" : String.Empty;
-                Console.WriteLine($"- {strEquipped}{item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}");
+                Console.WriteLine($"- {i + 1} {strEquipped}{item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}");
             }
             Console.WriteLine();
             Console.WriteLine("1. 장착관리");
@@ -172,25 +179,15 @@ namespace Elonmusk
             switch (act)
             {
                 case 0:
-                    Game.game.ChangeScene(Game.game.idle);
+                    Game.game.ChangeScene(new Idle());
                     break;
                 case 1:
-                    Game.game.ChangeScene(Game.game.equipment);
+                    Game.game.ChangeScene(new Equipment());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
                     break;
             }
-        }
-
-        public void EquipOrDequip(int index)
-        {
-            items[index] = (items[index].Item1, !(items[index].Item2));
-        }
-
-        public void AddItem(Item item)
-        {
-            items.Add((new Item(item), false));
         }
     }
 
@@ -203,9 +200,9 @@ namespace Elonmusk
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
             Console.WriteLine();
-            for (int i = 0; i < Game.game.inventory.items.Count; i++)
+            for (int i = 0; i < Game.game.player.items.Count; i++)
             {
-                (Item, bool) item = Game.game.inventory.items[i];
+                (Item, bool) item = Game.game.player.items[i];
                 String strEquipped = (item.Item2) ? "[E]" : String.Empty;
                 Console.WriteLine($"- {i + 1} {strEquipped}{item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}");
             }
@@ -216,11 +213,11 @@ namespace Elonmusk
         {
             if (act == 0)
             {
-                Game.game.ChangeScene(Game.game.idle);
+                Game.game.ChangeScene(new Inventory());
             }
-            else if (act > 0 && act < Game.game.inventory.items.Count + 1)
+            else if (act > 0 && act < Game.game.player.items.Count + 1)
             {
-                Game.game.inventory.EquipOrDequip(act - 1);
+                Game.game.player.EquipOrDequip(act - 1);
             }
             else
             {
@@ -268,10 +265,10 @@ namespace Elonmusk
             switch (act)
             {
                 case 0:
-                    Game.game.ChangeScene(Game.game.idle);
+                    Game.game.ChangeScene(new Idle());
                     break;
                 case 1:
-                    Game.game.ChangeScene(Game.game.buy);
+                    Game.game.ChangeScene(new Buy());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -287,7 +284,7 @@ namespace Elonmusk
             {
                 if (Game.game.player.GOLD >= items[index].Item1.GOLD)
                 {
-                    Game.game.inventory.AddItem(items[index].Item1);
+                    Game.game.player.AddItem(items[index].Item1);
                     Console.WriteLine("구매를 완료했습니다.");
                     items[index] = (items[index].Item1, true);
                 }
@@ -322,7 +319,7 @@ namespace Elonmusk
         {
             if (act == 0)
             {
-                Game.game.ChangeScene(Game.game.shop);
+                Game.game.ChangeScene(new Shop());
             }
             else if (act > 0 && act < Game.game.shop.items.Count + 1)
             {
@@ -414,6 +411,8 @@ namespace Elonmusk
 
     public class Player : Unit
     {
+        public List<(Item, bool)> items { get; private set; }
+
         public enum JOB
         {
             Warrior
@@ -426,7 +425,7 @@ namespace Elonmusk
             get
             {
                 Stat stat = new Stat();
-                foreach (var i in Game.game.inventory.items)
+                foreach (var i in Game.game.player.items)
                 {
                     if (i.Item2)
                     {
@@ -444,6 +443,7 @@ namespace Elonmusk
 
         public Player()
         {
+            items = new List<(Item, bool)>();
             name = "Victor";
             level = 1;
             job = JOB.Warrior;
@@ -488,6 +488,15 @@ namespace Elonmusk
             {
                 this.GOLD -= gold;
             }
+        }
+        public void EquipOrDequip(int index)
+        {
+            items[index] = (items[index].Item1, !(items[index].Item2));
+        }
+
+        public void AddItem(Item item)
+        {
+            items.Add((new Item(item), false));
         }
     }
 }
