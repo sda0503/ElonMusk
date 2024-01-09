@@ -40,7 +40,7 @@ namespace ElonMusk
             if (CurHealth <= 0)
             {
                 CurHealth = 0;
-                IsDead = true; //마을에서 치료하면 살아나는걸로?
+                IsDead = true;
             }
         }
 
@@ -249,30 +249,35 @@ namespace ElonMusk
                             case 0:
                                 Game.game.ChangeScene(new Battle_myturn());
                                 break;
-                            // Scene을 이동할 때에는 Game.game.ChangeScene(new 씬이름()); 을 사용하면 됨                
-                            case int:
-                                if (spawnlist[act - 1].IsDead)
-                                {
-                                    Console.WriteLine("이미 죽은 몬스터입니다.");
-                                    Game.game.ChangeScene(new BattleAttack());
-                                }
-                                else
-                                {
-                                    attack(player.ATK, spawnlist[act - 1]);
-                                    foreach (Monster mob in spawnlist)
-                                    {
-                                        if (!mob.IsDead)
+                                // Scene을 이동할 때에는 Game.game.ChangeScene(new 씬이름()); 을 사용하면 됨
+                                //while ()
+                                //{
+                                    case int:
+                                        if (spawnlist[act - 1].IsDead)
                                         {
-                                            isalive = true;
-                                            break;
+                                            Console.WriteLine("이미 죽은 몬스터입니다.");
+                                            Game.game.ChangeScene(new BattleAttack());
                                         }
-                                    }
-                                    if (isalive == true)
-                                        Game.game.ChangeScene(new Battle_enemyturn());
-                                    else
-                                        Game.game.ChangeScene(new BattleEnd_win());
-                                }
-                                break;
+                                        else
+                                        {
+                                            attack(player.ATK, spawnlist[act - 1]);
+                                            foreach (Monster mob in spawnlist)
+                                            {
+                                                if (!mob.IsDead)
+                                                {
+                                                    isalive = true;
+                                                    break;
+                                                }
+                                            }
+                                            if (isalive == true)
+                                                Game.game.ChangeScene(new Battle_enemyturn());
+                                            else
+                                                Game.game.ChangeScene(new BattleEnd_win());
+                                        }
+                                        break;
+                                    //}
+                            
+                                        
                         }
                         break;
                     default:
@@ -299,7 +304,7 @@ namespace ElonMusk
                         Console.WriteLine();
                         Console.WriteLine($"Lv.{mob.Level} {mob.Name} 을(를) 맞췄습니다. [데미지 : {damage}] - 치명타 공격!!");
                         Console.WriteLine($"Lv.{mob.Level} {mob.Name}");
-                        Console.WriteLine($"HP {temp} {(mob.IsDead ? "Dead" : mob.Health - damage)}");
+                        Console.WriteLine($"HP {temp} {(mob.IsDead ? "Dead" : mob.Health)}");
                         Console.WriteLine();
                         Console.ReadLine();
                     }
