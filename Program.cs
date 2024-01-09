@@ -26,8 +26,7 @@ namespace Elonmusk
         public static Game game;
         Scene curScene;
 
-        // public Player player { get; private set; }
-        // public Player player { get; private set; }
+        public Player player { get; private set; }
         
         public Game()
         {

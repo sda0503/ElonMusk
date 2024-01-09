@@ -139,6 +139,9 @@ M#########M                                88
             int bet = -1;
             do
             {
+                BlackJackLobby.PrintGameTitle();
+                Console.WriteLine();
+                Console.WriteLine("현재 소지 금액 {Game.game.player.GOLD}");
                 Console.WriteLine("배팅할 금액을 입력해주세요. (0은 나가기)");
                 bet = Game.GetPlayerInputInt();
                 if (bet > Game.game.player.GOLD)
