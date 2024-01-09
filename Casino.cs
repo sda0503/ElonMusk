@@ -80,6 +80,5 @@ MMMMMMMMMMM MMMMMMMMMMMM MMMMMMMMMMM MMMM MMMMMMMMMMM MMMMMMMMMMM
 
     public abstract class GameLobby : Scene
     {
-        public abstract void PrintGameTitle();
     }
 }
