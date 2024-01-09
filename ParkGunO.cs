@@ -254,7 +254,7 @@ namespace ElonMusk
                                 if (spawnlist[act - 1].IsDead)
                                 {
                                     Console.WriteLine("이미 죽은 몬스터입니다.");
-                                    Game.game.ChangeScene(new Battle_myturn());
+                                    Game.game.ChangeScene(new BattleAttack());
                                 }
                                 else
                                 {
@@ -282,7 +282,7 @@ namespace ElonMusk
                 }
             }
 
-            public int attack(int PlayerATK, Monster mob)
+            public void attack(int PlayerATK, Monster mob)
             {
                 Console.Clear();
                 Random rand = new Random();
@@ -319,10 +319,7 @@ namespace ElonMusk
                 {
                     Console.WriteLine("공격이 빗나갔습니다.");
                     Console.ReadLine();
-                }
-
-
-                return damage;
+                }                
             }
         }
 
