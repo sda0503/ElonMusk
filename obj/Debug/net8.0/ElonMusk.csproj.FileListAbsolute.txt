@@ -1,0 +1,15 @@
+C:\Users\S\Documents\GitHub\ElonMusk\bin\Debug\net8.0\ElonMusk.exe
+C:\Users\S\Documents\GitHub\ElonMusk\bin\Debug\net8.0\ElonMusk.deps.json
+C:\Users\S\Documents\GitHub\ElonMusk\bin\Debug\net8.0\ElonMusk.runtimeconfig.json
+C:\Users\S\Documents\GitHub\ElonMusk\bin\Debug\net8.0\ElonMusk.dll
+C:\Users\S\Documents\GitHub\ElonMusk\bin\Debug\net8.0\ElonMusk.pdb
+C:\Users\S\Documents\GitHub\ElonMusk\obj\Debug\net8.0\ElonMusk.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\S\Documents\GitHub\ElonMusk\obj\Debug\net8.0\ElonMusk.AssemblyInfoInputs.cache
+C:\Users\S\Documents\GitHub\ElonMusk\obj\Debug\net8.0\ElonMusk.AssemblyInfo.cs
+C:\Users\S\Documents\GitHub\ElonMusk\obj\Debug\net8.0\ElonMusk.csproj.CoreCompileInputs.cache
+C:\Users\S\Documents\GitHub\ElonMusk\obj\Debug\net8.0\ElonMusk.sourcelink.json
+C:\Users\S\Documents\GitHub\ElonMusk\obj\Debug\net8.0\ElonMusk.dll
+C:\Users\S\Documents\GitHub\ElonMusk\obj\Debug\net8.0\refint\ElonMusk.dll
+C:\Users\S\Documents\GitHub\ElonMusk\obj\Debug\net8.0\ElonMusk.pdb
+C:\Users\S\Documents\GitHub\ElonMusk\obj\Debug\net8.0\ElonMusk.genruntimeconfig.cache
+C:\Users\S\Documents\GitHub\ElonMusk\obj\Debug\net8.0\ref\ElonMusk.dll
