@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ElonMusk;
+using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Data;
@@ -28,7 +29,28 @@ namespace Elonmusk
 
         // public Player player { get; private set; }
         // public Player player { get; private set; }
-        
+        public Player player { get; private set; }
+
+        #region scenes
+        public PlayerInfo playerInfo { get; private set; }
+        public Shop shop { get; private set; }
+        public Buy buy { get; private set; }
+        public Inventory inventory { get; private set; }
+
+        public Idle idle { get; private set; }
+        public Equipment equipment { get; private set; }
+
+        public BadEndding badEndding { get; private set; }
+
+        public HappyEndding happyEndding { get; private set; }
+
+        public Take100Damage take100Damage { get; private set; }
+
+        public SampleDungeon sampleDungeon { get; private set; }
+
+        public bool GameOver { get; set; }
+
+        #endregion
         public Game()
         {
             game = this;
@@ -43,8 +65,21 @@ namespace Elonmusk
         void Init()
         {
             // player = new Player();
+            player = new Player();
+            playerInfo = new PlayerInfo();
+            shop = new Shop();
+            inventory = new Inventory();
+            idle = new Idle();
+            equipment = new Equipment();
+            buy = new Buy();
+            take100Damage = new Take100Damage();
+            badEndding = new BadEndding();
+            happyEndding = new HappyEndding();
+            sampleDungeon = new SampleDungeon();
 
-            curScene = new Idle();
+            GameOver = false;
+
+            curScene = idle;
         }
 
         void Loop()
@@ -52,6 +87,12 @@ namespace Elonmusk
             while (true)
             {
                 curScene.ShowInfo();
+
+                if (GameOver)
+                {
+                    GameOver = false;
+                    continue;
+                }
 
                 Console.WriteLine();
                 Console.WriteLine("원하시는 행동을 선택해주세요.");
@@ -96,6 +137,7 @@ namespace Elonmusk
             Console.WriteLine("0. 상태보기");
             Console.WriteLine("1. 인벤토리");
             Console.WriteLine("2. 상점");
+            Console.WriteLine($"3. 샘플 던전 (현재 {Game.game.sampleDungeon.Level}층)");
         }
         public override void GetAction(int act)
         {
@@ -103,13 +145,19 @@ namespace Elonmusk
             {
                 // Scene을 이동할 때에는 Game.game.ChangeScene(new 씬이름()); 을 사용하면 됨
                 case 0:
-                    Game.game.ChangeScene(new Idle());
+                    Game.game.ChangeScene(Game.game.playerInfo);
                     break;
                 case 1:
-                    Game.game.ChangeScene(new Idle());
+                    Game.game.ChangeScene(Game.game.inventory);
                     break;
                 case 2:
-                    Game.game.ChangeScene(new Idle());
+                    Game.game.ChangeScene(Game.game.shop);
+                    break;
+                case 3:
+                    Game.game.ChangeScene(Game.game.sampleDungeon);
+                    break;
+                case 99:
+                    Game.game.ChangeScene(Game.game.take100Damage);
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -372,7 +420,7 @@ namespace Elonmusk
             if (ATK > 0)
                 return $"공격력 +{ATK}";
             if (DEF > 0)
-                return $"방어력 +{ATK}";
+                return $"방어력 +{DEF}";
             return "효과 없음";
         }
     }
@@ -488,6 +536,13 @@ namespace Elonmusk
             {
                 this.GOLD -= gold;
             }
+        }
+
+        public void SetCurHP(int value)
+        {
+            if (CurHP + value < 0) CurHP = 0;
+            else if (CurHP + value > MaxHP) CurHP = MaxHP;
+            else CurHP += value;
         }
     }
 }
