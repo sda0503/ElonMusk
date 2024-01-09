@@ -123,14 +123,15 @@ M#########M                                88
 
         public void Bet()
         {
+            Console.Clear();
+            BlackJackLobby.PrintGameTitle();
+            Console.WriteLine();
+            Console.WriteLine($"현재 소지 금액 {Game.game.player.GOLD}");
+            Console.WriteLine("배팅할 금액을 입력해주세요. (0은 나가기)");
+            Console.WriteLine();
             int bet = -1;
             do
             {
-                Console.Clear();
-                BlackJackLobby.PrintGameTitle();
-                Console.WriteLine();
-                Console.WriteLine($"현재 소지 금액 {Game.game.player.GOLD}");
-                Console.WriteLine("배팅할 금액을 입력해주세요. (0은 나가기)");
                 bet = Game.GetPlayerInputInt();
                 if (bet > Game.game.player.GOLD)
                 {
@@ -201,6 +202,8 @@ M#########M                                88
                 Console.Clear();
                 BlackJackLobby.PrintGameTitle();
                 Console.WriteLine();
+                Console.WriteLine($"현재 배팅한 금액 [{betGold}]");
+                Console.WriteLine();
                 ShowCards();
                 Console.WriteLine("당신의 턴입니다. 당신의 행동을 선택하세요.");
                 Console.WriteLine("1. 카드 뽑기");
@@ -221,6 +224,8 @@ M#########M                                88
             Console.Clear();
             BlackJackLobby.PrintGameTitle();
             Console.WriteLine();
+            Console.WriteLine($"현재 배팅한 금액 [{betGold}]");
+            Console.WriteLine();
             ShowCards();
 
             Console.WriteLine("딜러의 턴입니다.");
@@ -229,10 +234,17 @@ M#########M                                88
                 Console.Clear();
                 BlackJackLobby.PrintGameTitle();
                 Console.WriteLine();
+                Console.WriteLine($"현재 배팅한 금액 [{betGold}]");
+                Console.WriteLine();
                 ShowCards();
                 Console.WriteLine("딜러가 카드를 뽑습니다.");
                 dealerHand.Add(DrawCard());
                 Thread.Sleep(1000);
+                Console.Clear();
+                BlackJackLobby.PrintGameTitle();
+                Console.WriteLine();
+                Console.WriteLine($"현재 배팅한 금액 [{betGold}]");
+                Console.WriteLine();
                 ShowCards();
             }
             Console.WriteLine("딜러가 턴을 종료합니다.");
@@ -242,14 +254,14 @@ M#########M                                88
         {
             Console.WriteLine();
             Console.WriteLine("1. 다시하기");
-            Console.WriteLine("0. 카지노로 돌아가기");
+            Console.WriteLine("0. 로비로 돌아간다");
 
             int act = -1;
             do
             {
                 act = Game.GetPlayerInputInt();
             }
-            while (act != 1 || act != 0);
+            while (act != 1 && act != 0);
 
             if (act == 1)
                 Bet();
