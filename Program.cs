@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ElonMusk;
+using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Data;
@@ -28,7 +29,19 @@ namespace Elonmusk
 
         // public Player player { get; private set; }
         // public Player player { get; private set; }
-        
+        public Player player { get; private set; }
+
+        #region scenes
+        public PlayerInfo playerInfo { get; private set; }
+        public Shop shop { get; private set; }
+        public Buy buy { get; private set; }
+        public Inventory inventory { get; private set; }
+
+        public Idle idle { get; private set; }
+        public Equipment equipment { get; private set; }
+
+        #endregion
+
         public Game()
         {
             game = this;
@@ -110,6 +123,9 @@ namespace Elonmusk
                     break;
                 case 2:
                     Game.game.ChangeScene(new Idle());
+                    break;
+                case 99:
+                    Game.game.ChangeScene(new Battle());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
