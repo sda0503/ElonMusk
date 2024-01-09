@@ -481,6 +481,8 @@ namespace Elonmusk
                 Console.WriteLine($"공격력 : {DEF}");
             else
                 Console.WriteLine($"공격력 : {DEF} (+{EquipmentStat.DEF})");
+            Console.WriteLine($"명중률 : {ACC}");
+            Console.WriteLine($"회피율 : {Evade}");
             Console.WriteLine($"최대 체력 : {MaxHP}");
             Console.WriteLine($"현재 체력 : {CurHP}");
         }
@@ -511,6 +513,15 @@ namespace Elonmusk
                 CurHP = 0;
                 IsDead = true;
             }
+        }
+
+        public void UsePotion()
+        {
+            CurHP += 30;
+            if (CurHP >= 100)
+            {
+                CurHP = 100;                
+            }            
         }
     }
 }

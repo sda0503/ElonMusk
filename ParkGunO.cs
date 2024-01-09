@@ -122,6 +122,7 @@ namespace ElonMusk
         static Random rand = new Random();        
         static List<Monster> spawnlist = new List<Monster>(4);
         static int BfHp = 0; //전투 시작 전 체력
+        static int potion = 3;
         //static int turn = 0;
 
         public override void ShowInfo()
@@ -139,13 +140,14 @@ namespace ElonMusk
         {
             switch (act)
             {
-                case 1: 
-                    //상태보기
+                case 1:
+                    Game.game.ChangeScene(new PlayerInfo_Battle());
                     break;
                 case 2:
                     Battleprepare();
                     break;
                 case 3:
+
                     break;
             }
         }
@@ -188,7 +190,7 @@ namespace ElonMusk
                 }
                 Console.WriteLine();
                 Console.WriteLine("[내 정보]");
-                Console.WriteLine($"Lv.{Game.game.player.CurHP} {Game.game.player.CurHP}");
+                Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
                 Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
                 Console.WriteLine();
                 Console.WriteLine("1. 공격");
@@ -419,7 +421,7 @@ namespace ElonMusk
                 switch (act)
                 {
                     default:
-                        //던전으로 돌아가게 구현
+                        Game.game.ChangeScene(new Idle());
                         break;
                 }
             }
@@ -445,6 +447,68 @@ namespace ElonMusk
                 {
                     default:
                         //마을로 돌아가게 구현
+                        break;
+                }
+            }
+        }
+
+        public class PlayerInfo_Battle : Scene
+        {
+            public override void ShowInfo()
+            {
+                Game.game.player.ShowPlayerProfile();
+
+                Console.WriteLine();
+                Console.WriteLine("0. 나가기");
+            }
+
+            public override void GetAction(int act)
+            {
+                switch (act)
+                {
+                    case 0:
+                        Game.game.ChangeScene(new Battle());
+                        break;
+                    default:
+                        Console.WriteLine("유효한 입력이 아닙니다!");
+                        break;
+                }
+            }
+        }
+
+        public class UsePotion : Scene
+        {
+            public override void ShowInfo()
+            {
+                Console.WriteLine("회복");
+                Console.WriteLine("포션을 사용하면 체력을 30 회복 할 수 있습니다.  (남은 포션 : {0})", potion); 
+                Console.WriteLine();
+                Console.WriteLine("1. 사용하기");
+                Console.WriteLine("0. 나가기");
+            }
+
+            public override void GetAction(int act)
+            {
+                switch (act)
+                {
+                    case 0:
+                        Game.game.ChangeScene(new Battle());
+                        break;
+                    case 1:
+                        if (potion > 0)
+                        {
+                            potion--;
+                            int temp = Game.game.player.CurHP;
+                            Game.game.player.UsePotion();
+                            Console.WriteLine($"체력을 회복하였습니다. (남은 포션 : {potion})");
+                            Console.WriteLine($"HP : {temp} -> {Game.game.player.CurHP}");                            
+                            Game.game.ChangeScene(new Battle());
+                        }
+                        else
+                            Console.WriteLine($"사용 가능한 포션이 부족합니다.");
+                        break;
+                    default:
+                        Console.WriteLine("유효한 입력이 아닙니다!");
                         break;
                 }
             }
