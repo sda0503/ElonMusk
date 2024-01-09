@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ElonMusk;
+using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Data;
@@ -32,6 +33,8 @@ namespace Elonmusk
         public Shop shop { get; private set; }
         public Buy buy { get; private set; }
         public Inventory inventory { get; private set; }
+        public Opening opening { get; private set; }
+        public BTestScene btestScene { get; private set; }
 
         public Idle idle { get; private set; }
         public Equipment equipment { get; private set; }
@@ -56,8 +59,10 @@ namespace Elonmusk
             idle = new Idle();
             equipment = new Equipment();
             buy = new Buy();
+            opening = new Opening();
+            btestScene = new BTestScene();
 
-            curScene = new Idle();
+            curScene = new BTestScene();
         }
 
         void Loop()
