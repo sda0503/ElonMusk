@@ -36,7 +36,6 @@ namespace Elonmusk
         public Shop shop { get; private set; }
         public Buy buy { get; private set; }
         public Inventory inventory { get; private set; }
-
         public Idle idle { get; private set; }
         public Equipment equipment { get; private set; }
 
