@@ -22,40 +22,40 @@ namespace ElonMusk
         void TakeDamage(int damage);
     }
 
-    public class Character
-    {
-        public string Name { get; set; }
-        public int Level { get; set; }
-        public int MaxHealth { get; set; }
-        public int CurHealth { get; set; }
-        public int ATK { get; set; }
-        public int DEF { get; set; }
-        public int ACC { get; set; }
-        public int Evade { get; set; }
-        public bool IsDead { get; set; }
+    //public class Character
+    //{
+    //    public string Name { get; set; }
+    //    public int Level { get; set; }
+    //    public int MaxHealth { get; set; }
+    //    public int CurHealth { get; set; }
+    //    public int ATK { get; set; }
+    //    public int DEF { get; set; }
+    //    public int ACC { get; set; }
+    //    public int Evade { get; set; }
+    //    public bool IsDead { get; set; }
 
-        public void TakeDamage(int damage)
-        {
-            CurHealth -= damage;
-            if (CurHealth <= 0)
-            {
-                CurHealth = 0;
-                IsDead = true;
-            }
-        }
+    //    public void TakeDamage(int damage)
+    //    {
+    //        CurHealth -= damage;
+    //        if (CurHealth <= 0)
+    //        {
+    //            CurHealth = 0;
+    //            IsDead = true;
+    //        }
+    //    }
 
-        public Character()
-        {
-            Name = "Chad";
-            Level = 1;            
-            ATK = 10;
-            DEF = 5;
-            MaxHealth = 100;
-            CurHealth = 100;
-            ACC = 10;
-            Evade = 10;
-        }
-    }
+    //    public Character()
+    //    {
+    //        Name = "Chad";
+    //        Level = 1;            
+    //        ATK = 10;
+    //        DEF = 5;
+    //        MaxHealth = 100;
+    //        CurHealth = 100;
+    //        ACC = 10;
+    //        Evade = 10;
+    //    }
+    //}
 
     public class Monster : ICharacter
     {
@@ -119,8 +119,7 @@ namespace ElonMusk
 
     public class Battle : Scene
     {
-        static Random rand = new Random();
-        static Character player = new Character();
+        static Random rand = new Random();        
         static List<Monster> spawnlist = new List<Monster>(4);
         static int BfHp = 0; //전투 시작 전 체력
         //static int turn = 0;
@@ -154,7 +153,7 @@ namespace ElonMusk
         void Battleprepare() //던전에서 이동해서 전투 나왔을 때 안에 함수들 한번만 실행되게 작성
         { 
             //필수구현할 때 전투시작전 체력도 저장해야될듯
-            BfHp = player.CurHealth;
+            BfHp = Game.game.player.CurHP;
                         
             for (int i = 0; i < rand.Next(1,5); i++)
             {
@@ -189,8 +188,8 @@ namespace ElonMusk
                 }
                 Console.WriteLine();
                 Console.WriteLine("[내 정보]");
-                Console.WriteLine($"Lv.{player.Level} {player.Name}");
-                Console.WriteLine($"HP {player.MaxHealth}/{player.CurHealth}");
+                Console.WriteLine($"Lv.{Game.game.player.CurHP} {Game.game.player.CurHP}");
+                Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
                 Console.WriteLine();
                 Console.WriteLine("1. 공격");
                 Console.WriteLine("2. 스킬");
@@ -231,8 +230,8 @@ namespace ElonMusk
                 j = 1;
                 Console.WriteLine();
                 Console.WriteLine("[내 정보]");
-                Console.WriteLine($"Lv.{player.Level} {player.Name}");
-                Console.WriteLine($"HP {player.MaxHealth}/{player.CurHealth}");
+                Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
+                Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
                 Console.WriteLine();
                 Console.WriteLine("0. 돌아가기");
             }
@@ -260,7 +259,7 @@ namespace ElonMusk
                                         }
                                         else
                                         {
-                                            attack(player.ATK, spawnlist[act - 1]);
+                                            attack(Game.game.player.ATK, spawnlist[act - 1]);
                                             foreach (Monster mob in spawnlist)
                                             {
                                                 if (!mob.IsDead)
@@ -294,7 +293,7 @@ namespace ElonMusk
                 int error = (int)MathF.Ceiling(PlayerATK / 10f);
                 int damage = rand.Next(PlayerATK - error, PlayerATK + error);
                 int temp = mob.Health;
-                if (player.ACC + rand.Next(20) > mob.Evade + rand.Next(20))
+                if (Game.game.player.ACC + rand.Next(20) > mob.Evade + rand.Next(20))
                 {
                     if (rand.Next(100) > 84)
                     {
@@ -345,14 +344,14 @@ namespace ElonMusk
         {            
             public override void ShowInfo()
             {
-                int temp = player.CurHealth;
+                int temp = Game.game.player.CurHP;
                 Console.Clear();
                 Console.WriteLine("Battle!! - 적 턴");
                 Console.WriteLine();
                 enemyattack();
 
-                Console.WriteLine($"Lv.{player.Level} {player.Name}");
-                Console.WriteLine($"HP {temp} -> {player.CurHealth}");
+                Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
+                Console.WriteLine($"HP {temp} -> {Game.game.player.CurHP}");
                 Console.WriteLine();
                 Console.WriteLine("0. 다음");
 
@@ -363,7 +362,7 @@ namespace ElonMusk
                 switch (act)
                 {
                     default:
-                        if (player.IsDead != true)
+                        if (Game.game.player.IsDead != true)
                         Game.game.ChangeScene(new Battle_myturn());
                         
                         else
@@ -380,11 +379,11 @@ namespace ElonMusk
                     if (mob.IsDead != true)
                     {
 
-                        if (player.Evade + rand.Next(20) < mob.ACC + rand.Next(20))
+                        if (Game.game.player.Evade + rand.Next(20) < mob.ACC + rand.Next(20))
                         {
-                            player.TakeDamage(mob.ATK);
+                            Game.game.player.TakeDamage(mob.ATK);
                             Console.WriteLine($"Lv.{mob.Level} {mob.Name}의 공격!");
-                            Console.WriteLine($"{player.Name} 을(를) 맞췄습니다. [데미지 : {mob.ATK}]");
+                            Console.WriteLine($"{Game.game.player.name} 을(를) 맞췄습니다. [데미지 : {mob.ATK}]");
                             Console.WriteLine();
                         }
                         else
@@ -409,8 +408,8 @@ namespace ElonMusk
                 Console.WriteLine();
                 Console.WriteLine($"던전에서 몬스터 {spawnlist.Count}마리를 잡았습니다.");
                 spawnlist.Clear();
-                Console.WriteLine($"Lv.{player.Level} {player.Name}");
-                Console.WriteLine($"Hp {BfHp} -> {player.CurHealth}");
+                Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
+                Console.WriteLine($"Hp {BfHp} -> {Game.game.player.CurHP}");
                 //플레이어 캐릭터 정보
                 //                            
                 Console.WriteLine("0. 돌아가기");
@@ -436,8 +435,8 @@ namespace ElonMusk
                 Console.WriteLine("You Lose");
                 Console.WriteLine();
                 spawnlist.Clear();
-                Console.WriteLine($"Lv.{player.Level} {player.Name}");
-                Console.WriteLine($"Hp {BfHp} -> {player.CurHealth}");                                   
+                Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
+                Console.WriteLine($"Hp {BfHp} -> {Game.game.player.CurHP}");                                   
                 Console.WriteLine("0. 돌아가기");
             }
             public override void GetAction(int act)

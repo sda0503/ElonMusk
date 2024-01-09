@@ -51,7 +51,7 @@ namespace Elonmusk
         {
             player = new Player();
 
-            curScene = new Casino();
+            curScene = new Battle();
         }
 
         void Loop()
@@ -391,15 +391,19 @@ namespace Elonmusk
 
         public int ATK { get; protected set; }
         public int DEF { get; protected set; }
+        public int ACC { get; protected set; }
+        public int Evade { get; protected set; }
 
         public int GOLD { get; protected set; }
+
+        public bool IsDead { get; protected set; }
 
         public Stat(string name = "", int level = 0, int ATK = 0, int DEF = 0, int GOLD = 0)
         {
             this.name = name;
             this.level = level;
             this.ATK = ATK;
-            this.DEF = DEF;
+            this.DEF = DEF;            
             this.GOLD = GOLD;
         }
 
@@ -458,6 +462,8 @@ namespace Elonmusk
             DEF = 5;
             MaxHP = 100;
             CurHP = 100;
+            ACC = 10;
+            Evade = 10;
             GOLD = 1500;
         }
 
@@ -494,6 +500,16 @@ namespace Elonmusk
             else
             {
                 this.GOLD -= gold;
+            }
+        }
+
+        public void TakeDamage(int damage)
+        {
+            CurHP -= damage;
+            if (CurHP <= 0)
+            {
+                CurHP = 0;
+                IsDead = true;
             }
         }
     }
