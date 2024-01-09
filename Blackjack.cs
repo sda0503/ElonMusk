@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Schema;
+using static ElonMusk.BlackJackGame;
 
 namespace ElonMusk
 {
@@ -100,7 +102,6 @@ M#########M                                88
             SPADES, CLUBS, HEARTS, DIAMONDS
         }
 
-
         public override void ShowInfo()
         {
             BlackJackLobby.PrintGameTitle();
@@ -111,13 +112,17 @@ M#########M                                88
 
         public override void GetAction(int act)
         {
-            if (act == 0)
+            switch (act)
             {
-                Game.game.ChangeScene(new BlackJackLobby());
-            }
-            else
-            {
-                Bet();
+                case 0:
+                    Game.game.ChangeScene(new BlackJackLobby());
+                    break;
+                case 1:
+                    Bet();
+                    break;
+                default:
+                    Console.WriteLine("유효한 입력이 아닙니다!");
+                    break;
             }
         }
 
@@ -196,33 +201,40 @@ M#########M                                88
 
         void PlayerTurn()
         {
+            Console.Clear();
+            Console.WriteLine();
+            Console.WriteLine($"현재 배팅한 금액 [{betGold}]");
+            Console.WriteLine();
+            ShowCards();
             int act = -1;
             do
             {
-                Console.Clear();
-                BlackJackLobby.PrintGameTitle();
-                Console.WriteLine();
-                Console.WriteLine($"현재 배팅한 금액 [{betGold}]");
-                Console.WriteLine();
-                ShowCards();
                 Console.WriteLine("당신의 턴입니다. 당신의 행동을 선택하세요.");
                 Console.WriteLine("1. 카드 뽑기");
                 Console.WriteLine("0. 멈추기");
 
                 act = Game.GetPlayerInputInt();
 
-                if (act == 1)
+                if (act == 1) { 
                     playerHand.Add(DrawCard());
+                    Console.Clear();
+                    Console.WriteLine();
+                    Console.WriteLine($"현재 배팅한 금액 [{betGold}]");
+                    Console.WriteLine();
+                    ShowCards();
+                }
                 if (act == 0)
                     break;
             }
             while (CountScore(playerHand) < 21);
+
+            Console.WriteLine("당신의 턴이 끝났습니다.");
+            Console.WriteLine();
         }
 
         void DealerTurn()
         {
             Console.Clear();
-            BlackJackLobby.PrintGameTitle();
             Console.WriteLine();
             Console.WriteLine($"현재 배팅한 금액 [{betGold}]");
             Console.WriteLine();
@@ -232,7 +244,6 @@ M#########M                                88
             while (CountScore(dealerHand) < 17)
             {
                 Console.Clear();
-                BlackJackLobby.PrintGameTitle();
                 Console.WriteLine();
                 Console.WriteLine($"현재 배팅한 금액 [{betGold}]");
                 Console.WriteLine();
@@ -241,7 +252,6 @@ M#########M                                88
                 dealerHand.Add(DrawCard());
                 Thread.Sleep(1000);
                 Console.Clear();
-                BlackJackLobby.PrintGameTitle();
                 Console.WriteLine();
                 Console.WriteLine($"현재 배팅한 금액 [{betGold}]");
                 Console.WriteLine();
@@ -272,17 +282,23 @@ M#########M                                88
         void ShowCards()
         {
             Console.WriteLine("딜러의 카드");
+            List<string> dealerCardString = new List<string>();
+            
             foreach (var card in dealerHand)
             {
-                Console.WriteLine($"{card.Item1.ToString()} {card.Item2}");
+                dealerCardString.Add(CardVisualizer.ToCardVisual(card.Item1, card.Item2));
             }
-
+            Console.WriteLine(CardVisualizer.CombineCardString(dealerCardString));
             Console.WriteLine();
+
             Console.WriteLine("플레이어의 카드");
+            List<string> playerCardString = new List<string>();
+
             foreach (var card in playerHand)
             {
-                Console.WriteLine($"{card.Item1.ToString()} {card.Item2}");
+                playerCardString.Add(CardVisualizer.ToCardVisual(card.Item1, card.Item2));
             }
+            Console.WriteLine(CardVisualizer.CombineCardString(playerCardString));
             Console.WriteLine();
         }
 
@@ -344,5 +360,201 @@ M#########M                                88
             return score;
         }
 
+    }
+
+    public static class CardVisualizer 
+    {
+        public static string ToCardVisual(BlackJackGame.Pattern pattern, string numString) 
+        {
+            int num = 0;
+            if (Int32.TryParse(numString, out num))
+            {
+                // Console.WriteLine($"{cardVisualFormat.GetLength(0)}, {numString}, {num}");
+                return String.Format(cardVisualFormat[num-1], numString, PatternToString(pattern));
+            }
+            else 
+            {
+                return String.Format(cardVisualFormat[0], numString, PatternToString(pattern));
+            }
+        }
+
+        static string PatternToString(BlackJackGame.Pattern pattern)
+        {
+            switch (pattern)
+            {
+                case Pattern.SPADES:
+                    return "♠";
+                case Pattern.HEARTS:
+                    return "♥";
+                case Pattern.DIAMONDS:
+                    return "◆";
+                default:
+                    return "♣";
+            }
+        }
+
+        public static string CombineCardString(List<string> cards) 
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Clear();
+
+            List<string[]> splitCardsString = new List<string[]>();
+            splitCardsString.Clear();
+
+            foreach (string card in cards) 
+            {
+                splitCardsString.Add(card.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries));
+            }
+
+            for (int j = 0; j < splitCardsString[0].Length; j++)
+            {
+                for (int i = 0; i < splitCardsString.Count; i++) 
+                {
+                    stringBuilder.Append(splitCardsString[i][j]);
+                }
+                stringBuilder.AppendLine();
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        static List<string> cardVisualFormat = new List<string>(){ @"
+._________.
+|{0}        |
+|{1}        |
+|         |
+|         |
+|    {1}    |
+|         |
+|         |
+|        {1}|
+|        {0}|
+'---------'
+"
+,
+@"
+._________.
+|{0}        |
+|{1}        |
+|    {1}    |
+|         |
+|         |
+|         |
+|    {1}    |
+|        {1}|
+|        {0}|
+'---------'
+"
+,
+@"
+._________.
+|{0}        |
+|{1}        |
+|    {1}    |
+|         |
+|    {1}    |
+|         |
+|    {1}    |
+|        {1}|
+|        {0}|
+'---------'
+"
+,
+@"
+._________.
+|{0}        |
+|{1}        |
+|   {1} {1}   |
+|         |
+|         |
+|         |
+|   {1} {1}   |
+|        {1}|
+|        {0}|
+'---------'
+"
+,
+@"
+.________.
+|{0}        |
+|{1}        |
+|   {1} {1}   |
+|         |
+|    {1}    |
+|         |
+|   {1} {1}   |
+|        {1}|
+|        {0}|
+'---------'
+"
+,
+@"
+._________.
+|{0}        |
+|{1}        |
+|   {1} {1}   |
+|         |
+|   {1} {1}   |
+|         |
+|   {1} {1}   |
+|        {1}|
+|        {0}|
+'---------'
+",
+@"
+._________.
+|{0}        |
+|{1}        |
+|   {1} {1}   |
+|    {1}    |
+|   {1} {1}   |
+|         |
+|   {1} {1}   |
+|        {1}|
+|        {0}|
+'---------'
+"
+,
+@"
+._________.
+|{0}        |
+|{1}        |
+|   {1} {1}   |
+|    {1}    |
+|   {1} {1}   |
+|    {1}    |
+|   {1} {1}   |
+|        {1}|
+|        {0}|
+'---------'
+"
+,
+@"
+._________.
+|{0}        |
+|{1}  {1} {1}   |
+|         |
+|   {1} {1}   |
+|    {1}    |
+|   {1} {1}   |
+|         |
+|   {1} {1}  {1}|
+|        {0}|
+'---------'
+"
+,
+@"
+._________.
+|{0}       |
+|{1}  {1} {1}   |
+|    {1}    |
+|   {1} {1}   |
+|         |
+|   {1} {1}   |
+|    {1}    |
+|   {1} {1}  {1}|
+|       {0}|
+'---------'
+"};
     }
 }
