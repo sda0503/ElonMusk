@@ -65,6 +65,7 @@ namespace ElonMusk
         public int ATK { get; set; }
         public int ACC { get; set; }
         public int Evade { get; set; }
+        public string Description { get; protected set; }
         public bool IsDead { get; set; }
 
         public void TakeDamage(int damage)
@@ -78,42 +79,87 @@ namespace ElonMusk
         }        
     }
 
-    public class Minion : Monster
+    public class Null : Monster
     {
-        public Minion() //밸런스 잡힌 타입
+        public Null() //밸런스 잡힌 타입
         {
-            Name = "미니언";
+            Name = "Null";
             Level = 2;
             Health = 15;
             ATK = 6;
             ACC = 5;
-            Evade = 5;            
+            Evade = 5;
+            Description = "Null의 값을 가질 수 없는 Object에 Null을 할당했기에 발생하거나, 참조하려는 개체가 Null일 때 발생합니다.";
         }
     }
 
-    public class CanonMinion : Monster
+    public class IndexOutOfRange : Monster
     {
-        public CanonMinion() //체력, 공격력 높은 대신 명중,회피가 낮음
+        public IndexOutOfRange() //체력, 공격력 높은 대신 명중,회피가 낮음
         {
-            Name = "대포미니언";
+            Name = "OutofRange";
             Level = 5;
             Health = 25;
             ATK = 15;
             ACC = 3;
             Evade = 0;
+            Description = "배열의 크기를 벗어나 접근할 때 발생합니다.";
         }
     }
 
-    public class VoidInsect : Monster
+    public class OthersCode : Monster
     {
-        public VoidInsect() //체력, 공격력 낮은 대신 명중,회피가 높음
+        public OthersCode() //체력, 공격력 낮은 대신 명중,회피가 높음
         {
-            Name = "공허충";
-            Level = 3;
-            Health = 10;
+            Name = "남이 작성한 코드";
+            Level = 1;
+            Health = 5;
+            ATK = 5;
+            ACC = 5;
+            Evade = 0;
+            Description = "남이 작성한 코드입니다. 이해하려면 시간이 걸립니다. 설명이 없다면 더더욱, 주석을 생활화합시다.";
+        }
+    }
+
+    public class Offline : Monster
+    {
+        public Offline()
+        {
+            Name = "연결끊김";
+            Level = 7;
+            Health = 20;
             ATK = 3;
-            ACC = 7;
-            Evade = 7;
+            ACC = 5;
+            Evade = 3;
+            Description = "인터넷이 끊겼습니다. 재앙이 아닐 수 없군요.";
+        }
+    }
+
+    public class TypeError : Monster
+    {
+        public TypeError()
+        {
+            Name = "형변환 오류";
+            Level = 6;
+            Health = 30;
+            ATK = 10;
+            ACC = 5;
+            Evade = 3;
+            Description = "암시적 형변환으로 충분치 않을 때 발생합니다.";
+        }
+    }
+
+    public class UncotrollableBug : Monster //보스
+    {
+        public UncotrollableBug()
+        {
+            Name = "관객 공포증 버그";
+            Level = 10;
+            Health = 70;
+            ATK = 15;
+            ACC = 10;
+            Evade = 5;
+            Description = "컨트롤 할 수 없는, 중요한 자리에서 발생한 버그입니다.";
         }
     }
 
@@ -165,16 +211,22 @@ namespace ElonMusk
                         
             for (int i = 0; i < rand.Next(1,5); i++)
             {
-                switch (rand.Next(0, 3))
+                switch (rand.Next(5))
                 {
                     case 0:
-                        spawnlist.Add(new Minion());
+                        spawnlist.Add(new Null());
                         break;
                     case 1:
-                        spawnlist.Add(new VoidInsect());
+                        spawnlist.Add(new IndexOutOfRange());
                         break;
                     case 2:
-                        spawnlist.Add(new CanonMinion());
+                        spawnlist.Add(new OthersCode());
+                        break;
+                    case 3:
+                        spawnlist.Add(new Offline());
+                        break;
+                    case 4:
+                        spawnlist.Add(new TypeError());
                         break;
                 }  
             }
@@ -195,7 +247,7 @@ namespace ElonMusk
                     if (mob.IsDead == true)
                         Console.ForegroundColor = ConsoleColor.DarkGray;                    
                     Console.Write($"Lv.{mob.Level} ");
-                    Console.Write(PadRightForMixedText(mob.Name,12));
+                    Console.Write(PadRightForMixedText(mob.Name,20));
                     Console.WriteLine($"HP {mob.Health}");
                     Console.ResetColor();
                 }
@@ -204,9 +256,10 @@ namespace ElonMusk
                 Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
                 Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
                 Console.WriteLine();
-                Console.WriteLine("1. 공격");
+                Console.WriteLine("1. 디버그");
                 Console.WriteLine("2. 스킬");
-                Console.WriteLine("3. 포션 사용하기");
+                Console.WriteLine("3. 버그 알아보기") ;
+                Console.WriteLine("4. 드링크 사용하기");
             }
 
             public override void GetAction(int act)
@@ -221,6 +274,9 @@ namespace ElonMusk
                         Game.game.ChangeScene(new BattleSkill());
                         break;
                     case 3:
+                        Game.game.ChangeScene(new Battle_InfoBug());
+                        break;
+                    case 4:
                         doing = Doing.battle_ing;
                         Game.game.ChangeScene(new UsePotion());
                         break;
@@ -246,16 +302,16 @@ namespace ElonMusk
                     if (mob.IsDead == true)
                     {
                         Console.ForegroundColor = ConsoleColor.DarkGray;
-                        Console.Write($"[{j++}]");
+                        Console.Write($"[{j++}] ");
                     }
                     else
                     {
                         Console.ForegroundColor = ConsoleColor.Cyan;
-                        Console.Write($"[{j++}]");
+                        Console.Write($"[{j++}] ");
                         Console.ResetColor();
                     }
                     Console.Write($"Lv.{mob.Level} ");
-                    Console.Write(PadRightForMixedText(mob.Name, 12));
+                    Console.Write(PadRightForMixedText(mob.Name, 20));
                     Console.WriteLine($"HP {mob.Health}");
                     Console.ResetColor();
                 }
@@ -280,37 +336,37 @@ namespace ElonMusk
                             case 0:
                                 Game.game.ChangeScene(new Battle_myturn());
                                 break;
-                                // Scene을 이동할 때에는 Game.game.ChangeScene(new 씬이름()); 을 사용하면 됨
-                                case int:
-                                    if (spawnlist[act - 1].IsDead)
+                            // Scene을 이동할 때에는 Game.game.ChangeScene(new 씬이름()); 을 사용하면 됨
+                            case int:
+                                if (spawnlist[act - 1].IsDead)
+                                {
+                                    Console.WriteLine("이미 죽은 몬스터입니다.");
+                                    Console.ReadKey();
+                                }
+                                else
+                                {
+                                    attack(Game.game.player.ATK, spawnlist[act - 1]);
+                                    foreach (Monster mob in spawnlist)
                                     {
-                                        Console.WriteLine("이미 죽은 몬스터입니다.");
-                                        Console.ReadKey();                                        
-                                    }
-                                    else
-                                    {
-                                        attack(Game.game.player.ATK, spawnlist[act - 1]);
-                                        foreach (Monster mob in spawnlist)
+                                        if (!mob.IsDead)
                                         {
-                                            if (!mob.IsDead)
-                                            {
-                                                isalive = true;
-                                                break;
-                                            }
+                                            isalive = true;
+                                            break;
                                         }
-                                        if (isalive == true)
-                                            Game.game.ChangeScene(new Battle_enemyturn());
-                                        else
-                                            Game.game.ChangeScene(new BattleEnd_win());
                                     }
-                                    break;
-                               
-                            
-                                        
+                                    if (isalive == true)
+                                        Game.game.ChangeScene(new Battle_enemyturn());
+                                    else
+                                        Game.game.ChangeScene(new BattleEnd_win());
+                                }
+                                break;
+
+
+
                         }
                         break;
                     default:
-                        Console.WriteLine("다시 선택해주세요.");                        
+                        Console.WriteLine("다시 선택해주세요.");
                         break;
                 }
             }
@@ -332,7 +388,7 @@ namespace ElonMusk
                         Console.WriteLine();
                         Console.WriteLine($"Lv.{mob.Level} {mob.Name} 을(를) 맞췄습니다. [데미지 : {damage}] - 치명타 공격!!");
                         Console.WriteLine($"Lv.{mob.Level} {mob.Name}");
-                        Console.WriteLine($"HP {temp} {(mob.IsDead ? "Dead" : mob.Health)}");
+                        Console.WriteLine($"HP {temp} -> {(mob.IsDead ? "Dead" : mob.Health)}");
                         Console.WriteLine();
                         Console.ReadLine();
                     }
@@ -352,7 +408,70 @@ namespace ElonMusk
                 {
                     Console.WriteLine("공격이 빗나갔습니다.");
                     Console.ReadLine();
-                }                
+                }
+            }
+        }
+
+        public class Battle_InfoBug : Scene
+        {
+            public override void ShowInfo()
+            {
+                Console.Clear();
+                Console.WriteLine("■■■■■■■■■■■■■■");
+                ShowHighlithtesText("Battle!! - 버그 알아보기");
+                Console.WriteLine("■■■■■■■■■■■■■■");
+                Console.WriteLine();
+                int j = 1;
+                foreach (Monster mob in spawnlist)
+                {
+                    if (mob.IsDead == true)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
+                        Console.Write($"[{j++}] ");
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write($"[{j++}] ");
+                        Console.ResetColor();
+                    }
+                    Console.Write($"Lv.{mob.Level} ");
+                    Console.Write(PadRightForMixedText(mob.Name, 12));
+                    Console.WriteLine($"HP {mob.Health}");
+                    Console.ResetColor();
+                }
+                j = 1;
+                Console.WriteLine();
+                Console.WriteLine("[내 정보]");
+                Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
+                Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
+                Console.WriteLine();
+                Console.WriteLine("0. 돌아가기");
+            }
+
+            public override void GetAction(int act)
+            {
+                bool check = (act <= spawnlist.Count && act >= 0);                    
+                switch (check)
+                {
+                    case true:
+                        switch (act)
+                        {
+                            case 0:
+                                Game.game.ChangeScene(new Battle_myturn());
+                                
+                                break;
+                            // Scene을 이동할 때에는 Game.game.ChangeScene(new 씬이름()); 을 사용하면 됨
+                            case int:                                
+                                Console.WriteLine(spawnlist[act - 1].Description);
+                                Console.ReadLine();
+                                break;
+                        }
+                        break;
+                    default:
+                        Console.WriteLine("다시 선택해주세요.");
+                        break;
+                }
             }
         }
 
@@ -503,9 +622,9 @@ namespace ElonMusk
             {
                 Console.Clear();
                 Console.WriteLine("■■■■■■■■■■■■■■");
-                ShowHighlithtesText("회복");                
+                ShowHighlithtesText("원기 회복");                
                 Console.WriteLine("■■■■■■■■■■■■■■");
-                Console.WriteLine("포션을 사용하면 체력을 30 회복 할 수 있습니다.  (남은 포션 : {0})", potion); 
+                Console.WriteLine("비밀의 드링크를 사용하면 체력을 30 회복 할 수 있습니다.  (남은 드링크 : {0})", potion); 
                 Console.WriteLine();
                 Console.WriteLine("1. 사용하기");
                 Console.WriteLine("0. 나가기");
@@ -529,7 +648,7 @@ namespace ElonMusk
                             potion--;
                             int temp = Game.game.player.CurHP;
                             Game.game.player.UsePotion();
-                            Console.WriteLine($"체력을 회복하였습니다. (남은 포션 : {potion})");
+                            Console.WriteLine($"체력을 회복하였습니다. (남은 드링크 : {potion})");
                             Console.WriteLine($"HP : {temp} -> {Game.game.player.CurHP}");
                             Console.ReadLine();
                             if (doing == Doing.beforebattle)
@@ -540,7 +659,7 @@ namespace ElonMusk
                         else if (potion < 1)
                         {
                             Console.Clear();
-                            Console.WriteLine($"사용 가능한 포션이 부족합니다.");
+                            Console.WriteLine($"드링크가 부족합니다.");
                             Console.ReadLine();
                         }
                         else if (potion > 0 && Game.game.player.CurHP == 100)
