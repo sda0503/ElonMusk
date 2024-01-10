@@ -356,7 +356,7 @@ namespace Elonmusk
                     Game.game.ChangeScene(new Idle());
                     break;
                 case 1:
-                    Game.game.ChangeScene(new Buy());
+                    Game.game.ChangeScene(new BTestScene());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
