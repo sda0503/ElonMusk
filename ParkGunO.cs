@@ -117,12 +117,15 @@ namespace ElonMusk
         }
     }
 
+    enum Doing { beforebattle,battle_ing}
+
     public class Battle : Scene
     {
         static Random rand = new Random();        
         static List<Monster> spawnlist = new List<Monster>(4);
         static int BfHp = 0; //전투 시작 전 체력
         static int potion = 3;
+        static Doing doing;
         //static int turn = 0;
 
         public override void ShowInfo()
@@ -148,6 +151,7 @@ namespace ElonMusk
                     Battleprepare();
                     break;
                 case 3:
+                    doing = Doing.beforebattle;
                     Game.game.ChangeScene(new UsePotion());
                     break;
             }
@@ -197,6 +201,7 @@ namespace ElonMusk
                 Console.WriteLine();
                 Console.WriteLine("1. 공격");
                 Console.WriteLine("2. 스킬");
+                Console.WriteLine("3. 포션 사용하기");
             }
 
             public override void GetAction(int act)
@@ -209,6 +214,10 @@ namespace ElonMusk
                         break;
                     case 2:
                         Game.game.ChangeScene(new BattleSkill());
+                        break;
+                    case 3:
+                        doing = Doing.battle_ing;
+                        Game.game.ChangeScene(new UsePotion());
                         break;
                     default:
                         Console.WriteLine("유효한 입력이 아닙니다!");
@@ -493,7 +502,10 @@ namespace ElonMusk
                 switch (act)
                 {
                     case 0:
-                        Game.game.ChangeScene(new Battle());
+                        if (doing == Doing.beforebattle)
+                            Game.game.ChangeScene(new Battle());
+                        else if (doing == Doing.battle_ing)
+                            Game.game.ChangeScene(new Battle_myturn());
                         break;                        
                     case 1:
                         if (potion > 0 && Game.game.player.CurHP != 100)
@@ -505,7 +517,10 @@ namespace ElonMusk
                             Console.WriteLine($"체력을 회복하였습니다. (남은 포션 : {potion})");
                             Console.WriteLine($"HP : {temp} -> {Game.game.player.CurHP}");
                             Console.ReadLine();
-                            Game.game.ChangeScene(new Battle());
+                            if (doing == Doing.beforebattle)
+                                Game.game.ChangeScene(new Battle());
+                            else if (doing == Doing.battle_ing)
+                                Game.game.ChangeScene(new Battle_myturn());
                         }
                         else if (potion < 1)
                         {
