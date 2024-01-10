@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ElonMusk;
+using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Data;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Media;
 using System.Numerics;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,8 +29,18 @@ namespace Elonmusk
         Scene curScene;
 
         public Player player { get; private set; }
+
+        public PlayerInfo playerInfo { get; private set; }
         public Shop shop { get; private set; }
-        
+        public Buy buy { get; private set; }
+        public Inventory inventory { get; private set; }
+        public Opening opening { get; private set; }
+        public BTestScene btestScene { get; private set; }
+        public Resume resume { get; private set; }
+
+        public Idle idle { get; private set; }
+        public Equipment equipment { get; private set; }
+
         public Game()
         {
             game = this;
@@ -43,9 +55,18 @@ namespace Elonmusk
         void Init()
         {
             player = new Player();
+            playerInfo = new PlayerInfo();
             shop = new Shop();
+            inventory = new Inventory();
+            idle = new Idle();
+            equipment = new Equipment();
+            buy = new Buy();
+            opening = new Opening();
+            btestScene = new BTestScene();
+            resume = new Resume();
 
-            curScene = new Idle();
+
+            curScene = new Resume();
         }
 
         void Loop()
@@ -91,26 +112,65 @@ namespace Elonmusk
     {
         public override void ShowInfo()
         {
-            Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
-            Console.WriteLine("이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.");
             Console.WriteLine();
-            Console.WriteLine("0. 상태보기");
-            Console.WriteLine("1. 인벤토리");
+            Console.WriteLine("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
+            Console.WriteLine("(주)스파르타에 오신 여러분 환영합니다.");
+            Console.WriteLine("");
+            Console.WriteLine("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
+
+            Console.WriteLine("           __________                                 ");
+            Console.WriteLine("         .'----------`.                              ");
+            Console.WriteLine("         | .--------. |                             ");
+            Console.WriteLine("         | |########| |       __________              ");
+            Console.WriteLine("         | |########| |      /__________\\            ");
+            Console.WriteLine(".--------| `--------' |------|    --=-- |-------------.");
+            Console.WriteLine("|        `----,-.-----'      |o ======  |             | ");
+            Console.WriteLine("|       ______|_|_______     |__________|             | ");
+            Console.WriteLine("|      /  %%%%%%%%%%%%  \\                             | ");
+            Console.WriteLine("|     /  %%%%%%%%%%%%%%  \\                            | ");
+            Console.WriteLine("|     ^^^^^^^^^^^^^^^^^^^^                            | ");
+            Console.WriteLine("+-----------------------------------------------------+");
+            Console.WriteLine("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
+
+            
+            Console.WriteLine();
+            Console.WriteLine("0. 상태창");
+            Console.WriteLine("1. 가방");
             Console.WriteLine("2. 상점");
+            Console.WriteLine("3. 일하기");
+            Console.WriteLine("4. 인사평가");
+            Console.WriteLine("5. 강원랜드");
+            Console.WriteLine("6. 퀘스트");
+            Console.WriteLine("7. 저장");
         }
         public override void GetAction(int act)
         {
             switch (act)
             {
                 // Scene을 이동할 때에는 Game.game.ChangeScene(new 씬이름()); 을 사용하면 됨
-                case 0:
+                case 0: //상태창
+                    Game.game.ChangeScene(new PlayerInfo());
+                    break;
+                case 1: //가방
+                    Game.game.ChangeScene(new Inventory());
+                    break;
+                case 2: //상점
+                    Game.game.ChangeScene(new Shop());
+                    break;
+                case 3: //일하기
                     Game.game.ChangeScene(new Idle());
                     break;
-                case 1:
+                case 4: //인사평가
                     Game.game.ChangeScene(new Idle());
                     break;
-                case 2:
-                    Game.game.ChangeScene(Game.game.shop);
+                case 5: //강원래드
+                    Game.game.ChangeScene(new Idle());
+                    break;
+                case 6: //퀘스트
+                    Game.game.ChangeScene(new Idle());
+                    break;
+                case 7: //저장
+                    Game.game.ChangeScene(new Idle());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -144,25 +204,19 @@ namespace Elonmusk
 
     public class Inventory : Scene
     {
-        public List<(Item, bool)> items { get; private set; }
-
-        public Inventory()
-        {
-            items = new List<(Item, bool)>();
-        }
-
-
+        
         public override void ShowInfo()
         {
-            Console.WriteLine("인벤토리");
+            Console.WriteLine("가방");
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
             Console.WriteLine();
-            foreach (var item in items)
+            for (int i = 0; i < Game.game.player.items.Count; i++)
             {
+                (Item, bool) item = Game.game.player.items[i];
                 String strEquipped = (item.Item2) ? "[E]" : String.Empty;
-                Console.WriteLine($"- {strEquipped}{item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}");
+                Console.WriteLine($"- {i + 1} {strEquipped}{item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}");
             }
             Console.WriteLine();
             Console.WriteLine("1. 장착관리");
@@ -183,58 +237,43 @@ namespace Elonmusk
                     break;
             }
         }
-
-        public void EquipOrDequip(int index)
-        {
-            items[index] = (items[index].Item1, !(items[index].Item2));
-        }
-
-        public void AddItem(Item item)
-        {
-            items.Add((new Item(item), false));
-        }
     }
 
     public class Equipment : Scene
     {
         public override void ShowInfo()
         {
-            Console.WriteLine("인벤토리 - 장착관리");
+            Console.WriteLine("가방 - 장착관리");
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
             Console.WriteLine();
-            /*
-            for (int i = 0; i < Game.game.inventory.items.Count; i++)
+            for (int i = 0; i < Game.game.player.items.Count; i++)
             {
-                (Item, bool) item = Game.game.inventory.items[i];
+                (Item, bool) item = Game.game.player.items[i];
                 String strEquipped = (item.Item2) ? "[E]" : String.Empty;
                 Console.WriteLine($"- {i + 1} {strEquipped}{item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}");
             }
-            */
             Console.WriteLine();
             Console.WriteLine("0. 나가기");
         }
         public override void GetAction(int act)
         {
-            /*
             if (act == 0)
             {
-                Game.game.ChangeScene(new Idle());
+                Game.game.ChangeScene(new Inventory());
             }
-            else if (act > 0 && act < Game.game.inventory.items.Count + 1)
+            else if (act > 0 && act < Game.game.player.items.Count + 1)
             {
-                Game.game.inventory.EquipOrDequip(act - 1);
+                Game.game.player.EquipOrDequip(act - 1);
             }
             else
             {
                 Console.WriteLine("잘못된 입력입니다.");
             }
-            */
         }
     }
 
-    /*
     public class Shop : Scene
     {
         // bool 변수는 팔렸는지의 여부(true면 구매불가)
@@ -277,7 +316,7 @@ namespace Elonmusk
                     Game.game.ChangeScene(new Idle());
                     break;
                 case 1:
-                    Game.game.ChangeScene(Game.game.buy);
+                    Game.game.ChangeScene(new Buy());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -293,7 +332,7 @@ namespace Elonmusk
             {
                 if (Game.game.player.GOLD >= items[index].Item1.GOLD)
                 {
-                    Game.game.inventory.AddItem(items[index].Item1);
+                    Game.game.player.AddItem(items[index].Item1);
                     Console.WriteLine("구매를 완료했습니다.");
                     items[index] = (items[index].Item1, true);
                 }
@@ -302,8 +341,7 @@ namespace Elonmusk
             }
         }
     }
-    */
-    /*
+
     public class Buy : Scene
     {
         public override void ShowInfo()
@@ -329,7 +367,7 @@ namespace Elonmusk
         {
             if (act == 0)
             {
-                Game.game.ChangeScene(Game.game.shop);
+                Game.game.ChangeScene(new Shop());
             }
             else if (act > 0 && act < Game.game.shop.items.Count + 1)
             {
@@ -342,8 +380,7 @@ namespace Elonmusk
         }
 
     }
-    */
-    /*
+
     public class Item : Stat
     {
         public string desc { get; private set; }
@@ -384,7 +421,6 @@ namespace Elonmusk
             return "효과 없음";
         }
     }
-    */
 
     public class Stat
     {
@@ -393,7 +429,6 @@ namespace Elonmusk
 
         public int ATK { get; protected set; }
         public int DEF { get; protected set; }
-
 
         public int GOLD { get; protected set; }
 
@@ -424,9 +459,15 @@ namespace Elonmusk
 
     public class Player : Unit
     {
+        public List<(Item, bool)> items { get; private set; }
+
         public enum JOB
         {
-            Warrior
+            Intern,                 //인턴
+            Assistant,              //사원
+            JuniorProgrammer,       //주니어
+            SeniorProgrammer,       //시니어 (대리,주임)
+            Manager                 //과장
         }
 
         public JOB job;
@@ -435,22 +476,17 @@ namespace Elonmusk
         {
             get
             {
-                
                 Stat stat = new Stat();
-                /*
-                foreach (var i in Game.game.inventory.items)
+                foreach (var i in Game.game.player.items)
                 {
                     if (i.Item2)
                     {
                         stat = stat + i.Item1;
                     }
                 }
-                */
                 return stat;
-                
             }
         }
-        
 
         public Stat RealtimeStat
         {
@@ -459,9 +495,10 @@ namespace Elonmusk
 
         public Player()
         {
+            items = new List<(Item, bool)>();
             name = "Victor";
             level = 1;
-            job = JOB.Warrior;
+            job = JOB.Intern;
             ATK = 10;
             DEF = 5;
             MaxHP = 100;
@@ -471,20 +508,25 @@ namespace Elonmusk
 
         public void ShowPlayerProfile()
         {
-            Console.WriteLine("플레이어의 현재 정보입니다.");
+            Console.WriteLine("상태창");
             Console.WriteLine($"Lv.{level}");
             Console.WriteLine($"이름 : {name}");
-            Console.WriteLine($"직업 : {job.ToString()}");
+            Console.WriteLine($"직급 : {job.ToString()}");
             if (EquipmentStat.ATK == 0)
-                Console.WriteLine($"공격력 : {ATK}");
+                Console.WriteLine($"코딩력(물리) : {ATK}");
             else
-                Console.WriteLine($"공격력 : {ATK} (+{EquipmentStat.ATK})");
+                Console.WriteLine($"코딩력(물리) : {ATK} (+{EquipmentStat.ATK})");
             if (EquipmentStat.DEF == 0)
-                Console.WriteLine($"공격력 : {DEF}");
+                Console.WriteLine($"코딩력(논리) : {DEF}");
             else
-                Console.WriteLine($"공격력 : {DEF} (+{EquipmentStat.DEF})");
-            Console.WriteLine($"최대 체력 : {MaxHP}");
-            Console.WriteLine($"현재 체력 : {CurHP}");
+                Console.WriteLine($"코딩력(논리) : {DEF} (+{EquipmentStat.DEF})");
+            Console.WriteLine($"체력 : {CurHP} / {MaxHP}");
+            Console.WriteLine($"소지금 : {GOLD}G");
+        }
+
+        public void SetName(string name)
+        {
+            this.name = name;
         }
 
         public void gainGold(int gold)
@@ -503,6 +545,15 @@ namespace Elonmusk
             {
                 this.GOLD -= gold;
             }
+        }
+        public void EquipOrDequip(int index)
+        {
+            items[index] = (items[index].Item1, !(items[index].Item2));
+        }
+
+        public void AddItem(Item item)
+        {
+            items.Add((new Item(item), false));
         }
     }
 }
