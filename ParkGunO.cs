@@ -7,6 +7,8 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using static Elonmusk.Player;
+using static System.Net.Mime.MediaTypeNames;
 
 
 namespace ElonMusk
@@ -129,7 +131,7 @@ namespace ElonMusk
             Evade = 8;
         }
     }
-
+    
     public class Battle : Scene
     {
         static Random rand = new Random();        
@@ -226,7 +228,7 @@ namespace ElonMusk
                         Game.game.ChangeScene(new BattleAttack());
                         break;
                     case 2:
-                        Game.game.ChangeScene(new BattleSkill());
+                        Game.game.ChangeScene(new BattleSkillChoose());
                         break;
                     default:
                         Console.WriteLine("유효한 입력이 아닙니다!");
@@ -355,16 +357,209 @@ namespace ElonMusk
             }
         }
 
-        public class BattleSkill : Scene
+        public class BattleSkillChoose : Scene
         {
             public override void ShowInfo()
             {
-
+                Console.WriteLine("Battle!! - 플레이어 턴");
+                Console.WriteLine();
+                foreach (Monster mob in spawnlist)
+                {
+                    if (mob.IsDead == true)
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine($"Lv.{mob.Level} {mob.Name}  HP {mob.Health}");
+                    Console.ResetColor();
+                }
+                Console.WriteLine();
+                Console.WriteLine("[내 정보]");
+                Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
+                Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
+                Console.WriteLine($"MP {Game.game.player.MaxMP}/{Game.game.player.CurMP}");
+                Console.WriteLine();
+                int i = 1;
+                foreach(var skill in Game.game.player.skills)
+                {
+                    Console.WriteLine($"{i++}. {skill.Name} - MP {skill.Cost}");
+                    Console.WriteLine($"- {skill.Description1}");
+                    Console.WriteLine($"{skill.Description2}");
+                    Console.WriteLine();
+                }
+                Console.WriteLine("0. 취소");
             }
 
             public override void GetAction(int act)
             {
+                //switch (act)
+                //{
+                //    // Scene을 이동할 때에는 Game.game.ChangeScene(new 씬이름()); 을 사용하면 됨                
+                //    case 1:
+                //        if (Game.game.player.CurMP >= 10)
+                //            Game.game.ChangeScene(new BattleAttack());
+                //        else
+                //            Console.WriteLine("MP가 부족합니다.");
+                //        break;
+                //    case 2:
+                //        if(Game.game.player.CurMP >= 15)
+                //            Game.game.ChangeScene(new BattleSkillChoose());
+                //        else
+                //            Console.WriteLine("MP가 부족합니다.");
+                //        break;
+                //    case 3:
+                //        if(Game.game.player.CurMP >= 30)
+                //            Game.game.ChangeScene(new BattleSkill(act));
+                //        else
+                //            Console.WriteLine("MP가 부족합니다.");
+                //        break;
+                //    default:
+                //        Console.WriteLine("유효한 입력이 아닙니다!");
+                //        break;
+                //}
 
+                if(act <= Game.game.player.skills.Count && act >= 1)
+                {
+                    if (Game.game.player.skills[act -1].Cost <= Game.game.player.CurMP)
+                    {
+                        Game.game.player.skills[act - 1].UseSkill(spawnlist);
+                        bool isAlive = false;
+                        foreach (Monster mob in spawnlist)
+                        {
+                            if (!mob.IsDead)
+                            {
+                                isAlive = true;
+                                break;
+                            }
+                        }
+                        if (isAlive == true)
+                            Game.game.ChangeScene(new Battle_enemyturn());
+                        else
+                        {
+                            if (stage == bossStage)
+                                Game.game.ChangeScene(new HappyEndding());
+                            else
+                                Game.game.ChangeScene(new BattleEnd_win());
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("MP가 부족합니다.");
+                    }
+                }
+                else if(act == 0)
+                {
+                    Game.game.ChangeScene(new Battle_myturn());
+                }
+                else
+                    Console.WriteLine("유효한 입력이 아닙니다!");
+            }
+
+        }
+
+        public class BattleSkill : Scene
+        {
+            int skillNumber;
+            int enemyNumber;
+
+            public BattleSkill(int skillNumber, int enemyNumber = 0)
+            {
+                this.skillNumber = skillNumber;
+                this.enemyNumber = enemyNumber;
+            }
+            public override void ShowInfo()
+            {
+                switch(skillNumber)
+                {
+                    case 1:
+                        Skill_Ask();
+                        break;
+                    case 2:
+                        Skill_Googling();
+                        break;
+                    case 3:
+                        Skill_Teach();
+                        break;
+                    default:
+                        break;
+                }
+
+                Console.WriteLine("0. 다음");
+                Console.WriteLine();
+            }
+            public override void GetAction(int act)
+            {
+                switch (act)
+                {
+                    case 0:
+                        bool isAlive = false;
+                        foreach (Monster mob in spawnlist)
+                        {
+                            if (!mob.IsDead)
+                            {
+                                isAlive = true;
+                                break;
+                            }
+                        }
+                        if (isAlive == true)
+                            Game.game.ChangeScene(new Battle_enemyturn());
+                        else
+                        {
+                            if (stage == bossStage)
+                                Game.game.ChangeScene(new HappyEndding());
+                            else
+                                Game.game.ChangeScene(new BattleEnd_win());
+                        }
+                        break;
+                    default:
+                        Console.WriteLine("잘못된 입력입니다.");
+                        break;
+                }
+            }
+
+            void Skill_Ask()
+            {
+                int damage = Game.game.player.ATK * 2;
+                int temp = spawnlist[enemyNumber].Health;
+                spawnlist[enemyNumber].TakeDamage(damage);
+                Console.WriteLine("플레이어의 '사수에게 물어보기' 스킬 사용");
+                Console.WriteLine();
+                Console.WriteLine($"Lv.{spawnlist[enemyNumber].Level} {spawnlist[enemyNumber].Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
+                Console.WriteLine($"Lv.{spawnlist[enemyNumber].Level} {spawnlist[enemyNumber].Name}");
+                Console.WriteLine($"HP {temp} -> {(spawnlist[enemyNumber].IsDead ? "Dead" : spawnlist[enemyNumber].Health)}");
+                Console.WriteLine();
+                Console.ReadLine();
+            }
+
+            void Skill_Googling()
+            {
+
+            }
+
+            void Skill_Teach()
+            {
+                int damage = Game.game.player.ATK;
+
+                Console.WriteLine("플레이어의 '신입 기강잡기' 스킬 사용");
+                Console.WriteLine();
+                int totalDamage = 0;
+                foreach(var monster in spawnlist)
+                {
+                    int temp = monster.Health;
+                    monster.TakeDamage(damage);
+                    totalDamage += damage;
+                    Console.WriteLine($"Lv.{monster.Level} {monster.Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
+                    Console.WriteLine($"Lv.{monster.Level} {monster.Name}");
+                    Console.WriteLine($"HP {temp} -> {(monster.IsDead ? "Dead" : monster.Health)}");
+                    Console.WriteLine();
+                }
+
+                int tempPlayerHP = Game.game.player.CurHP;
+                Game.game.player.SetPlayerHP(totalDamage);
+                Console.WriteLine($"체력을 {totalDamage}만큼 회복");
+                Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
+                Console.WriteLine($"Hp {tempPlayerHP} -> {Game.game.player.CurHP}");
+
+
+                Console.WriteLine();
+                Console.ReadLine();
             }
         }
 

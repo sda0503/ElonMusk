@@ -427,13 +427,19 @@ namespace Elonmusk
     {
         public int MaxHP { get; protected set; }
         public int CurHP { get; protected set; }
+
+        public int MaxMP { get; protected set; }
+        public int CurMP { get; protected set; }
     }
 
     public class Player : Unit
     {
         public enum JOB
         {
-            Warrior
+            Intern,
+            NewComer,
+            Jonior,
+            senior
         }
 
         public JOB job;
@@ -459,18 +465,23 @@ namespace Elonmusk
             get { return EquipmentStat + this; }
         }
 
+        public List<Skill> skills;
+
         public Player()
         {
             name = "Victor";
             level = 1;
-            job = JOB.Warrior;
-            ATK = 100;
+            job = JOB.senior;
+            ATK = 10;
             DEF = 5;
             MaxHP = 100;
             CurHP = 100;
             ACC = 100;
             Evade = 10;
             GOLD = 1500;
+            MaxMP = 100;
+            CurMP = 100;
+            skills = [new Skill_Teach(), new Skill_Ask(), new Skill_Googling()];
         }
 
         public void ShowPlayerProfile()
@@ -519,6 +530,23 @@ namespace Elonmusk
                 CurHP = 0;
                 IsDead = true;
             }
+        }
+
+        public void SetPlayerHP(int value)
+        {
+            CurHP += value;
+            if (CurHP >= MaxHP)
+                CurHP = MaxHP;
+            else if(CurHP <= 0)
+            {
+                CurHP = 0;
+                IsDead = true;
+            }
+        }
+
+        public void SetPlayerMP(int value)
+        {
+            CurMP -= value;
         }
 
         public void UsePotion()

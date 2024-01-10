@@ -12,7 +12,7 @@ namespace ElonMusk
     {
         public override void ShowInfo()
         {
-            Console.WriteLine("몰려오는 적을 막아내지 못한 Player.Name 이 결국 사망하였습니다.");
+            Console.WriteLine("몰려오는 버그에 결국 (주)스파르타는 파산했습니다.");
             Console.WriteLine("---Bad Endding---");
             Console.WriteLine();
             Console.WriteLine("새 게임 시작?");
@@ -42,7 +42,7 @@ namespace ElonMusk
         public override void ShowInfo()
         {
             Console.Clear();
-            Console.WriteLine("던전을 모두 클리어해 스파르탄 마을에 평화가 찾아왔습니다!");
+            Console.WriteLine("몰려오는 버그들을 모두 해결해 (주)스파르타에 평호가 찾아왔습니다!!");
             Console.WriteLine("---Happy Endding---");
             Console.WriteLine();
             Console.WriteLine("새 게임 시작?");
