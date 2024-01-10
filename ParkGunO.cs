@@ -244,7 +244,10 @@ namespace ElonMusk
                 foreach (Monster mob in spawnlist)
                 {
                     if (mob.IsDead == true)
+                    {
                         Console.ForegroundColor = ConsoleColor.DarkGray;
+                        Console.Write($"[{j++}]");
+                    }
                     else
                     {
                         Console.ForegroundColor = ConsoleColor.Cyan;
@@ -427,6 +430,7 @@ namespace ElonMusk
 
         public class BattleEnd_win : Scene
         {
+            int sumexp;
             public override void ShowInfo()
             {
                 Console.Clear();
@@ -434,12 +438,24 @@ namespace ElonMusk
                 ShowHighlithtesText("Battle!! - Result");
                 Console.WriteLine("■■■■■■■■■■■■■■");
                 Console.WriteLine();
-                Console.WriteLine("Victory");
+                PrintTextWithHighlighst(ConsoleColor.Green,"","Victory","");                
                 Console.WriteLine();
                 Console.WriteLine($"던전에서 몬스터 {spawnlist.Count}마리를 잡았습니다.");
+                foreach(Monster mob in spawnlist)
+                {
+                    sumexp += mob.Level;
+                }
                 spawnlist.Clear();
-                Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
-                Console.WriteLine($"Hp {BfHp} -> {Game.game.player.CurHP}");                             
+                Console.Write($"Lv. ");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write($"{Game.game.player.level}");
+                Console.ResetColor ();
+                Console.WriteLine($"{Game.game.player.name}");                
+                //Console.WriteLine($"exp {Game.game.player.exp} -> {Game.game.player.exp+sumexp}");
+                //Game.game.player.Addexp(sumexp);
+                //Console.WriteLine();
+                //Console.WriteLine("[획득 아이템]");
+                sumexp = 0;
                 Console.WriteLine("0. 돌아가기");
             }
             public override void GetAction(int act)
@@ -462,7 +478,7 @@ namespace ElonMusk
                 ShowHighlithtesText("Battle!! - Result");
                 Console.WriteLine("■■■■■■■■■■■■■■");
                 Console.WriteLine();
-                Console.WriteLine("You Lose");
+                PrintTextWithHighlighst(ConsoleColor.Red, "", "You Lose", "");                            
                 Console.WriteLine();
                 spawnlist.Clear();
                 Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
@@ -568,6 +584,14 @@ namespace ElonMusk
             return length;
         }
 
+        private static void PrintTextWithHighlighst(ConsoleColor color,string s1, string s2, string s3 = "") //사이에 있는 텍스트 색깔 바꾸기
+        {
+            Console.Write(s1);
+            Console.ForegroundColor = color;
+            Console.Write(s2);
+            Console.ResetColor();
+            Console.WriteLine(s3);
+        }
         public static string PadRightForMixedText(string str, int totalLength)
         {
             int currentLength = GetPrintableLength(str);
