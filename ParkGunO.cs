@@ -238,20 +238,22 @@ namespace ElonMusk
                 Board();
                 Console.WriteLine();
                 Console.WriteLine("이동할 방향을 누르세요. ex) 4 : Left, 8 : up, 6 : Right, 2 : Down");
+                Console.WriteLine("0. 돌아가기");
                 Console.WriteLine();
             }
             public override void GetAction(int act)
             {
                 switch (act)
                 {
+                    case 0:
+                        Game.game.ChangeScene(new Dungeon());
+                        break;
                     case 4: //왼쪽
                         if (Forsave.dungeonposy - 1 < 0)
                             Console.WriteLine("그곳으로는 갈 수 없습니다.");
                         else
                         {
-                            Forsave.dungeonposy--;
-                            if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == false)
-                                Game.game.ChangeScene(new Battle());                            
+                            Forsave.dungeonposy--;                                                        
                         }
                         break;
 
@@ -260,9 +262,7 @@ namespace ElonMusk
                             Console.WriteLine("그곳으로는 갈 수 없습니다.");
                         else
                         {
-                            Forsave.dungeonposy++;
-                            if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == false)
-                                Game.game.ChangeScene(new Battle());
+                            Forsave.dungeonposy++;                           
                         }
                         break;
 
@@ -271,10 +271,7 @@ namespace ElonMusk
                             Console.WriteLine("그곳으로는 갈 수 없습니다.");
                         else
                         {
-                            Forsave.dungeonposx--;
-                            if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == false)
-                                Game.game.ChangeScene(new Battle());
-
+                            Forsave.dungeonposx--; 
                         }
                         break;
 
@@ -283,9 +280,7 @@ namespace ElonMusk
                             Console.WriteLine("그곳으로는 갈 수 없습니다.");
                         else
                         {
-                            Forsave.dungeonposx++;
-                            if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == false)
-                                Game.game.ChangeScene(new Battle());
+                            Forsave.dungeonposx++;                          
                         }
                         break;
                         
@@ -293,6 +288,8 @@ namespace ElonMusk
                         Console.WriteLine("그곳으론 갈 수 없습니다..");
                         break;
                 }
+                if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == false)
+                    Game.game.ChangeScene(new Battle()); //돌아가기 했을 때 현재위치가 True로 찍혀있어서 이벤트 발생 안함.
             }
             static void Board()
             {
@@ -720,22 +717,15 @@ namespace ElonMusk
                 //Console.WriteLine();
                 //Console.WriteLine("[획득 아이템]");
                 sumexp = 0;
-                Console.WriteLine("0. 돌아가기");
-                    Console.WriteLine("1. 계속 진행하기");
+                Console.WriteLine("0. 돌아가기");                 
                 }
             public override void GetAction(int act)
             {
                 switch (act)
                 {
-                    case 0:
-                            Game.game.ChangeScene(new Dungeon());
-                            break;
-                    case 1:                           
+                    case 0:                           
                         Game.game.ChangeScene(new Dungeon_move());
-                        break;
-                    default:
-                       
-                        break;
+                        break;                    
                 }
             }
         }
