@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Elonmusk 
-{
+{   
     internal class Program
     {
         static void Main(string[] args)
@@ -21,14 +21,14 @@ namespace Elonmusk
             game.Start();
         }
     }
-
+    
     public class Game
     {
+        
         public static Game game;
         Scene curScene;
 
         public Player player { get; private set; }
-
         public Idle idle { get; private set; }
         public Inventory inventory { get; private set; }
         public Equipment equipment { get; private set; }
@@ -126,7 +126,7 @@ namespace Elonmusk
     }
 
     public class PlayerInfo : Scene
-    {
+    {       
         public override void ShowInfo()
         {
             Game.game.player.ShowPlayerProfile();
@@ -139,7 +139,10 @@ namespace Elonmusk
             switch (act)
             {
                 case 0:
-                    Game.game.ChangeScene(Game.game.idle);
+                    if(Battle.doing == Doing.beforebattle)
+                        Game.game.ChangeScene(new Battle());
+                    else
+                        Game.game.ChangeScene(Game.game.idle);
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -437,13 +440,13 @@ namespace Elonmusk
             get
             {
                 Stat stat = new Stat();
-                foreach (var i in Game.game.inventory.items)
-                {
-                    if (i.Item2)
-                    {
-                        stat = stat + i.Item1;
-                    }
-                }
+                //foreach (var i in Game.game.inventory.items)
+                //{
+                //    if (i.Item2)
+                //    {
+                //        stat = stat + i.Item1;
+                //    }
+                //}
                 return stat;
             }
         }
@@ -469,6 +472,7 @@ namespace Elonmusk
 
         public void ShowPlayerProfile()
         {
+            
             Console.WriteLine("플레이어의 현재 정보입니다.");
             Console.WriteLine($"Lv.{level}");
             Console.WriteLine($"이름 : {name}");

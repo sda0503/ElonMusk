@@ -117,7 +117,7 @@ namespace ElonMusk
         }
     }
 
-    enum Doing { beforebattle,battle_ing}
+    public enum Doing { beforebattle,battle_ing}
 
     public class Battle : Scene
     {
@@ -125,7 +125,7 @@ namespace ElonMusk
         static List<Monster> spawnlist = new List<Monster>(4);
         static int BfHp = 0; //전투 시작 전 체력
         static int potion = 3;
-        static Doing doing;
+        public static Doing doing;
         //static int turn = 0;
 
         public override void ShowInfo()
@@ -145,7 +145,8 @@ namespace ElonMusk
             switch (act)
             {
                 case 1:
-                    Game.game.ChangeScene(new PlayerInfo_Battle());
+                    doing = Doing.beforebattle;
+                    Game.game.ChangeScene(new PlayerInfo());
                     break;
                 case 2:
                     Battleprepare();
@@ -458,31 +459,7 @@ namespace ElonMusk
                 }
             }
         }
-
-        public class PlayerInfo_Battle : Scene
-        {
-            public override void ShowInfo()
-            {
-                Console.Clear();
-                Game.game.player.ShowPlayerProfile();
-
-                Console.WriteLine();
-                Console.WriteLine("0. 나가기");
-            }
-
-            public override void GetAction(int act)
-            {
-                switch (act)
-                {
-                    case 0:
-                        Game.game.ChangeScene(new Battle());
-                        break;
-                    default:
-                        Console.WriteLine("유효한 입력이 아닙니다!");
-                        break;
-                }
-            }
-        }
+               
 
         public class UsePotion : Scene
         {
