@@ -11,14 +11,24 @@ namespace ElonMusk
     {
         public override void ShowInfo()
         {
-            Console.WriteLine(String.Format("{0,90}", "--------------------------------------------------------------- "));
-            Console.WriteLine(String.Format("{0,70}", "|"));
-
+            Console.WriteLine("1. 이름 입력하기");
         }
+        
         public override void GetAction(int act)
         {
-
-
+            switch (act)
+            {
+                case 0:
+                    Game.game.ChangeScene(new Idle());
+                    break;
+                case 1:
+                    Game.game.player.SetName(Console.ReadLine());
+                    Game.game.ChangeScene(new Idle());
+                    break;
+                default:
+                    Console.WriteLine("유효한 입력이 아닙니다!");
+                    break;
+            }
         }
     }
 }

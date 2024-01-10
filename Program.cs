@@ -7,6 +7,7 @@ using System.Linq;
 using System.Media;
 using System.Numerics;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,7 +66,7 @@ namespace Elonmusk
             resume = new Resume();
 
 
-            curScene = new Idle();
+            curScene = new Resume();
         }
 
         void Loop()
@@ -516,6 +517,11 @@ namespace Elonmusk
             Console.WriteLine($"최대 체력 : {MaxHP}");
             Console.WriteLine($"현재 체력 : {CurHP}");
 
+        }
+
+        public void SetName(string name)
+        {
+            this.name = name;
         }
 
         public void gainGold(int gold)
