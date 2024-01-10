@@ -186,13 +186,17 @@ namespace ElonMusk
             public override void ShowInfo()
             {
                 Console.Clear();
-                Console.WriteLine("Battle!! - 플레이어 턴");
+                Console.WriteLine("■■■■■■■■■■■■■■");
+                ShowHighlithtesText("Battle!! - 플레이어 턴");
+                Console.WriteLine("■■■■■■■■■■■■■■");
                 Console.WriteLine();
                 foreach (Monster mob in spawnlist)
                 {
                     if (mob.IsDead == true)
-                        Console.ForegroundColor = ConsoleColor.DarkGray;
-                    Console.WriteLine($"Lv.{mob.Level} {mob.Name}  HP {mob.Health}");
+                        Console.ForegroundColor = ConsoleColor.DarkGray;                    
+                    Console.Write($"Lv.{mob.Level} ");
+                    Console.Write(PadRightForMixedText(mob.Name,12));
+                    Console.WriteLine($"HP {mob.Health}");
                     Console.ResetColor();
                 }
                 Console.WriteLine();
@@ -232,14 +236,24 @@ namespace ElonMusk
             public override void ShowInfo()
             {
                 Console.Clear();
-                Console.WriteLine("Battle!!");
+                Console.WriteLine("■■■■■■■■■■■■■■");
+                ShowHighlithtesText("Battle!!");
+                Console.WriteLine("■■■■■■■■■■■■■■");
                 Console.WriteLine();
                 int j = 1;
                 foreach (Monster mob in spawnlist)
                 {
                     if (mob.IsDead == true)
                         Console.ForegroundColor = ConsoleColor.DarkGray;
-                    Console.WriteLine($"{j++} Lv.{mob.Level} {mob.Name}  HP {mob.Health}");
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.Write($"[{j++}]");
+                        Console.ResetColor();
+                    }
+                    Console.Write($"Lv.{mob.Level} ");
+                    Console.Write(PadRightForMixedText(mob.Name, 12));
+                    Console.WriteLine($"HP {mob.Health}");
                     Console.ResetColor();
                 }
                 j = 1;
@@ -358,7 +372,9 @@ namespace ElonMusk
             {
                 int temp = Game.game.player.CurHP;
                 Console.Clear();
-                Console.WriteLine("Battle!! - 적 턴");
+                Console.WriteLine("■■■■■■■■■■■■■■");
+                ShowHighlithtesText("Battle!! - 적 턴");
+                Console.WriteLine("■■■■■■■■■■■■■■");
                 Console.WriteLine();
                 enemyattack();
 
@@ -414,7 +430,9 @@ namespace ElonMusk
             public override void ShowInfo()
             {
                 Console.Clear();
-                Console.WriteLine("Battle!! - Result");
+                Console.WriteLine("■■■■■■■■■■■■■■");
+                ShowHighlithtesText("Battle!! - Result");
+                Console.WriteLine("■■■■■■■■■■■■■■");
                 Console.WriteLine();
                 Console.WriteLine("Victory");
                 Console.WriteLine();
@@ -440,7 +458,9 @@ namespace ElonMusk
             public override void ShowInfo()
             {
                 Console.Clear();
-                Console.WriteLine("Battle!! - Result");
+                Console.WriteLine("■■■■■■■■■■■■■■");
+                ShowHighlithtesText("Battle!! - Result");
+                Console.WriteLine("■■■■■■■■■■■■■■");
                 Console.WriteLine();
                 Console.WriteLine("You Lose");
                 Console.WriteLine();
@@ -466,7 +486,9 @@ namespace ElonMusk
             public override void ShowInfo()
             {
                 Console.Clear();
-                Console.WriteLine("회복");
+                Console.WriteLine("■■■■■■■■■■■■■■");
+                ShowHighlithtesText("회복");                
+                Console.WriteLine("■■■■■■■■■■■■■■");
                 Console.WriteLine("포션을 사용하면 체력을 30 회복 할 수 있습니다.  (남은 포션 : {0})", potion); 
                 Console.WriteLine();
                 Console.WriteLine("1. 사용하기");
@@ -517,6 +539,40 @@ namespace ElonMusk
                         break;
                 }
             }
+
+           
+    }
+        private static void ShowHighlithtesText(string Text)//글자색깔바꾸기
+        {
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine(Text);
+            Console.ResetColor();
+        }
+
+     
+
+        public static int GetPrintableLength(string str)
+        {
+            int length = 0;
+            foreach (char c in str)
+            {
+                if (char.GetUnicodeCategory(c) == System.Globalization.UnicodeCategory.OtherLetter)
+                {
+                    length += 2; //한글과 같은 넓은 문제에 대해 길이를 2로 취급
+                }
+                else
+                {
+                    length += 1; //나머지 문자에 대해 길이를 1로 취급
+                }
+            }
+            return length;
+        }
+
+        public static string PadRightForMixedText(string str, int totalLength)
+        {
+            int currentLength = GetPrintableLength(str);
+            int padding = totalLength - currentLength;
+            return str.PadRight(str.Length + padding);
         }
     }
 }
