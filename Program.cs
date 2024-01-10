@@ -251,24 +251,19 @@ namespace Elonmusk
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
             Console.WriteLine();
-            /*
-            for (int i = 0; i < Game.game.inventory.items.Count; i++)
             for (int i = 0; i < Game.game.player.items.Count; i++)
             {
                 (Item, bool) item = Game.game.player.items[i];
                 String strEquipped = (item.Item2) ? "[E]" : String.Empty;
                 Console.WriteLine($"- {i + 1} {strEquipped}{item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}");
             }
-            */
             Console.WriteLine();
             Console.WriteLine("0. 나가기");
         }
         public override void GetAction(int act)
         {
-            /*
             if (act == 0)
             {
-                Game.game.ChangeScene(new Idle());
                 Game.game.ChangeScene(new Inventory());
             }
             else if (act > 0 && act < Game.game.player.items.Count + 1)
@@ -279,11 +274,10 @@ namespace Elonmusk
             {
                 Console.WriteLine("잘못된 입력입니다.");
             }
-            */
         }
     }
 
-    /*
+    
     public class Shop : Scene
     {
         // bool 변수는 팔렸는지의 여부(true면 구매불가)
@@ -292,12 +286,19 @@ namespace Elonmusk
         public Shop()
         {
             items = new List<(Item, bool)>();
-            items.Add((new Item("수련자 갑옷", "수련에 도움을 주는 갑옷입니다.", 0, 5, 1000), false));
-            items.Add((new Item("무쇠 갑옷", "무쇠로 만들어져 튼튼한 갑옷입니다.", 0, 9, 2000), false));
-            items.Add((new Item("스파르타의 갑옷", "스파르타의 전사들이 사용했다는 전설의 갑옷입니다.", 0, 15, 3500), false));
-            items.Add((new Item("낡은 검", "어디에서나 쉽게 볼 수 있는 낡은 검입니다.", 2, 0, 600), false));
-            items.Add((new Item("청동 도끼", "어디선가 사용됐던거 같은 도끼입니다.", 5, 0, 1500), false));
-            items.Add((new Item("스파르타의 창", "스파르타의 전사들이 사용했다는 전설의 창입니다.", 7, 0, 2500), false));
+            items.Add((new Item("오래된 검정 후드티", "편하게 입기 좋은 후드티", 0, 5, 10000, Item.ItemType.ARMOR), false));
+            items.Add((new Item("깔끔해 보이는 정장", "멀끔해 보이나 코딩력은 낮아보인다.", 0, 15, 80000, Item.ItemType.ARMOR), false));
+            items.Add((new Item("개발자의 체크 난방", "디자인은 별로이지만 코딩력이 상당히 높아보이는 옷", 0, 30, 100000, Item.ItemType.ARMOR), false));
+            items.Add((new Item("오래된 키보드&마우스세트", "오래되어 작동이 잘안되는 키보드와 마우스 세트", 15, 0, 10000, Item.ItemType.WEAPON), false));
+            items.Add((new Item("무소음 키보드&마우스세트", "키를 입력하거나 클릭을 할 때 소음이 없다", 30, 0, 200000, Item.ItemType.WEAPON), false));
+            items.Add((new Item("C# 전공책", "냄비 받침으로 쓰기 좋은 두꺼운 전공책", 5, 0, 30000, Item.ItemType.ACC), false));
+            items.Add((new Item("오래된 노트북", "메모장이 겨우 돌아가는 노트북!.", 12, 0, 300000, Item.ItemType.ACC), false));
+            items.Add((new Item("최신형 맥북", "최신형 맥북 개발자라면 맥 정도는 써야지요", 25, 0, 1700000, Item.ItemType.ACC), false));
+            items.Add((new Item("Chat GPT 코칭권", "무엇이든지 답해주는 있는 만능 아이템", 0, 0, 50000, Item.ItemType.USE), false));
+            items.Add((new Item("아이스아메리카노", "추운날에도 나를 깨워주는 각성제", 0, 0, 1000, Item.ItemType.USE), false));
+            items.Add((new Item("코카콜라(빨간포션)", "먹으면 체력을 회복해주는 아이템", 0, 0, 1500, Item.ItemType.USE), false));
+            items.Add((new Item("팹시(파란포션)", "먹으면 기력을 회복해주는 아이템", 0, 0, 1500, Item.ItemType.USE), false));
+            items.Add((new Item("샌드위치", "배고플때 허기 채우기 좋은 아이템", 0, 0, 2500, Item.ItemType.USE), false));
         }
 
         public override void ShowInfo()
@@ -309,9 +310,40 @@ namespace Elonmusk
             Console.WriteLine($"{Game.game.player.GOLD}");
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
+            Console.WriteLine($" [방어구]");
             foreach (var item in items)
             {
-                Console.WriteLine($"- {item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}");
+                if (item.Item1.itemType.ToString() == "ARMOR")
+                {
+                    Console.WriteLine($"- {item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}G");
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine($" [무기류]");
+            foreach (var item in items)
+            {
+                if (item.Item1.itemType.ToString() == "WEAPON")
+                {
+                    Console.WriteLine($"- {item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}G");
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine($" [장신구]");
+            foreach (var item in items)
+            {
+                if (item.Item1.itemType.ToString() == "ACC")
+                {
+                    Console.WriteLine($"- {item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}G");
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine($" [소모품]");
+            foreach (var item in items)
+            {
+                if (item.Item1.itemType.ToString() == "USE")
+                {
+                    Console.WriteLine($"- {item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}G");
+                }
             }
             Console.WriteLine();
             Console.WriteLine("1.아이템 구매");
@@ -351,8 +383,8 @@ namespace Elonmusk
             }
         }
     }
-    */
-    /*
+    
+    
     public class Buy : Scene
     {
         public override void ShowInfo()
@@ -391,15 +423,15 @@ namespace Elonmusk
         }
 
     }
-    */
-    /*
+    
+    
     public class Item : Stat
     {
         public string desc { get; private set; }
 
-        public enum ItemType { NONE, WEAPON, ARMOR };
+        public enum ItemType { NONE, WEAPON, ARMOR, ACC, USE };
 
-        ItemType itemType = ItemType.NONE;
+        public ItemType itemType = ItemType.NONE;
         public Item()
         {
             name = "Item";
@@ -413,6 +445,16 @@ namespace Elonmusk
             this.ATK = ATK;
             this.DEF = DEF;
             this.GOLD = GOLD;
+        }
+
+        public Item(string name, string desc, int ATK, int DEF, int GOLD, ItemType thisType)
+        {
+            this.name = name;
+            this.desc = desc;
+            this.ATK = ATK;
+            this.DEF = DEF;
+            this.GOLD = GOLD;
+            this.itemType = thisType;
         }
 
         public Item(Item item)
@@ -429,11 +471,11 @@ namespace Elonmusk
             if (ATK > 0)
                 return $"공격력 +{ATK}";
             if (DEF > 0)
-                return $"방어력 +{ATK}";
+                return $"방어력 +{DEF}";
             return "효과 없음";
         }
     }
-    */
+    
 
     public class Stat
     {
@@ -493,8 +535,6 @@ namespace Elonmusk
             {
                 
                 Stat stat = new Stat();
-                /*
-                foreach (var i in Game.game.inventory.items)
                 foreach (var i in Game.game.player.items)
                 {
                     if (i.Item2)
@@ -502,9 +542,8 @@ namespace Elonmusk
                         stat = stat + i.Item1;
                     }
                 }
-                */
                 return stat;
-                
+
             }
         }
         
