@@ -39,7 +39,7 @@ namespace ElonMusk
             switch (act)
             {
                 case 0:
-                    Game.game.ChangeScene(new Idle());
+                    Game.game.ChangeScene(new Resume());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
