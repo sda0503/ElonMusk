@@ -12,23 +12,24 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Elonmusk 
-{
+{   
     internal class Program
     {
+        
         static void Main(string[] args)
         {
             Game game = new Game();
             game.Start();
         }
     }
-
+    
     public class Game
     {
+        
         public static Game game;
         Scene curScene;
 
         public Player player { get; private set; }
-
         public Idle idle { get; private set; }
         public Inventory inventory { get; private set; }
         public Equipment equipment { get; private set; }
@@ -38,7 +39,7 @@ namespace Elonmusk
         public HappyEndding happyEndding { get; private set; }
         public BadEndding badEndding { get; private set; }
 
-        public Battle battle { get; private set; }
+        //public Battle battle { get; private set; }
 
 
         
@@ -56,8 +57,8 @@ namespace Elonmusk
         void Init()
         {
             player = new Player();
-            battle = new Battle();
-            curScene = battle;
+
+            curScene = new Idle();
         }
 
         void Loop()
@@ -124,6 +125,9 @@ namespace Elonmusk
                 case 2:
                     Game.game.ChangeScene(new Idle());
                     break;
+                case 99:
+                    Game.game.ChangeScene(new Dungeon());
+                    break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
                     break;
@@ -132,7 +136,7 @@ namespace Elonmusk
     }
 
     public class PlayerInfo : Scene
-    {
+    {       
         public override void ShowInfo()
         {
             Game.game.player.ShowPlayerProfile();
@@ -145,7 +149,12 @@ namespace Elonmusk
             switch (act)
             {
                 case 0:
-                    Game.game.ChangeScene(Game.game.idle);
+                    if (Dungeon.doing == Doing.beforebattle)
+                        Game.game.ChangeScene(new Dungeon.Battle());
+                    else if (Dungeon.doing == Doing.beforeDungeon)
+                        Game.game.ChangeScene(new Dungeon());
+                    else
+                        Game.game.ChangeScene(Game.game.idle);
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -449,13 +458,13 @@ namespace Elonmusk
             get
             {
                 Stat stat = new Stat();
-                foreach (var i in Game.game.inventory.items)
-                {
-                    if (i.Item2)
-                    {
-                        stat = stat + i.Item1;
-                    }
-                }
+                //foreach (var i in Game.game.inventory.items)
+                //{
+                //    if (i.Item2)
+                //    {
+                //        stat = stat + i.Item1;
+                //    }
+                //}
                 return stat;
             }
         }
@@ -486,6 +495,7 @@ namespace Elonmusk
 
         public void ShowPlayerProfile()
         {
+            
             Console.WriteLine("플레이어의 현재 정보입니다.");
             Console.WriteLine($"Lv.{level}");
             Console.WriteLine($"이름 : {name}");
