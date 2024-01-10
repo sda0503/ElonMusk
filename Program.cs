@@ -35,6 +35,12 @@ namespace Elonmusk
         public Buy buy { get; private set; }
         public Shop shop { get; private set; }
 
+        public HappyEndding happyEndding { get; private set; }
+        public BadEndding badEndding { get; private set; }
+
+        public Battle battle { get; private set; }
+
+
         
         public Game()
         {
@@ -50,8 +56,8 @@ namespace Elonmusk
         void Init()
         {
             player = new Player();
-
-            curScene = new Battle();
+            battle = new Battle();
+            curScene = battle;
         }
 
         void Loop()
@@ -458,11 +464,11 @@ namespace Elonmusk
             name = "Victor";
             level = 1;
             job = JOB.Warrior;
-            ATK = 10;
+            ATK = 100;
             DEF = 5;
             MaxHP = 100;
             CurHP = 100;
-            ACC = 10;
+            ACC = 100;
             Evade = 10;
             GOLD = 1500;
         }

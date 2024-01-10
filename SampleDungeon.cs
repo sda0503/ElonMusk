@@ -22,7 +22,7 @@ namespace ElonMusk
             if (IsAllClear())
             {
                 Game.game.ChangeScene(Game.game.happyEndding);
-                Game.game.GameOver = true;
+                //Game.game.GameOver = true;
             }
             Console.WriteLine();
             if(!IsAllClear())

@@ -23,7 +23,7 @@ namespace ElonMusk
             int damage = random.Next(20, 50);
             Console.WriteLine($"플레이어가 {damage}만큼의 데미지를 입음");
 
-            Game.game.player.SetCurHP(damage* -1);
+            //Game.game.player.SetCurHP(damage* -1);
             if (Game.game.player.CurHP <= 0)
             {
                 Game.game.ChangeScene(Game.game.badEndding);

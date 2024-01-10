@@ -117,12 +117,27 @@ namespace ElonMusk
         }
     }
 
+    public class Boss : Monster
+    {
+        public Boss() // 보스 몬스터
+        {
+            Name = "보스 몬스터";
+            Level = 10;
+            Health = 30;
+            ATK = 10;
+            ACC = 20;
+            Evade = 8;
+        }
+    }
+
     public class Battle : Scene
     {
         static Random rand = new Random();        
         static List<Monster> spawnlist = new List<Monster>(4);
         static int BfHp = 0; //전투 시작 전 체력
         static int potion = 3;
+        static int stage = 1;
+        static int bossStage = 5;
         //static int turn = 0;
 
         public override void ShowInfo()
@@ -171,6 +186,11 @@ namespace ElonMusk
                         spawnlist.Add(new CanonMinion());
                         break;
                 }  
+            }
+            if(stage == bossStage)
+            {
+                spawnlist.Clear();
+                spawnlist.Add(new Boss());
             }
             Game.game.ChangeScene(new Battle_myturn());
         }
@@ -274,7 +294,12 @@ namespace ElonMusk
                                             if (isalive == true)
                                                 Game.game.ChangeScene(new Battle_enemyturn());
                                             else
-                                                Game.game.ChangeScene(new BattleEnd_win());
+                                            {
+                                                if(stage == bossStage)
+                                                    Game.game.ChangeScene(new HappyEndding());
+                                                else
+                                                    Game.game.ChangeScene(new BattleEnd_win());
+                                            }      
                                         }
                                         break;
                                     //}
@@ -369,7 +394,7 @@ namespace ElonMusk
                         Game.game.ChangeScene(new Battle_myturn());
                         
                         else
-                        Game.game.ChangeScene(new BattleEnd_Lose());
+                        Game.game.ChangeScene(new BadEndding());
                         break;
                 }
             }
@@ -413,6 +438,7 @@ namespace ElonMusk
                 spawnlist.Clear();
                 Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
                 Console.WriteLine($"Hp {BfHp} -> {Game.game.player.CurHP}");
+                stage++;
                 //플레이어 캐릭터 정보
                 //                            
                 Console.WriteLine("0. 돌아가기");
@@ -422,7 +448,7 @@ namespace ElonMusk
                 switch (act)
                 {
                     default:
-                        Game.game.ChangeScene(new Idle());
+                        Game.game.ChangeScene(Game.game.battle);
                         break;
                 }
             }
