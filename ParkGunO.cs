@@ -486,7 +486,7 @@ namespace ElonMusk
                             Game.game.ChangeScene(new BattleAttack());
                             break;
                         case 2:
-                            Game.game.ChangeScene(new BattleSkill());
+                            Game.game.ChangeScene(new BattleSkillChoose());
                             break;
                         case 3:
                             Game.game.ChangeScene(new Battle_InfoBug());
@@ -740,10 +740,10 @@ namespace ElonMusk
                             Game.game.ChangeScene(new Battle_enemyturn());
                         else
                         {
-                            if (stage == bossStage)
+                            //if (stage == bossStage)
                                 Game.game.ChangeScene(new HappyEndding());
-                            else
-                                Game.game.ChangeScene(new BattleEnd_win());
+                            //else
+                                //Game.game.ChangeScene(new BattleEnd_win());
                         }
                     }
                     else
