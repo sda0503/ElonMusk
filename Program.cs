@@ -15,6 +15,7 @@ namespace Elonmusk
 {   
     internal class Program
     {
+        
         static void Main(string[] args)
         {
             Game game = new Game();
@@ -51,7 +52,7 @@ namespace Elonmusk
         {
             player = new Player();
 
-            curScene = new Battle();
+            curScene = new Idle();
         }
 
         void Loop()
@@ -118,6 +119,9 @@ namespace Elonmusk
                 case 2:
                     Game.game.ChangeScene(new Idle());
                     break;
+                case 99:
+                    Game.game.ChangeScene(new Dungeon());
+                    break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
                     break;
@@ -139,8 +143,10 @@ namespace Elonmusk
             switch (act)
             {
                 case 0:
-                    if(Battle.doing == Doing.beforebattle)
-                        Game.game.ChangeScene(new Battle());
+                    if (Dungeon.doing == Doing.beforebattle)
+                        Game.game.ChangeScene(new Dungeon.Battle());
+                    else if (Dungeon.doing == Doing.beforeDungeon)
+                        Game.game.ChangeScene(new Dungeon());
                     else
                         Game.game.ChangeScene(Game.game.idle);
                     break;

@@ -163,7 +163,151 @@ namespace ElonMusk
         }
     }
 
-    public enum Doing { beforebattle,battle_ing}
+    public enum Doing { beforebattle,battle_ing,beforeDungeon}
+    public class Forsave()
+    {
+        public static bool Dungeonfirst;
+        public static int dungeonposx;
+        public static int dungeonposy;
+        public static Dictionary<string, bool> isclear;
+        public static bool[,] dungeon = new bool[3, 3];
+        public static void dungeonsetting()
+        {
+            isclear = new Dictionary<string, bool>(){
+            { "isclear1",false },
+            { "isclear2",false },
+            { "isclear3",false },
+            { "isclear4",false },
+            { "isclear5",false },
+            { "isclear6",false },
+            { "isclear7",false },
+            { "isclear8",false },
+            { "isclear9",false }
+            };
+            dungeon = new bool[3, 3] {
+            { isclear["isclear1"], isclear["isclear2"], isclear["isclear3"] },
+            { isclear["isclear4"], isclear["isclear5"], isclear["isclear6"] },
+            { isclear["isclear7"], isclear["isclear8"], isclear["isclear9"] } };
+        }
+    }
+    
+    public class Dungeon : Scene
+    {
+        public static Doing doing;
+        
+        public override void ShowInfo()
+        {            
+            while(Forsave.Dungeonfirst == false)
+            {
+                Forsave.dungeonsetting();
+                Forsave.Dungeonfirst = true;
+            }
+            Console.WriteLine("환영합니다.");
+            Console.WriteLine("입장하기 전 점검 모시깽");
+            Console.WriteLine();
+            Console.WriteLine("0. 돌아가기");
+            Console.WriteLine("1. 입장하기");
+            Console.WriteLine("2. 상태보기");
+        }
+
+        public override void GetAction(int act)
+        {
+            switch (act)
+            {
+                case 0:
+                    Game.game.ChangeScene(new Idle());
+                    break;
+                case 1:
+                    Forsave.dungeonposx = Forsave.dungeon.GetLength(0)-1;
+                    Forsave.dungeonposy = Forsave.dungeon.GetLength(1)-1;
+                    Game.game.ChangeScene(new Dungeon_move());
+                    break;
+                case 2:
+                    doing = Doing.beforeDungeon;
+                    Game.game.ChangeScene(new PlayerInfo());
+                    break;
+            }
+        }
+
+        public class Dungeon_move : Scene
+        {
+            public override void ShowInfo()
+            {
+
+                Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] = true; //처음 입장하는 곳 전투X
+                Board();
+                Console.WriteLine();
+                Console.WriteLine("이동할 방향을 누르세요. ex) 4 : Left, 8 : up, 6 : Right, 2 : Down");
+                Console.WriteLine();
+            }
+            public override void GetAction(int act)
+            {
+                switch (act)
+                {
+                    case 4: //왼쪽
+                        if (Forsave.dungeonposy - 1 < 0)
+                            Console.WriteLine("그곳으로는 갈 수 없습니다.");
+                        else
+                        {
+                            Forsave.dungeonposy--;
+                            if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == false)
+                                Game.game.ChangeScene(new Battle());                            
+                        }
+                        break;
+
+                    case 6: //오른쪽
+                        if (Forsave.dungeonposy + 1 >= Forsave.dungeon.GetLength(1))
+                            Console.WriteLine("그곳으로는 갈 수 없습니다.");
+                        else
+                        {
+                            Forsave.dungeonposy++;
+                            if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == false)
+                                Game.game.ChangeScene(new Battle());
+                        }
+                        break;
+
+                    case 8: //위
+                        if (Forsave.dungeonposx - 1 < 0)
+                            Console.WriteLine("그곳으로는 갈 수 없습니다.");
+                        else
+                        {
+                            Forsave.dungeonposx--;
+                            if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == false)
+                                Game.game.ChangeScene(new Battle());
+
+                        }
+                        break;
+
+                    case 2: //아래
+                        if (Forsave.dungeonposx + 1 >= Forsave.dungeon.GetLength(1))
+                            Console.WriteLine("그곳으로는 갈 수 없습니다.");
+                        else
+                        {
+                            Forsave.dungeonposx++;
+                            if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == false)
+                                Game.game.ChangeScene(new Battle());
+                        }
+                        break;
+                        
+                    default:
+                        Console.WriteLine("그곳으론 갈 수 없습니다..");
+                        break;
+                }
+            }
+            static void Board()
+            {
+                Console.WriteLine("     |     |     ");
+                Console.WriteLine("  {0}  |  {1}  |  {2}  ", Forsave.dungeon[0, 0] ? "O" : "X", Forsave.dungeon[0, 1] ? "O" : "X", Forsave.dungeon[0, 2] ? "O" : "X");
+                Console.WriteLine("_____|_____|_____");
+                Console.WriteLine("     |     |     ");
+                Console.WriteLine("  {0}  |  {1}  |  {2}  ", Forsave.dungeon[1, 0] ? "O" : "X", Forsave.dungeon[1, 1] ? "O" : "X", Forsave.dungeon[1, 2] ? "O" : "X");
+                Console.WriteLine("_____|_____|_____");
+                Console.WriteLine("     |     |     ");
+                Console.WriteLine("  {0}  |  {1}  |  {2}  ", Forsave.dungeon[2, 0] ? "O" : "X", Forsave.dungeon[2, 1] ? "O" : "X", Forsave.dungeon[2, 2] ? "O" : "X");
+                Console.WriteLine("     |     |     ");
+            }
+        }
+    
 
     public class Battle : Scene
     {
@@ -171,7 +315,7 @@ namespace ElonMusk
         static List<Monster> spawnlist = new List<Monster>(4);
         static int BfHp = 0; //전투 시작 전 체력
         static int potion = 3;
-        public static Doing doing;
+        
         //static int turn = 0;
 
         public override void ShowInfo()
@@ -553,6 +697,7 @@ namespace ElonMusk
             public override void ShowInfo()
             {
                 Console.Clear();
+                Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] = true;
                 Console.WriteLine("■■■■■■■■■■■■■■");
                 ShowHighlithtesText("Battle!! - Result");
                 Console.WriteLine("■■■■■■■■■■■■■■");
@@ -567,22 +712,29 @@ namespace ElonMusk
                 spawnlist.Clear();
                 Console.Write($"Lv. ");
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.Write($"{Game.game.player.level}");
+                Console.Write($"{Game.game.player.level} ");
                 Console.ResetColor ();
-                Console.WriteLine($"{Game.game.player.name}");                
+                Console.WriteLine($" {Game.game.player.name}");                
                 //Console.WriteLine($"exp {Game.game.player.exp} -> {Game.game.player.exp+sumexp}");
                 //Game.game.player.Addexp(sumexp);
                 //Console.WriteLine();
                 //Console.WriteLine("[획득 아이템]");
                 sumexp = 0;
                 Console.WriteLine("0. 돌아가기");
-            }
+                    Console.WriteLine("1. 계속 진행하기");
+                }
             public override void GetAction(int act)
             {
                 switch (act)
                 {
+                    case 0:
+                            Game.game.ChangeScene(new Dungeon());
+                            break;
+                    case 1:                           
+                        Game.game.ChangeScene(new Dungeon_move());
+                        break;
                     default:
-                        Game.game.ChangeScene(new Idle());
+                       
                         break;
                 }
             }
@@ -684,8 +836,6 @@ namespace ElonMusk
             Console.ResetColor();
         }
 
-     
-
         public static int GetPrintableLength(string str)
         {
             int length = 0;
@@ -718,6 +868,7 @@ namespace ElonMusk
             return str.PadRight(str.Length + padding);
         }
     }
+}
 }
 
 
