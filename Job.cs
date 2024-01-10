@@ -20,7 +20,7 @@ namespace Elonmusk
         public Job()
         {
             JobList = new List<(string, bool)>();
-            JobList.Add(("취준생", false));
+            JobList.Add(("인턴", false));
             JobList.Add(("신입개발자", false));
             JobList.Add(("주니어개발자", false));
             JobList.Add(("시니어개발자", false));
@@ -28,13 +28,13 @@ namespace Elonmusk
 
         public override void ShowInfo()
         {
-            Console.WriteLine("전직");
-            Console.WriteLine("다른 직업으로 바꿀 수 있습니다.");
+            Console.WriteLine("인사평가");
+            Console.WriteLine("조건을 채우면 진급이 가능합니다.");
             Console.WriteLine();
-            Console.WriteLine("[현재 직업]");
-            //Console.WriteLine($"{Game.game.player.GOLD}");
+            Console.WriteLine("[현재 직책]");
+            Console.WriteLine($"{Game.game.player.JobToString(Game.game.player.job)}");
             Console.WriteLine();
-            Console.WriteLine("전직 가능한 직업");
+            Console.WriteLine("[진급조건]");
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("0. 나가기");

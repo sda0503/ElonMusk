@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using static Elonmusk.Player;
 
 namespace Elonmusk 
 {
@@ -41,6 +42,8 @@ namespace Elonmusk
         public Idle idle { get; private set; }
         public Equipment equipment { get; private set; }
 
+        public Job job { get; private set; }
+
         public Game()
         {
             game = this;
@@ -64,7 +67,7 @@ namespace Elonmusk
             opening = new Opening();
             btestScene = new BTestScene();
             resume = new Resume();
-
+            job =new Job();
 
             curScene = new Resume();
         }
@@ -161,7 +164,7 @@ namespace Elonmusk
                     Game.game.ChangeScene(new Idle());
                     break;
                 case 4: //인사평가
-                    Game.game.ChangeScene(new Idle());
+                    Game.game.ChangeScene(new Job());
                     break;
                 case 5: //강원래드
                     Game.game.ChangeScene(new Idle());
@@ -282,12 +285,19 @@ namespace Elonmusk
         public Shop()
         {
             items = new List<(Item, bool)>();
-            items.Add((new Item("수련자 갑옷", "수련에 도움을 주는 갑옷입니다.", 0, 5, 1000), false));
-            items.Add((new Item("무쇠 갑옷", "무쇠로 만들어져 튼튼한 갑옷입니다.", 0, 9, 2000), false));
-            items.Add((new Item("스파르타의 갑옷", "스파르타의 전사들이 사용했다는 전설의 갑옷입니다.", 0, 15, 3500), false));
-            items.Add((new Item("낡은 검", "어디에서나 쉽게 볼 수 있는 낡은 검입니다.", 2, 0, 600), false));
-            items.Add((new Item("청동 도끼", "어디선가 사용됐던거 같은 도끼입니다.", 5, 0, 1500), false));
-            items.Add((new Item("스파르타의 창", "스파르타의 전사들이 사용했다는 전설의 창입니다.", 7, 0, 2500), false));
+            items.Add((new Item("오래된 검정 후드티", "편하게 입기 좋은 후드티", 0, 5, 1000, Item.ItemType.ARMOR), false));
+            items.Add((new Item("깔끔해 보이는 정장", "멀끔해 보이나 코딩력은 낮아보인다.", 0, 9, 2000, Item.ItemType.ARMOR), false));
+            items.Add((new Item("개발자의 체크 난방", "디자인은 별로이지만 코딩력이 상당히 높아보이는 옷", 0, 15, 3500, Item.ItemType.ARMOR), false));
+            items.Add((new Item("오래된 키보드&마우스세트", "오래되어 작동이 잘안되는 키보드와 마우스 세트", 2, 0, 600, Item.ItemType.WEAPON), false));
+            items.Add((new Item("무소음 키보드&마우스세트", "키를 입력하거나 클릭을 할 때 소음이 없다", 5, 0, 1500, Item.ItemType.WEAPON), false));
+            items.Add((new Item("C# 전공책", "냄비 받침으로 쓰기 좋은 두꺼운 전공책", 7, 0, 2500, Item.ItemType.ACC), false));
+            items.Add((new Item("오래된 노트북", "메모장이 겨우 돌아가는 노트북!.", 7, 0, 2500, Item.ItemType.ACC), false));
+            items.Add((new Item("최신형 맥북", "최신형 맥북 개발자라면 맥 정도는 써야지요", 7, 0, 2500, Item.ItemType.ACC) , false));
+            items.Add((new Item("Chat GPT 코칭권", "무엇이든지 답해주는 있는 만능 아이템", 7, 0, 2500, Item.ItemType.USE), false));
+            items.Add((new Item("아이스아메리카노", "추운날에도 나를 깨워주는 각성제", 7, 0, 2500, Item.ItemType.USE), false));
+            items.Add((new Item("코카콜라", "무엇이든지 답해주는 있는 만능 아이템", 7, 0, 2500, Item.ItemType.USE), false));
+            items.Add((new Item("팹시", "무엇이든지 답해주는 있는 만능 아이템", 7, 0, 2500, Item.ItemType.USE), false));
+            items.Add((new Item("샌드위치", "무엇이든지 답해주는 있는 만능 아이템", 7, 0, 2500, Item.ItemType.USE), false));
         }
 
         public override void ShowInfo()
@@ -385,9 +395,11 @@ namespace Elonmusk
     {
         public string desc { get; private set; }
 
-        public enum ItemType { NONE, WEAPON, ARMOR };
+        //기타, 무기류, 방어구, 악세류, 소모품
+        public enum ItemType { NONE, WEAPON, ARMOR, ACC, USE};
 
         ItemType itemType = ItemType.NONE;
+
         public Item()
         {
             name = "Item";
@@ -401,6 +413,15 @@ namespace Elonmusk
             this.ATK = ATK;
             this.DEF = DEF;
             this.GOLD = GOLD;
+        }
+        public Item(string name, string desc, int ATK, int DEF, int GOLD, ItemType thisType)
+        {
+            this.name = name;
+            this.desc = desc;
+            this.ATK = ATK;
+            this.DEF = DEF;
+            this.GOLD = GOLD;
+            this.itemType = thisType;
         }
 
         public Item(Item item)
@@ -417,7 +438,7 @@ namespace Elonmusk
             if (ATK > 0)
                 return $"공격력 +{ATK}";
             if (DEF > 0)
-                return $"방어력 +{ATK}";
+                return $"방어력 +{DEF}";
             return "효과 없음";
         }
     }
@@ -460,6 +481,7 @@ namespace Elonmusk
     public class Player : Unit
     {
         public List<(Item, bool)> items { get; private set; }
+        public string jobName;
 
         public enum JOB
         {
@@ -506,12 +528,24 @@ namespace Elonmusk
             GOLD = 1500;
         }
 
+        public string JobToString(JOB j)
+        {
+            switch (j)
+            {
+                case JOB.Intern: jobName = "인턴"; break;
+                case JOB.Assistant: jobName = "사원"; break;
+                case JOB.JuniorProgrammer: jobName = "주니어개발자"; break;
+                case JOB.SeniorProgrammer: jobName = "시니어개발자"; break;
+            }
+            return jobName;
+        }
+
         public void ShowPlayerProfile()
         {
             Console.WriteLine("상태창");
             Console.WriteLine($"Lv.{level}");
             Console.WriteLine($"이름 : {name}");
-            Console.WriteLine($"직급 : {job.ToString()}");
+            Console.WriteLine($"직급 : {JobToString(job)}");
             if (EquipmentStat.ATK == 0)
                 Console.WriteLine($"코딩력(물리) : {ATK}");
             else

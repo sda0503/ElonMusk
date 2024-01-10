@@ -13,6 +13,7 @@ using static Elonmusk.Item;
 
 namespace Elonmusk 
 {
+    /*
     public class Item : Stat
     {
         public string desc { get; private set; }
@@ -267,4 +268,5 @@ namespace Elonmusk
             return itemType;
         }
     }
+    */
 }
