@@ -516,6 +516,7 @@ namespace Elonmusk
     {
         public List<(Item, bool)> items { get; private set; }
         private(string, bool) playerName;
+        public string jobName;
         public (string, bool) PlayerName{get{ return playerName;}set { playerName = value; } }
         public enum JOB
         {
@@ -527,6 +528,18 @@ namespace Elonmusk
         }
 
         public JOB job;
+
+        public string JobToString(JOB j)
+        {
+            switch (j)
+            {
+                case JOB.Intern: jobName = "인턴"; break;
+                case JOB.Assistant: jobName = "사원"; break;
+                case JOB.JuniorProgrammer: jobName = "주니어개발자"; break;
+                case JOB.SeniorProgrammer: jobName = "시니어개발자"; break;
+            }
+            return jobName;
+        }
 
         public Stat EquipmentStat
         {
@@ -568,7 +581,7 @@ namespace Elonmusk
             Console.WriteLine("이력서");
             Console.WriteLine($"Lv.{level}");
             Console.WriteLine($"이름 : {playerName.Item1}");
-            Console.WriteLine($"직급 : {job.ToString()}");
+            Console.WriteLine($"직급 : {JobToString(job)}");
             if (EquipmentStat.ATK == 0)
                 Console.WriteLine($"코딩력(물리) : {ATK}");
             else
