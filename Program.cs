@@ -376,8 +376,11 @@ namespace Elonmusk
                     Console.WriteLine("구매를 완료했습니다.");
                     items[index] = (items[index].Item1, true);
                 }
-                else
-                    Console.WriteLine("골드가 부족합니다.");
+                else Console.WriteLine("골드가 부족합니다.");
+                if (items[index].Item1.itemType.ToString() == "USE")
+                {
+                    items[index] = (items[index].Item1, false);
+                }
             }
         }
     }
