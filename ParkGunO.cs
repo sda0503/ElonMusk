@@ -127,6 +127,7 @@ namespace ElonMusk
 
         public override void ShowInfo()
         {
+            Console.Clear();
             Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
             Console.WriteLine("이제 전투를 시작할 수 있습니다.");
             Console.WriteLine();
@@ -179,6 +180,7 @@ namespace ElonMusk
         {
             public override void ShowInfo()
             {
+                Console.Clear();
                 Console.WriteLine("Battle!! - 플레이어 턴");
                 Console.WriteLine();
                 foreach (Monster mob in spawnlist)
@@ -219,6 +221,7 @@ namespace ElonMusk
         {
             public override void ShowInfo()
             {
+                Console.Clear();
                 Console.WriteLine("Battle!!");
                 Console.WriteLine();
                 int j = 1;
@@ -251,40 +254,36 @@ namespace ElonMusk
                                 Game.game.ChangeScene(new Battle_myturn());
                                 break;
                                 // Scene을 이동할 때에는 Game.game.ChangeScene(new 씬이름()); 을 사용하면 됨
-                                //while ()
-                                //{
-                                    case int:
-                                        if (spawnlist[act - 1].IsDead)
+                                case int:
+                                    if (spawnlist[act - 1].IsDead)
+                                    {
+                                        Console.WriteLine("이미 죽은 몬스터입니다.");
+                                        Console.ReadKey();                                        
+                                    }
+                                    else
+                                    {
+                                        attack(Game.game.player.ATK, spawnlist[act - 1]);
+                                        foreach (Monster mob in spawnlist)
                                         {
-                                            Console.WriteLine("이미 죽은 몬스터입니다.");
-                                            Console.ReadKey();
-                                            Game.game.ChangeScene(new BattleAttack()); //어차피 루프 돌아서 안걸어도되는데 Console.Clear때문에 걸어야겠다.
-                                        }
-                                        else
-                                        {
-                                            attack(Game.game.player.ATK, spawnlist[act - 1]);
-                                            foreach (Monster mob in spawnlist)
+                                            if (!mob.IsDead)
                                             {
-                                                if (!mob.IsDead)
-                                                {
-                                                    isalive = true;
-                                                    break;
-                                                }
+                                                isalive = true;
+                                                break;
                                             }
-                                            if (isalive == true)
-                                                Game.game.ChangeScene(new Battle_enemyturn());
-                                            else
-                                                Game.game.ChangeScene(new BattleEnd_win());
                                         }
-                                        break;
-                                    //}
+                                        if (isalive == true)
+                                            Game.game.ChangeScene(new Battle_enemyturn());
+                                        else
+                                            Game.game.ChangeScene(new BattleEnd_win());
+                                    }
+                                    break;
+                               
                             
                                         
                         }
                         break;
                     default:
-                        Console.WriteLine("다시 선택해주세요.");
-                        Game.game.ChangeScene(new BattleAttack());
+                        Console.WriteLine("다시 선택해주세요.");                        
                         break;
                 }
             }
@@ -412,9 +411,7 @@ namespace ElonMusk
                 Console.WriteLine($"던전에서 몬스터 {spawnlist.Count}마리를 잡았습니다.");
                 spawnlist.Clear();
                 Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
-                Console.WriteLine($"Hp {BfHp} -> {Game.game.player.CurHP}");
-                //플레이어 캐릭터 정보
-                //                            
+                Console.WriteLine($"Hp {BfHp} -> {Game.game.player.CurHP}");                             
                 Console.WriteLine("0. 돌아가기");
             }
             public override void GetAction(int act)
@@ -457,6 +454,7 @@ namespace ElonMusk
         {
             public override void ShowInfo()
             {
+                Console.Clear();
                 Game.game.player.ShowPlayerProfile();
 
                 Console.WriteLine();
