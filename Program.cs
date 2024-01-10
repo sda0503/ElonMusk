@@ -251,19 +251,24 @@ namespace Elonmusk
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
             Console.WriteLine();
+            /*
+            for (int i = 0; i < Game.game.inventory.items.Count; i++)
             for (int i = 0; i < Game.game.player.items.Count; i++)
             {
                 (Item, bool) item = Game.game.player.items[i];
                 String strEquipped = (item.Item2) ? "[E]" : String.Empty;
                 Console.WriteLine($"- {i + 1} {strEquipped}{item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}");
             }
+            */
             Console.WriteLine();
             Console.WriteLine("0. 나가기");
         }
         public override void GetAction(int act)
         {
+            /*
             if (act == 0)
             {
+                Game.game.ChangeScene(new Idle());
                 Game.game.ChangeScene(new Inventory());
             }
             else if (act > 0 && act < Game.game.player.items.Count + 1)
@@ -274,9 +279,11 @@ namespace Elonmusk
             {
                 Console.WriteLine("잘못된 입력입니다.");
             }
+            */
         }
     }
 
+    /*
     public class Shop : Scene
     {
         // bool 변수는 팔렸는지의 여부(true면 구매불가)
@@ -344,7 +351,8 @@ namespace Elonmusk
             }
         }
     }
-
+    */
+    /*
     public class Buy : Scene
     {
         public override void ShowInfo()
@@ -383,7 +391,8 @@ namespace Elonmusk
         }
 
     }
-
+    */
+    /*
     public class Item : Stat
     {
         public string desc { get; private set; }
@@ -424,6 +433,7 @@ namespace Elonmusk
             return "효과 없음";
         }
     }
+    */
 
     public class Stat
     {
@@ -432,6 +442,7 @@ namespace Elonmusk
 
         public int ATK { get; protected set; }
         public int DEF { get; protected set; }
+
 
         public int GOLD { get; protected set; }
 
@@ -480,7 +491,10 @@ namespace Elonmusk
         {
             get
             {
+                
                 Stat stat = new Stat();
+                /*
+                foreach (var i in Game.game.inventory.items)
                 foreach (var i in Game.game.player.items)
                 {
                     if (i.Item2)
@@ -488,9 +502,12 @@ namespace Elonmusk
                         stat = stat + i.Item1;
                     }
                 }
+                */
                 return stat;
+                
             }
         }
+        
 
         public Stat RealtimeStat
         {
