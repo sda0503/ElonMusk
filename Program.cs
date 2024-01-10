@@ -112,9 +112,11 @@ namespace Elonmusk
     {
         public override void ShowInfo()
         {
+            Console.WriteLine();
+            Console.WriteLine("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
             Console.WriteLine("(주)스파르타에 오신 여러분 환영합니다.");
-            Console.WriteLine("열심히 일해서 성공허자");
-
+            Console.WriteLine("");
+            Console.WriteLine("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
 
             Console.WriteLine("           __________                                 ");
             Console.WriteLine("         .'----------`.                              ");
@@ -461,7 +463,11 @@ namespace Elonmusk
 
         public enum JOB
         {
-            Warrior
+            Intern,                 //인턴
+            Assistant,              //사원
+            JuniorProgrammer,       //주니어
+            SeniorProgrammer,       //시니어 (대리,주임)
+            Manager                 //과장
         }
 
         public JOB job;
@@ -492,7 +498,7 @@ namespace Elonmusk
             items = new List<(Item, bool)>();
             name = "Victor";
             level = 1;
-            job = JOB.Warrior;
+            job = JOB.Intern;
             ATK = 10;
             DEF = 5;
             MaxHP = 100;
@@ -502,21 +508,20 @@ namespace Elonmusk
 
         public void ShowPlayerProfile()
         {
-            Console.WriteLine("플레이어의 현재 정보입니다.");
+            Console.WriteLine("상태창");
             Console.WriteLine($"Lv.{level}");
             Console.WriteLine($"이름 : {name}");
-            Console.WriteLine($"직업 : {job.ToString()}");
+            Console.WriteLine($"직급 : {job.ToString()}");
             if (EquipmentStat.ATK == 0)
-                Console.WriteLine($"공격력 : {ATK}");
+                Console.WriteLine($"코딩력(물리) : {ATK}");
             else
-                Console.WriteLine($"공격력 : {ATK} (+{EquipmentStat.ATK})");
+                Console.WriteLine($"코딩력(물리) : {ATK} (+{EquipmentStat.ATK})");
             if (EquipmentStat.DEF == 0)
-                Console.WriteLine($"공격력 : {DEF}");
+                Console.WriteLine($"코딩력(논리) : {DEF}");
             else
-                Console.WriteLine($"공격력 : {DEF} (+{EquipmentStat.DEF})");
-            Console.WriteLine($"최대 체력 : {MaxHP}");
-            Console.WriteLine($"현재 체력 : {CurHP}");
-
+                Console.WriteLine($"코딩력(논리) : {DEF} (+{EquipmentStat.DEF})");
+            Console.WriteLine($"체력 : {CurHP} / {MaxHP}");
+            Console.WriteLine($"소지금 : {GOLD}G");
         }
 
         public void SetName(string name)
