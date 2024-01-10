@@ -15,27 +15,24 @@ namespace ElonMusk
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine();
             Console.WriteLine();
-            Console.WriteLine("           /\\                                                 /\\");
-            Console.WriteLine(" _         )( ______________________   ______________________ )(         _");
-            Console.WriteLine("(_)///////(**)______________________> <______________________(**)\\\\\\\\\\\\\\(_)");
-            Console.WriteLine("           )(                                                 )(");
-            Console.WriteLine("           \\/                                                 \\/");
-            Console.WriteLine();
-            Console.WriteLine("__________________________  ______________ ____________________  ________");
-            Console.WriteLine("\\__    ___/\\_   _____/\\   \\/  /\\__    ___/ \\______   \\______   \\/  _____/");
-            Console.WriteLine("  |    |    |    __)_  \\     /   |    |     |       _/|     ___/   \\  ___ ");
-            Console.WriteLine("  |    |    |        \\ /     \\   |    |     |    |   \\|    |   \\    \\_\\  \\");
-            Console.WriteLine("  |____|   /_______  //___/\\  \\  |____|     |____|_  /|____|    \\______  /");
-            Console.WriteLine("                   \\/       \\_/                    \\/                  \\/ ");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("=========================================================================");
+            Console.WriteLine(String.Format("{0,100}", " #######  ######      #     ######    ######     #                               "));
+            Console.WriteLine(String.Format("{0,100}", " ###  ##  ### ###    ###    ## ####   ######    ###              ####      ###   "));
+            Console.WriteLine(String.Format("{0,100}", " ###      ##   ##    ###    #######     ##      ###             #####    ### ##  "));
+            Console.WriteLine(String.Format("{0,100}", " #######  ### ###   #####   #####       ##     #####            ##       ### ##  "));
+            Console.WriteLine(String.Format("{0,100}", "     ###  ######    ## ##   ## ###      ##     ## ##            ##       ### ##  "));
+            Console.WriteLine(String.Format("{0,100}", " ##  ###  ##       ### ###  ##  ###     ##    ### ###    ##     #####    ######  "));
+            Console.WriteLine(String.Format("{0,100}", "  #######  ##       ### ###  ##   ##     ##    ### ###    ##      ####      ###   "));
             Console.ResetColor();
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
-            Console.WriteLine("0. 새 게임");
+            Console.WriteLine(String.Format("{0,60}", "0. 이력서 작성하로가기"));
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
         }
         public override void GetAction(int act)
         {

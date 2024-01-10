@@ -35,6 +35,7 @@ namespace Elonmusk
         public Inventory inventory { get; private set; }
         public Opening opening { get; private set; }
         public BTestScene btestScene { get; private set; }
+        public Resume resume { get; private set; }
 
         public Idle idle { get; private set; }
         public Equipment equipment { get; private set; }
@@ -61,8 +62,10 @@ namespace Elonmusk
             buy = new Buy();
             opening = new Opening();
             btestScene = new BTestScene();
+            resume = new Resume();
 
-            curScene = new BTestScene();
+
+            curScene = new Idle();
         }
 
         void Loop()
