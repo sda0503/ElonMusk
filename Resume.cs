@@ -11,7 +11,8 @@ namespace ElonMusk
     {
         public override void ShowInfo()
         {
-            Console.WriteLine("1. 이름 입력하기");
+            string script = Game.game.player.PlayerName.Item2 ? "0. 회사로 가기" : "1. 이름 입력하기 ";
+            Console.WriteLine($"{script}");
         }
         
         public override void GetAction(int act)

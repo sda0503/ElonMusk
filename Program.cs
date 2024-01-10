@@ -66,7 +66,7 @@ namespace Elonmusk
             resume = new Resume();
 
 
-            curScene = new Resume();
+            curScene = new Opening();
         }
 
         void Loop()
@@ -171,6 +171,9 @@ namespace Elonmusk
                     break;
                 case 7: //저장
                     Game.game.ChangeScene(new Idle());
+                    break;
+                case 99:
+                    Game.game.ChangeScene(new Resume());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -460,7 +463,8 @@ namespace Elonmusk
     public class Player : Unit
     {
         public List<(Item, bool)> items { get; private set; }
-
+        private(string, bool) playerName;
+        public (string, bool) PlayerName{get{ return playerName;}set { playerName = value; } }
         public enum JOB
         {
             Intern,                 //인턴
@@ -496,6 +500,7 @@ namespace Elonmusk
         public Player()
         {
             items = new List<(Item, bool)>();
+            playerName.Item2 = false;
             name = "Victor";
             level = 1;
             job = JOB.Intern;
@@ -510,7 +515,7 @@ namespace Elonmusk
         {
             Console.WriteLine("상태창");
             Console.WriteLine($"Lv.{level}");
-            Console.WriteLine($"이름 : {name}");
+            Console.WriteLine($"이름 : {playerName.Item1}");
             Console.WriteLine($"직급 : {job.ToString()}");
             if (EquipmentStat.ATK == 0)
                 Console.WriteLine($"코딩력(물리) : {ATK}");
@@ -526,7 +531,8 @@ namespace Elonmusk
 
         public void SetName(string name)
         {
-            this.name = name;
+            this.playerName.Item1 = name;
+            this.playerName.Item2 = true;
         }
 
         public void gainGold(int gold)
