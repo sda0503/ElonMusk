@@ -153,7 +153,7 @@ namespace ElonMusk
     {
         public UncontrollableBug()
         {
-            Name = "관객 공포증 버그";
+            Name = "\"관객 공포증\" 버그";
             Level = 10;
             Health = 70;
             ATK = 15;
@@ -172,11 +172,11 @@ namespace ElonMusk
                 IsDead = true;
                 Forsave.isdungeonclear = true;
             }
-
         }
     }
 
     public enum Doing { beforebattle, battle_ing, beforeDungeon }
+
     public class Forsave()
     {
         public static bool Dungeonfirst;
@@ -198,7 +198,7 @@ namespace ElonMusk
             { 4,"H"},
             { 5,"B"}
             };
-            dungeon = new int[3, 3] {
+            dungeon = new int[3, 3] { //보스방이랑 시작위치만 고정하고 나머지 방은 Random으로 섞어버리자. || 전투 4개, 함정 2개, 보상 1개 해서 배열 만든다음에 오더바이해서 섞어버리고 포문으로 넣어버리는 게 더 깔끔할 듯.
             { 5, 2, 0 },
             { 2, 1, 0 },
             { 0, 0, 3 } };
@@ -213,7 +213,7 @@ namespace ElonMusk
         public static Doing doing;       
         public override void ShowInfo()
         {
-            while (Forsave.Dungeonfirst == false)
+            if (Forsave.Dungeonfirst == false)
             {
                 Forsave.dungeonsetting();
                 Forsave.Dungeonfirst = true;
@@ -327,8 +327,6 @@ namespace ElonMusk
                     default:
                         break;
                 }
-
-
             }
             static void Board()
             {
@@ -460,7 +458,7 @@ namespace ElonMusk
                         if (mob.IsDead == true)
                             Console.ForegroundColor = ConsoleColor.DarkGray;
                         Console.Write($"Lv.{mob.Level} ");
-                        Console.Write(PadRightForMixedText(mob.Name, 20));
+                        Console.Write(PadRightForMixedText(mob.Name, 25));
                         Console.WriteLine($"HP {mob.Health}");
                         Console.ResetColor();
                     }
@@ -773,7 +771,7 @@ namespace ElonMusk
                     Console.WriteLine();
                     PrintTextWithHighlighst(ConsoleColor.Green, "", "Victory", "");
                     Forsave.KillCnt += spawnlist.Count;
-                    if (!Forsave.isdungeonclear)
+                    if (!(spawnlist[0] is UncontrollableBug))
                     {
                         Console.WriteLine();
                         Console.WriteLine($"던전에서 몬스터 {spawnlist.Count}마리를 잡았습니다.");
@@ -783,8 +781,9 @@ namespace ElonMusk
                         Console.WriteLine("{0}", Forsave.KillCnt);
                         Console.ResetColor();
                     }
-                    else if (Forsave.isdungeonclear)
+                    else if (spawnlist[0] is UncontrollableBug)
                     {
+                       // if ()
                         Console.WriteLine("축하합니다! 던전을 클리어 하셨습니다!");                        
                         Forsave.dungeonClearCnt++;
                         Console.WriteLine();
