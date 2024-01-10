@@ -108,26 +108,63 @@ namespace Elonmusk
     {
         public override void ShowInfo()
         {
-            Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
-            Console.WriteLine("이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.");
+            Console.WriteLine("(주)스파르타에 오신 여러분 환영합니다.");
+            Console.WriteLine("열심히 일해서 성공허자");
+
+
+            Console.WriteLine("           __________                                 ");
+            Console.WriteLine("         .'----------`.                              ");
+            Console.WriteLine("         | .--------. |                             ");
+            Console.WriteLine("         | |########| |       __________              ");
+            Console.WriteLine("         | |########| |      /__________\\            ");
+            Console.WriteLine(".--------| `--------' |------|    --=-- |-------------.");
+            Console.WriteLine("|        `----,-.-----'      |o ======  |             | ");
+            Console.WriteLine("|       ______|_|_______     |__________|             | ");
+            Console.WriteLine("|      /  %%%%%%%%%%%%  \\                             | ");
+            Console.WriteLine("|     /  %%%%%%%%%%%%%%  \\                            | ");
+            Console.WriteLine("|     ^^^^^^^^^^^^^^^^^^^^                            | ");
+            Console.WriteLine("+-----------------------------------------------------+");
+            Console.WriteLine("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
+
+            
             Console.WriteLine();
-            Console.WriteLine("0. 상태보기");
-            Console.WriteLine("1. 인벤토리");
+            Console.WriteLine("0. 상태창");
+            Console.WriteLine("1. 가방");
             Console.WriteLine("2. 상점");
+            Console.WriteLine("3. 일하기");
+            Console.WriteLine("4. 인사평가");
+            Console.WriteLine("5. 강원랜드");
+            Console.WriteLine("6. 퀘스트");
+            Console.WriteLine("7. 저장");
         }
         public override void GetAction(int act)
         {
             switch (act)
             {
                 // Scene을 이동할 때에는 Game.game.ChangeScene(new 씬이름()); 을 사용하면 됨
-                case 0:
+                case 0: //상태창
                     Game.game.ChangeScene(new PlayerInfo());
                     break;
-                case 1:
+                case 1: //가방
                     Game.game.ChangeScene(new Inventory());
                     break;
-                case 2:
+                case 2: //상점
                     Game.game.ChangeScene(new Shop());
+                    break;
+                case 3: //일하기
+                    Game.game.ChangeScene(new Idle());
+                    break;
+                case 4: //인사평가
+                    Game.game.ChangeScene(new Idle());
+                    break;
+                case 5: //강원래드
+                    Game.game.ChangeScene(new Idle());
+                    break;
+                case 6: //퀘스트
+                    Game.game.ChangeScene(new Idle());
+                    break;
+                case 7: //저장
+                    Game.game.ChangeScene(new Idle());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -164,7 +201,7 @@ namespace Elonmusk
         
         public override void ShowInfo()
         {
-            Console.WriteLine("인벤토리");
+            Console.WriteLine("가방");
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
@@ -200,7 +237,7 @@ namespace Elonmusk
     {
         public override void ShowInfo()
         {
-            Console.WriteLine("인벤토리 - 장착관리");
+            Console.WriteLine("가방 - 장착관리");
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
@@ -475,6 +512,7 @@ namespace Elonmusk
                 Console.WriteLine($"공격력 : {DEF} (+{EquipmentStat.DEF})");
             Console.WriteLine($"최대 체력 : {MaxHP}");
             Console.WriteLine($"현재 체력 : {CurHP}");
+
         }
 
         public void gainGold(int gold)
