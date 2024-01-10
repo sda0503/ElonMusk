@@ -34,7 +34,13 @@ namespace Elonmusk
             Console.WriteLine("[현재 직책]");
             Console.WriteLine($"{Game.game.player.JobToString(Game.game.player.job)}");
             Console.WriteLine();
+            Console.WriteLine("[다음 직책]");
+            Console.WriteLine($"{Game.game.player.JobToString(Game.game.player.job + 1)}");
+            Console.WriteLine(); 
             Console.WriteLine("[진급조건]");
+            Console.WriteLine("보유골드 : ");
+            Console.WriteLine("버그소탕 : ");
+            Console.WriteLine("완료파일 : ");
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("0. 나가기");

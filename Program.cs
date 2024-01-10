@@ -285,19 +285,19 @@ namespace Elonmusk
         public Shop()
         {
             items = new List<(Item, bool)>();
-            items.Add((new Item("오래된 검정 후드티", "편하게 입기 좋은 후드티", 0, 5, 1000, Item.ItemType.ARMOR), false));
-            items.Add((new Item("깔끔해 보이는 정장", "멀끔해 보이나 코딩력은 낮아보인다.", 0, 9, 2000, Item.ItemType.ARMOR), false));
-            items.Add((new Item("개발자의 체크 난방", "디자인은 별로이지만 코딩력이 상당히 높아보이는 옷", 0, 15, 3500, Item.ItemType.ARMOR), false));
-            items.Add((new Item("오래된 키보드&마우스세트", "오래되어 작동이 잘안되는 키보드와 마우스 세트", 2, 0, 600, Item.ItemType.WEAPON), false));
-            items.Add((new Item("무소음 키보드&마우스세트", "키를 입력하거나 클릭을 할 때 소음이 없다", 5, 0, 1500, Item.ItemType.WEAPON), false));
-            items.Add((new Item("C# 전공책", "냄비 받침으로 쓰기 좋은 두꺼운 전공책", 7, 0, 2500, Item.ItemType.ACC), false));
-            items.Add((new Item("오래된 노트북", "메모장이 겨우 돌아가는 노트북!.", 7, 0, 2500, Item.ItemType.ACC), false));
-            items.Add((new Item("최신형 맥북", "최신형 맥북 개발자라면 맥 정도는 써야지요", 7, 0, 2500, Item.ItemType.ACC) , false));
-            items.Add((new Item("Chat GPT 코칭권", "무엇이든지 답해주는 있는 만능 아이템", 7, 0, 2500, Item.ItemType.USE), false));
-            items.Add((new Item("아이스아메리카노", "추운날에도 나를 깨워주는 각성제", 7, 0, 2500, Item.ItemType.USE), false));
-            items.Add((new Item("코카콜라", "무엇이든지 답해주는 있는 만능 아이템", 7, 0, 2500, Item.ItemType.USE), false));
-            items.Add((new Item("팹시", "무엇이든지 답해주는 있는 만능 아이템", 7, 0, 2500, Item.ItemType.USE), false));
-            items.Add((new Item("샌드위치", "무엇이든지 답해주는 있는 만능 아이템", 7, 0, 2500, Item.ItemType.USE), false));
+            items.Add((new Item("오래된 검정 후드티", "편하게 입기 좋은 후드티", 0, 5, 10000, Item.ItemType.ARMOR), false));
+            items.Add((new Item("깔끔해 보이는 정장", "멀끔해 보이나 코딩력은 낮아보인다.", 0, 15, 80000, Item.ItemType.ARMOR), false));
+            items.Add((new Item("개발자의 체크 난방", "디자인은 별로이지만 코딩력이 상당히 높아보이는 옷", 0, 30, 100000, Item.ItemType.ARMOR), false));
+            items.Add((new Item("오래된 키보드&마우스세트", "오래되어 작동이 잘안되는 키보드와 마우스 세트", 15, 0, 10000, Item.ItemType.WEAPON), false));
+            items.Add((new Item("무소음 키보드&마우스세트", "키를 입력하거나 클릭을 할 때 소음이 없다", 30, 0, 200000, Item.ItemType.WEAPON), false));
+            items.Add((new Item("C# 전공책", "냄비 받침으로 쓰기 좋은 두꺼운 전공책", 5, 0, 30000, Item.ItemType.ACC), false));
+            items.Add((new Item("오래된 노트북", "메모장이 겨우 돌아가는 노트북!.", 12, 0, 300000, Item.ItemType.ACC), false));
+            items.Add((new Item("최신형 맥북", "최신형 맥북 개발자라면 맥 정도는 써야지요", 25, 0, 1700000, Item.ItemType.ACC) , false));
+            items.Add((new Item("Chat GPT 코칭권", "무엇이든지 답해주는 있는 만능 아이템", 0, 0, 50000, Item.ItemType.USE), false));
+            items.Add((new Item("아이스아메리카노", "추운날에도 나를 깨워주는 각성제", 0, 0, 1000, Item.ItemType.USE), false));
+            items.Add((new Item("코카콜라(빨간포션)", "먹으면 체력을 회복해주는 아이템", 0, 0, 1500, Item.ItemType.USE), false));
+            items.Add((new Item("팹시(파란포션)", "먹으면 기력을 회복해주는 아이템", 0, 0, 1500, Item.ItemType.USE), false));
+            items.Add((new Item("샌드위치", "배고플때 허기 채우기 좋은 아이템", 0, 0, 2500, Item.ItemType.USE), false));
         }
 
         public override void ShowInfo()
@@ -306,12 +306,43 @@ namespace Elonmusk
             Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
             Console.WriteLine();
             Console.WriteLine("[보유 골드]");
-            Console.WriteLine($"{Game.game.player.GOLD}");
+            Console.WriteLine($"{Game.game.player.GOLD}G");
             Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
+            Console.WriteLine($" [방어구]");
             foreach (var item in items)
             {
-                Console.WriteLine($"- {item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}");
+                if (item.Item1.itemType.ToString() == "ARMOR")
+                {
+                    Console.WriteLine($"- {item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}G");
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine($" [무기류]");
+            foreach (var item in items)
+            {
+                if (item.Item1.itemType.ToString() == "WEAPON")
+                {
+                    Console.WriteLine($"- {item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}G");
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine($" [장신구]");
+            foreach (var item in items)
+            {
+                if (item.Item1.itemType.ToString() == "ACC")
+                {
+                    Console.WriteLine($"- {item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}G");
+                }
+            }
+            Console.WriteLine();
+            Console.WriteLine($" [소모품]");
+            foreach (var item in items)
+            {
+                if (item.Item1.itemType.ToString() == "USE")
+                {
+                    Console.WriteLine($"- {item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}G");
+                }
             }
             Console.WriteLine();
             Console.WriteLine("1.아이템 구매");
@@ -326,7 +357,7 @@ namespace Elonmusk
                     Game.game.ChangeScene(new Idle());
                     break;
                 case 1:
-                    Game.game.ChangeScene(new Buy());
+                    Game.game.ChangeScene(new BTestScene());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -346,8 +377,11 @@ namespace Elonmusk
                     Console.WriteLine("구매를 완료했습니다.");
                     items[index] = (items[index].Item1, true);
                 }
-                else
-                    Console.WriteLine("골드가 부족합니다.");
+                else Console.WriteLine("골드가 부족합니다.");
+                if(items[index].Item1.itemType.ToString() == "USE")
+                {
+                    items[index] = (items[index].Item1, false);
+                }
             }
         }
     }
@@ -398,7 +432,7 @@ namespace Elonmusk
         //기타, 무기류, 방어구, 악세류, 소모품
         public enum ItemType { NONE, WEAPON, ARMOR, ACC, USE};
 
-        ItemType itemType = ItemType.NONE;
+        public ItemType itemType = ItemType.NONE;
 
         public Item()
         {
@@ -582,7 +616,8 @@ namespace Elonmusk
         }
         public void EquipOrDequip(int index)
         {
-            items[index] = (items[index].Item1, !(items[index].Item2));
+            if (items[index].Item1.itemType.ToString() == "USE") Console.WriteLine($"소비품은 착용 불가능합니다.");
+            else items[index] = (items[index].Item1, !(items[index].Item2));
         }
 
         public void AddItem(Item item)
