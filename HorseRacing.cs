@@ -1,4 +1,7 @@
-﻿using Elonmusk;
+﻿
+#define TEST
+
+using Elonmusk;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace ElonMusk
 {
+
     public class HorseRacingLobby : GameLobby
     {
         public override void ShowInfo()
@@ -66,7 +70,7 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
             HorseRacingLobby.PrintGameTitle();
             Console.WriteLine();
             Console.WriteLine("스파르타 무스메는 5마리의 열정 넘치는 경기마들 중에서 승리하는 말을 맞추는 게임입니다.");
-            Console.WriteLine("승리하는 말을 맞추면 베팅한 금액의 세 배를 얻습니다.");
+            Console.WriteLine("승리하는 말을 맞추면 베팅한 금액의 다섯 배를 얻습니다.");
             Console.WriteLine("반대로 맞추지 못했을 경우에는 베팅한 금액을 모두 잃습니다.");
             Console.WriteLine("각 말들의 특징은 다음과 같습니다.");
             Console.WriteLine();
@@ -95,6 +99,7 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
 
     public class HorseRacingGame : Scene
     {
+
         bool isRunning = false;
         public const int laneLength = 200000;
 
@@ -112,6 +117,10 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
 
             Console.WriteLine("1. 게임 시작");
             Console.WriteLine("0. 돌아가기");
+
+#if TEST
+            Test(1000000);
+#endif
 
             Bet();
         }
@@ -168,6 +177,22 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
             }
         }
 
+#if TEST
+        void Test(int test) 
+        {
+            int[] winHorese = new int[5];
+
+            for(int i=0; i< test; i++) 
+            {
+                HorseRacing();
+                winHorese[winHorse-1]++;
+            }
+
+            Console.WriteLine($"{winHorese[0]},{winHorese[1]},{winHorese[2]},{winHorese[3]},{winHorese[4]}");
+
+            int act = Game.GetPlayerInputInt();
+        }
+#endif
         void PlayHorseRacing() 
         {
             Console.WriteLine("경마 시작!");
@@ -176,7 +201,19 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
             thread.Start();
             thread.Join();
 
+            Console.WriteLine();
             Console.WriteLine($"경기 종료!! 승리한 말은 {winHorse}번마입니다.");
+
+            if(betHorseNum == winHorse) 
+            {
+                Console.WriteLine($"맞추셨습니다! {betGold * 5}만큼 골드를 받습니다.");
+                Game.game.player.gainGold(betGold * 5);
+            }
+            else 
+            {
+                Console.WriteLine($"승리한 말을 맞추지 못했습니다. 배팅한 금액을 잃습니다.");
+                betGold = 0;
+            }
 
             RegameOrExit();
         }
@@ -267,16 +304,16 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
 
             while(!win) 
             {
-
+#if !TEST
                 Console.Clear();
                 printHorseLane();
-
+#endif
                 foreach (var horse in horses) 
                 {
                     horse.Run();
-
+#if !TEST
                     Console.WriteLine($"Horse : Speed = {horse.speed, -5}, Length = {horse.length, -20}");
-
+#endif
                     if (horse.length > laneLength) win = true;
                 }
 
@@ -308,7 +345,7 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
                 double maxRate = 0;
                 for(int i=0; i<winHorsesIndexes.Count; i++) 
                 {
-                    Horse winHorse = horses[i];
+                    Horse winHorse = horses[winHorsesIndexes[i]];
                     double overRate = ((double)(winHorse.length - laneLength)) / winHorse.speed;
 
                     if(maxRate < overRate)
@@ -337,6 +374,7 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
         void CalculateHorseSpeed() 
         {
             Random random = new Random();
+            
 
             // 1번마
             // 1번마의 속도는 확률 평균 300부터 시작해서 최소 100 이하로 감소
