@@ -147,6 +147,7 @@ namespace ElonMusk
     {
         public int turn;
         public Skill_SpawnError spawnError = new Skill_SpawnError();
+        public Skill_ErrorIncrease errorIncrease = new Skill_ErrorIncrease();
         public UncontrollableBug()
         {
             Name = "\"관객 공포증\" 버그";
@@ -814,6 +815,13 @@ namespace ElonMusk
                                     boss.turn++;
                                     break;
                                 }
+                                else if(boss.turn % 3 == 0)
+                                {
+                                    boss.errorIncrease.UseSkill(spawnlist);
+                                    boss.turn++;
+                                    continue;
+                                }
+                                boss.turn++;
                             }
                             if (Game.game.player.Evade + rand.Next(20) < mob.ACC + rand.Next(20))
                             {

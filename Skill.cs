@@ -35,7 +35,7 @@ namespace ElonMusk
 
         public override void UseSkill(List<Monster> spawnList)
         {
-            
+
             Draw(spawnList);
             int index;
             while (true)
@@ -56,11 +56,11 @@ namespace ElonMusk
                     continue;
                 }
             }
-            
+
             Game.game.player.SetPlayerMP(Cost);
             int damage = Game.game.player.ATK * 2;
-            int temp = spawnList[index-1].Health;
-            spawnList[index-1].TakeDamage(damage);
+            int temp = spawnList[index - 1].Health;
+            spawnList[index - 1].TakeDamage(damage);
             Console.Clear();
             Console.WriteLine($"플레이어의 '{Name}' 스킬 사용");
             Console.WriteLine();
@@ -121,7 +121,7 @@ namespace ElonMusk
             {
                 damage = Game.game.player.ATK * 3;
             }
-            
+
             int temp = spawnList[index - 1].Health;
             spawnList[index - 1].TakeDamage(damage);
 
@@ -190,7 +190,7 @@ namespace ElonMusk
     #region
     public class Skill_SpawnError : Skill
     {
-        public Skill_SpawnError() 
+        public Skill_SpawnError()
         {
             Name = "관련 에러 소환";
             Description1 = "관련 에러 두 개를 발생시킵니다.";
@@ -200,7 +200,7 @@ namespace ElonMusk
             Monster boss = null;
             foreach (var monster in spawnList)
             {
-                if(monster is UncontrollableBug)
+                if (monster is UncontrollableBug)
                 {
                     boss = (UncontrollableBug)monster;
                 }
@@ -212,6 +212,40 @@ namespace ElonMusk
             spawnList.Add(new RelatedError());
         }
     }
+
+    public class Skill_ErrorIncrease : Skill
+    {
+        public Skill_ErrorIncrease()
+        {
+            Name = "에러 증식";
+            Description1 = "에러가 걷잡을 수 없이 커집니다. 얼른 해결해야겠네요.";
+            Description1 = "자신의 공격력 + 10, 명중률 + 10";
+        }
+        public override void UseSkill(List<Monster> spawnList)
+        {
+            Monster boss = null;
+            foreach (var monster in spawnList)
+            {
+                if (monster is UncontrollableBug)
+                {
+                    boss = (UncontrollableBug)monster;
+                }
+            }
+            Console.WriteLine($"Lv.{boss.Level} {boss.Name}의 {Name}!");
+            Console.WriteLine(Description1);
+            Console.WriteLine(Description2);
+            Console.WriteLine();
+
+            int tempATK = boss.ATK;
+            int tempACC = boss.ACC;
+            boss.ATK += 10;
+            boss.ACC += 10;
+            Console.WriteLine($"공격력: {tempATK} -> {boss.ATK}");
+            Console.WriteLine($"명중률: {tempACC} -> {boss.ACC}");
+            Console.WriteLine();
+        }
+    }
+
     #endregion
     public static class ConsoleDraw
     {
