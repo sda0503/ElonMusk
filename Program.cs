@@ -13,18 +13,20 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Elonmusk 
-{
+{   
     internal class Program
     {
+        
         static void Main(string[] args)
         {
             Game game = new Game();
             game.Start();
         }
     }
-
+    
     public class Game
     {
+        
         public static Game game;
         Scene curScene;
 
@@ -185,7 +187,7 @@ namespace Elonmusk
     }
 
     public class PlayerInfo : Scene
-    {
+    {       
         public override void ShowInfo()
         {
             Game.game.player.ShowPlayerProfile();
@@ -198,7 +200,12 @@ namespace Elonmusk
             switch (act)
             {
                 case 0:
-                    Game.game.ChangeScene(new Idle());
+                    if (Dungeon.doing == Doing.beforebattle)
+                        Game.game.ChangeScene(new Dungeon.Battle());
+                    else if (Dungeon.doing == Doing.beforeDungeon)
+                        Game.game.ChangeScene(new Dungeon());
+                    else
+                        Game.game.ChangeScene(Game.game.idle);
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -485,15 +492,19 @@ namespace Elonmusk
 
         public int ATK { get; protected set; }
         public int DEF { get; protected set; }
+        public int ACC { get; protected set; }
+        public int Evade { get; protected set; }
 
         public int GOLD { get; protected set; }
+
+        public bool IsDead { get; protected set; }
 
         public Stat(string name = "", int level = 0, int ATK = 0, int DEF = 0, int GOLD = 0)
         {
             this.name = name;
             this.level = level;
             this.ATK = ATK;
-            this.DEF = DEF;
+            this.DEF = DEF;            
             this.GOLD = GOLD;
         }
 
@@ -513,6 +524,9 @@ namespace Elonmusk
     {
         public int MaxHP { get; protected set; }
         public int CurHP { get; protected set; }
+
+        public int MaxMP { get; protected set; }
+        public int CurMP { get; protected set; }
     }
 
     public class Player : Unit
@@ -565,6 +579,8 @@ namespace Elonmusk
             get { return EquipmentStat + this; }
         }
 
+        public List<Skill> skills;
+
         public Player()
         {
             items = new List<(Item, bool)>();
@@ -576,7 +592,12 @@ namespace Elonmusk
             DEF = 5;
             MaxHP = 100;
             CurHP = 100;
-            GOLD = 1000000;
+            ACC = 100;
+            Evade = 10;
+            GOLD = 1500;
+            MaxMP = 100;
+            CurMP = 100;
+            skills = [new Skill_Teach(), new Skill_Ask(), new Skill_Googling()];
         }
 
         public void ShowPlayerProfile()
@@ -594,6 +615,8 @@ namespace Elonmusk
             else
                 Console.WriteLine($"코딩력(논리) : {DEF} (+{EquipmentStat.DEF})");
             Console.WriteLine($"체력 : {CurHP} / {MaxHP}");
+            Console.WriteLine($"명중률 : {ACC}");
+            Console.WriteLine($"회피율 : {Evade}");
             Console.WriteLine($"소지금 : {GOLD}G");
         }
 
@@ -620,6 +643,40 @@ namespace Elonmusk
                 this.GOLD -= gold;
             }
         }
+        public void TakeDamage(int damage)
+        {
+            CurHP -= damage;
+            if (CurHP <= 0)
+            {
+                CurHP = 0;
+                IsDead = true;
+            }
+        }
+
+        public void SetPlayerHP(int value)
+        {
+            CurHP += value;
+            if (CurHP >= MaxHP)
+                CurHP = MaxHP;
+            else if(CurHP <= 0)
+            {
+                CurHP = 0;
+                IsDead = true;
+            }
+        }
+
+        public void SetPlayerMP(int value)
+        {
+            CurMP -= value;
+        }
+
+        public void UsePotion()
+        {
+            CurHP += 30;
+            if (CurHP >= 100)
+            {
+                CurHP = 100;                
+            }            
         public void EquipOrDequip(int index)
         {
             items[index] = (items[index].Item1, !(items[index].Item2));
