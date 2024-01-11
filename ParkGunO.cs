@@ -576,9 +576,6 @@ namespace ElonMusk
                                             Game.game.ChangeScene(new BattleEnd_win());
                                     }
                                     break;
-
-
-
                             }
                             break;
                         default:
@@ -587,12 +584,12 @@ namespace ElonMusk
                     }
                 }
 
-                public void attack(int PlayerATK, Monster mob)
+                public void attack(float PlayerATK, Monster mob)
                 {
                     Console.Clear();
                     Random rand = new Random();
                     int error = (int)MathF.Ceiling(PlayerATK / 10f);
-                    int damage = rand.Next(PlayerATK - error, PlayerATK + error);
+                    int damage = rand.Next((int)MathF.Ceiling(PlayerATK) - error, (int)MathF.Ceiling(PlayerATK) + error);
                     int temp = mob.Health;
                     int ACC= Game.game.player.ACC + rand.Next(20);
                     int Evade = mob.Evade + rand.Next(20);
@@ -878,10 +875,11 @@ namespace ElonMusk
                     Console.Write($"{Game.game.player.level} ");
                     Console.ResetColor();
                     Console.WriteLine($" {Game.game.player.name}");
-                    //Console.WriteLine($"exp {Game.game.player.exp} -> {Game.game.player.exp+sumexp}");
-                    //Game.game.player.Addexp(sumexp);
-                    //Console.WriteLine();
-                    //Console.WriteLine("[획득 아이템]");
+                    Console.WriteLine($"exp {Game.game.player.EXP} -> {Game.game.player.EXP + sumexp}");
+                    Game.game.player.Addexp(sumexp);
+                    Game.game.player.Levelup();
+                    Console.WriteLine();
+                    //Console.WriteLine("[획득 아이템]"); //확률에 따라서 그냥 랜덤 아이템 레어도 가격 낮은 걸로 드랍.
                     sumexp = 0;
                     Console.WriteLine($"0. {togo}");
                 }

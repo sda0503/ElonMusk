@@ -494,7 +494,7 @@ namespace Elonmusk
         public string name { get; protected set; }
         public int level { get; protected set; }
 
-        public int ATK { get; protected set; }
+        public float ATK { get; protected set; }
         public int DEF { get; protected set; }
         public int ACC { get; protected set; }
         public int Evade { get; protected set; }
@@ -664,6 +664,58 @@ namespace Elonmusk
         public void SetPlayerMP(int value)
         {
             CurMP -= value;
+        }
+
+        public void Addexp(int value)
+        {
+            EXP += value;
+        }
+
+        public void Levelup()
+        {
+            switch (level)
+            {
+                case 1:
+                    if (EXP >= 10)
+                    {                        
+                        Console.WriteLine("레벨 업!");
+                        Console.WriteLine($"Lv. {level} -> {level+1} {name}");
+                        level++;
+                        ATK += 0.5f;
+                        DEF += 1;
+                    }
+                    break;
+                case 2:
+                    if (EXP >= 35)
+                    {
+                        Console.WriteLine("레벨 업!");
+                        Console.WriteLine($"Lv. {level} -> {level + 1} {name}");
+                        level++;
+                        ATK += 0.5f;
+                        DEF += 1;
+                    }
+                    break;
+                case 3:
+                    if (EXP >= 65)
+                    {
+                        Console.WriteLine("레벨 업!");
+                        Console.WriteLine($"Lv. {level} -> {level + 1} {name}");
+                        level++;
+                        ATK += 0.5f;
+                        DEF += 1;
+                    }
+                    break;
+                case 4:
+                    if (EXP >= 100)
+                    {
+                        Console.WriteLine("레벨 업!");
+                        Console.WriteLine($"Lv. {level} -> {level + 1} {name}");
+                        level++;
+                        ATK += 0.5f;
+                        DEF += 1;
+                    }
+                    break;
+            }
         }
 
         public void UsePotion()
