@@ -856,8 +856,7 @@ namespace ElonMusk
                         togo = "준비과정으로 돌아가기";
                     }
                     else if (spawnlist[0] is UncontrollableBug)
-                    {
-                        // if ()
+                    {                      
                         Console.WriteLine("축하합니다! 발표를 성공적으로 마쳤습니다!");
                         Forsave.dungeonClearCnt++;
                         Console.WriteLine();
@@ -877,15 +876,20 @@ namespace ElonMusk
                     {
                         sumexp += mob.Level;
                     }
-                    spawnlist.Clear();
+                    
                     Console.Write($"Lv. ");
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.Write($"{Game.game.player.level} ");
                     Console.ResetColor();
                     Console.WriteLine($" {Game.game.player.name}");
                     Console.WriteLine($"exp {Game.game.player.EXP} -> {Game.game.player.EXP + sumexp}");
+                    Console.WriteLine();
+                    Console.WriteLine("[획득 아이템]");
+                    PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{spawnlist.Count*150}");
+                    Game.game.player.gainGold(spawnlist.Count * 150);
                     Game.game.player.Addexp(sumexp);
                     Game.game.player.LevelCal();
+                    spawnlist.Clear();
                     Console.WriteLine();
                     //Console.WriteLine("[획득 아이템]"); //확률에 따라서 그냥 랜덤 아이템 레어도 가격 낮은 걸로 드랍.
                     sumexp = 0;
@@ -950,7 +954,7 @@ namespace ElonMusk
                     Console.WriteLine("비밀의 드링크를 사용하면 체력을 30 회복 할 수 있습니다.  (남은 드링크 : {0})", potion);
                     Console.WriteLine();
                     Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
-                    Console.WriteLine($"MP {Game.gam .player.MaxMP}/{Game.game.player.CurMP}");
+                    Console.WriteLine($"MP {Game.game .player.MaxMP}/{Game.game.player.CurMP}");
                     Console.WriteLine("1. 사용하기");
                     Console.WriteLine("2. 이건 싫다. 다른 건 없나?");
                     Console.WriteLine("0. 나가기");
