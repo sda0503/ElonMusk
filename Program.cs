@@ -70,7 +70,7 @@ namespace Elonmusk
             resume = new Resume();
             quset = new Quest();
 
-            curScene = new Opening();
+            curScene = new Dungeon();
         }
 
         void Loop()

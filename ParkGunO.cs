@@ -678,13 +678,18 @@ namespace ElonMusk
             {
                 public override void ShowInfo()
                 {
-                    Console.WriteLine("Battle!! - 플레이어 턴");
+                    Console.Clear();
+                    Console.WriteLine("■■■■■■■■■■■■■■");
+                    ShowHighlithtesText("오류 수정!! - 플레이어 턴");
+                    Console.WriteLine("■■■■■■■■■■■■■■");
                     Console.WriteLine();
                     foreach (Monster mob in spawnlist)
                     {
                         if (mob.IsDead == true)
                             Console.ForegroundColor = ConsoleColor.DarkGray;
-                        Console.WriteLine($"Lv.{mob.Level} {mob.Name}  HP {mob.Health}");
+                        Console.Write($"Lv.{mob.Level} ");
+                        Console.Write(PadRightForMixedText(mob.Name, 25));
+                        Console.WriteLine($"HP {mob.Health}");
                         Console.ResetColor();
                     }
                     Console.WriteLine();
@@ -1020,7 +1025,7 @@ namespace ElonMusk
                 }
             }
 
-            private static void ShowHighlithtesText(string Text)//글자색깔바꾸기
+            public static void ShowHighlithtesText(string Text)//글자색깔바꾸기
             {
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine(Text);

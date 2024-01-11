@@ -37,11 +37,7 @@ namespace ElonMusk
             while (true)
             {
                 index = Game.GetPlayerInputInt();
-                if(index == 0)
-                {
-                    return;
-                }
-                else if (index <= spawnList.Count && index > 0)
+                if (index <= spawnList.Count && index > 0)
                 {
                     if (spawnList[index - 1].IsDead)
                     {
@@ -73,24 +69,7 @@ namespace ElonMusk
 
         public void Draw(List<Monster> spawnList)
         {
-            Console.Clear();
-            Console.WriteLine("Battle!!");
-            Console.WriteLine();
-            int j = 1;
-            foreach (Monster mob in spawnList)
-            {
-                if (mob.IsDead == true)
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine($"{j++} Lv.{mob.Level} {mob.Name}  HP {mob.Health}");
-                Console.ResetColor();
-            }
-            j = 1;
-            Console.WriteLine();
-            Console.WriteLine("[내 정보]");
-            Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
-            Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
-            Console.WriteLine();
-            Console.WriteLine("0. 돌아가기");
+            ConsoleDraw.DrawEnemyChoose(spawnList);
         }
     }
 
@@ -106,17 +85,12 @@ namespace ElonMusk
 
         public override void UseSkill(List<Monster> spawnList)
         {
-            
             Draw(spawnList);
             int index;
             while (true)
             {
                 index = Game.GetPlayerInputInt();
-                if (index == 0)
-                {
-                    return;
-                }
-                else if (index <= spawnList.Count && index > 0)
+                if (index <= spawnList.Count && index > 0)
                 {
                     if (spawnList[index - 1].IsDead)
                     {
@@ -159,24 +133,7 @@ namespace ElonMusk
 
         public void Draw(List<Monster> spawnList)
         {
-            Console.Clear();
-            Console.WriteLine("Battle!!");
-            Console.WriteLine();
-            int j = 1;
-            foreach (Monster mob in spawnList)
-            {
-                if (mob.IsDead == true)
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine($"{j++} Lv.{mob.Level} {mob.Name}  HP {mob.Health}");
-                Console.ResetColor();
-            }
-            j = 1;
-            Console.WriteLine();
-            Console.WriteLine("[내 정보]");
-            Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
-            Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
-            Console.WriteLine();
-            Console.WriteLine("0. 돌아가기");
+            ConsoleDraw.DrawEnemyChoose(spawnList);
         }
     }
 
@@ -221,6 +178,44 @@ namespace ElonMusk
 
             Console.WriteLine();
             Console.ReadLine();
+        }
+    }
+
+    public static class ConsoleDraw
+    {
+        public static void DrawEnemyChoose(List<Monster> spawnList)
+        {
+            Console.Clear();
+            Console.WriteLine("■■■■■■■■■■■■■■");
+            Dungeon.Battle.ShowHighlithtesText("오류 수정!! - 플레이어 턴");
+            Console.WriteLine("■■■■■■■■■■■■■■");
+            Console.WriteLine();
+            int j = 1;
+            foreach (Monster mob in spawnList)
+            {
+                if (mob.IsDead == true)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.Write($"[{j++}] ");
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.Write($"[{j++}] ");
+                    Console.ResetColor();
+                }
+                Console.Write($"Lv.{mob.Level} ");
+                Console.Write(Dungeon.Battle.PadRightForMixedText(mob.Name, 20));
+                Console.WriteLine($"HP {mob.Health}");
+                Console.ResetColor();
+            }
+            j = 1;
+            Console.WriteLine();
+            Console.WriteLine("[내 정보]");
+            Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
+            Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
+            Console.WriteLine();
+            Console.WriteLine("0. 돌아가기");
         }
     }
 }
