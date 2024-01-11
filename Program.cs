@@ -37,8 +37,8 @@ namespace Elonmusk
         public Buy buy { get; private set; }
         public Inventory inventory { get; private set; }
         public Opening opening { get; private set; }
-        public BTestScene btestScene { get; private set; }
         public Resume resume { get; private set; }
+        public BTestScene bTestScene { get; private set; }
 
         public Idle idle { get; private set; }
         public Equipment equipment { get; private set; }
@@ -66,11 +66,11 @@ namespace Elonmusk
             equipment = new Equipment();
             buy = new Buy();
             opening = new Opening();
-            btestScene = new BTestScene();
             resume = new Resume();
             quset = new Quest();
+            bTestScene = new BTestScene();
 
-            curScene = new Quest();
+            curScene = new Idle();
         }
 
         void Loop()
@@ -179,6 +179,9 @@ namespace Elonmusk
                 case 99:
                     Game.game.ChangeScene(new Resume());
                     break;
+                case 34:
+                    Game.game.ChangeScene(new BTestScene());
+                    break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
                     break;
@@ -229,6 +232,7 @@ namespace Elonmusk
                 (Item, bool) item = Game.game.player.items[i];
                 String strEquipped = (item.Item2) ? "[E]" : String.Empty;
                 Console.WriteLine($"- {i + 1} {strEquipped}{item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}");
+                Console.WriteLine(item.Item1.itemType);
             }
             Console.WriteLine();
             Console.WriteLine("1. 장착관리");
@@ -277,7 +281,6 @@ namespace Elonmusk
             }
             else if (act > 0 && act < Game.game.player.items.Count + 1)
             {
-                string itenType = Game.game.player.items[act - 1].Item1.itemType.ToString();
                 Game.game.player.EquipOrDequip(act - 1);
             }
             else
@@ -366,7 +369,7 @@ namespace Elonmusk
                     Game.game.ChangeScene(new Idle());
                     break;
                 case 1:
-                    Game.game.ChangeScene(new BTestScene());
+                    Game.game.ChangeScene(new Buy());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -447,15 +450,6 @@ namespace Elonmusk
             desc = "ItemDescription";
         }
 
-        public Item(string name, string desc, int ATK, int DEF, int GOLD)
-        {
-            this.name = name;
-            this.desc = desc;
-            this.ATK = ATK;
-            this.DEF = DEF;
-            this.GOLD = GOLD;
-        }
-
         public Item(string name, string desc, int ATK, int DEF, int GOLD, ItemType thisType)
         {
             this.name = name;
@@ -473,6 +467,7 @@ namespace Elonmusk
             this.ATK = item.ATK;
             this.DEF = item.DEF;
             this.GOLD = item.GOLD;
+            this.itemType = item.itemType;
         }
 
         public string GetEffectScript()
@@ -532,6 +527,7 @@ namespace Elonmusk
     public class Player : Unit
     {
         public List<(Item, bool)> items { get; private set; }
+        public List<Item> equipedItems {  get; private set; }
         private(string, bool) playerName;
         public string jobName;
         public (string, bool) PlayerName{get{ return playerName;}set { playerName = value; } }
@@ -584,6 +580,7 @@ namespace Elonmusk
         public Player()
         {
             items = new List<(Item, bool)>();
+            equipedItems = new List<Item> ();
             playerName.Item2 = false;
             name = "Victor";
             level = 1;
@@ -594,7 +591,7 @@ namespace Elonmusk
             CurHP = 100;
             ACC = 100;
             Evade = 10;
-            GOLD = 1500;
+            GOLD = 1000000;
             MaxMP = 100;
             CurMP = 100;
             skills = [new Skill_Teach(), new Skill_Ask(), new Skill_Googling()];
@@ -680,21 +677,28 @@ namespace Elonmusk
         }     
         public void EquipOrDequip(int index)
         {
-            items[index] = (items[index].Item1, !(items[index].Item2));
+            var selectedItem = items[index];
+
+            if (selectedItem.Item2)
+            {
+                items[index] = (selectedItem.Item1, false);
+                Console.WriteLine($"{selectedItem.Item1.name}이(가) 해제되었습니다.");
+            }
+            else
+            {
+                var itemType = selectedItem.Item1.itemType;
+                foreach (var i in items.Where(i => i.Item2 && i.Item1.itemType == itemType).ToList())
+                {
+                    items[items.IndexOf(i)] = (i.Item1, false);
+                    Console.WriteLine($"{i.Item1.name}이(가) 해제되었습니다.");
+                }
+                items[index] = (selectedItem.Item1, true);
+                Console.WriteLine($"{selectedItem.Item1.name}이(가) 장착되었습니다.");
+            }
         }
         public void AddItem(Item item)
         {
             items.Add((new Item(item), false));
-        }
-        public void CheckEquiped(string itemType, int index)
-        {
-            foreach(var i in items)
-            {
-                if(i.Item1.itemType.ToString().Equals(itemType) && i.Item2 ==true)
-                {
-                    Console.WriteLine("동일한 장비를 제거해주세요");
-                }
-            }
         }
     }
 }
