@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Elonmusk.Player;
 
 namespace ElonMusk
 {
@@ -19,6 +20,9 @@ namespace ElonMusk
         public abstract void UseSkill(List<Monster> spawnList);
     }
 
+
+    // 플레이어 스킬
+    #region
     public class Skill_Ask : Skill
     {
         public Skill_Ask()
@@ -180,7 +184,35 @@ namespace ElonMusk
             Console.ReadLine();
         }
     }
+    #endregion
 
+    // 보스 스킬
+    #region
+    public class Skill_SpawnError : Skill
+    {
+        public Skill_SpawnError() 
+        {
+            Name = "관련 에러 소환";
+            Description1 = "관련 에러 두 개를 발생시킵니다.";
+        }
+        public override void UseSkill(List<Monster> spawnList)
+        {
+            Monster boss = null;
+            foreach (var monster in spawnList)
+            {
+                if(monster is UncontrollableBug)
+                {
+                    boss = (UncontrollableBug)monster;
+                }
+            }
+            Console.WriteLine($"Lv.{boss.Level} {boss.Name}의 {Name}!");
+            Console.WriteLine(Description1);
+            Console.WriteLine();
+            spawnList.Add(new RelatedError());
+            spawnList.Add(new RelatedError());
+        }
+    }
+    #endregion
     public static class ConsoleDraw
     {
         public static void DrawEnemyChoose(List<Monster> spawnList)

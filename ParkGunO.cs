@@ -129,8 +129,24 @@ namespace ElonMusk
         }
     }
 
+    public class RelatedError : Monster
+    {
+        public RelatedError()
+        {
+            Name = "Related Error";
+            Level = 7;
+            Health = 30;
+            ATK = 10;
+            ACC = 10;
+            Evade = 3;
+            Description = "\'관객 공포증\' 버그가 생성한 또 다른 버그입니다.";
+        }
+    }
+
     public class UncontrollableBug : Monster //보스
     {
+        public int turn;
+        public Skill_SpawnError spawnError = new Skill_SpawnError();
         public UncontrollableBug()
         {
             Name = "\"관객 공포증\" 버그";
@@ -140,6 +156,7 @@ namespace ElonMusk
             ACC = 10;
             Evade = 5;
             Description = "컨트롤 할 수 없는, 중요한 자리에서 발생한 버그입니다.";
+            turn = 0;
         }
 
         public override void TakeDamage(int damage)
@@ -181,7 +198,7 @@ namespace ElonMusk
             dungeon = new int[3, 3] { //보스방이랑 시작위치만 고정하고 나머지 방은 Random으로 섞어버리자. || 전투 4개, 함정 2개, 보상 1개 해서 배열 만든다음에 오더바이해서 섞어버리고 포문으로 넣어버리는 게 더 깔끔할 듯.
             { 5, 2, 0 },
             { 2, 1, 0 },
-            { 0, 0, 3 } };
+            { 0, 5, 3 } };
 
             Forsave.dungeonposx = Forsave.dungeon.GetLength(0) - 1;
             Forsave.dungeonposy = Forsave.dungeon.GetLength(1) - 1;
@@ -789,7 +806,15 @@ namespace ElonMusk
                     {
                         if (mob.IsDead != true)
                         {
-
+                            if(mob is UncontrollableBug boss)
+                            {
+                                if(boss.turn == 0)
+                                {
+                                    boss.spawnError.UseSkill(spawnlist);
+                                    boss.turn++;
+                                    break;
+                                }
+                            }
                             if (Game.game.player.Evade + rand.Next(20) < mob.ACC + rand.Next(20))
                             {
                                 Game.game.player.TakeDamage(mob.ATK);
