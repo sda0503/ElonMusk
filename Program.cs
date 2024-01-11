@@ -143,9 +143,10 @@ namespace Elonmusk
             Console.WriteLine("2. 상점");
             Console.WriteLine("3. 일하기");
             Console.WriteLine("4. 인사평가");
-            Console.WriteLine("5. 강원랜드");
-            Console.WriteLine("6. 도전과제");
-            Console.WriteLine("7. 저장");
+            Console.WriteLine("5. 발표하기");
+            Console.WriteLine("6. 강원랜드");
+            Console.WriteLine("7. 도전과제");
+            Console.WriteLine("8. 저장");
         }
         public override void GetAction(int act)
         {
@@ -167,13 +168,16 @@ namespace Elonmusk
                 case 4: //인사평가
                     Game.game.ChangeScene(new Idle());
                     break;
-                case 5: //강원래드
+                case 5: //던전입장
+                    Game.game.ChangeScene(new Dungeon());
+                    break;
+                case 6: //강원래드
                     Game.game.ChangeScene(new Idle());
                     break;
-                case 6: //퀘스트
+                case 7: //퀘스트
                     Game.game.ChangeScene(new Idle());
                     break;
-                case 7: //저장
+                case 8: //저장
                     Game.game.ChangeScene(new Idle());
                     break;
                 case 99:

@@ -22,40 +22,6 @@ namespace ElonMusk
         void TakeDamage(int damage);
     }
 
-    //public class Character
-    //{
-    //    public string Name { get; set; }
-    //    public int Level { get; set; }
-    //    public int MaxHealth { get; set; }
-    //    public int CurHealth { get; set; }
-    //    public int ATK { get; set; }
-    //    public int DEF { get; set; }
-    //    public int ACC { get; set; }
-    //    public int Evade { get; set; }
-    //    public bool IsDead { get; set; }
-
-    //    public void TakeDamage(int damage)
-    //    {
-    //        CurHealth -= damage;
-    //        if (CurHealth <= 0)
-    //        {
-    //            CurHealth = 0;
-    //            IsDead = true;
-    //        }
-    //    }
-
-    //    public Character()
-    //    {
-    //        Name = "Chad";
-    //        Level = 1;            
-    //        ATK = 10;
-    //        DEF = 5;
-    //        MaxHealth = 100;
-    //        CurHealth = 100;
-    //        ACC = 10;
-    //        Evade = 10;
-    //    }
-    //}
 
     public class Monster : ICharacter
     {
@@ -141,11 +107,25 @@ namespace ElonMusk
         {
             Name = "형변환 오류";
             Level = 6;
+            Health = 25;
+            ATK = 7;
+            ACC = 5;
+            Evade = 3;
+            Description = "암시적 형변환으로 충분치 않을 때 발생합니다.";
+        }
+    }
+
+    public class runtimeerror : Monster
+    {
+        public runtimeerror()
+        {
+            Name = "runtime error";
+            Level = 8;
             Health = 30;
             ATK = 10;
             ACC = 5;
             Evade = 3;
-            Description = "암시적 형변환으로 충분치 않을 때 발생합니다.";
+            Description = "갖은 이유로 실행 중 발생한 오류입니다.";
         }
     }
 
@@ -175,7 +155,7 @@ namespace ElonMusk
         }
     }
 
-    public enum Doing { beforebattle, battle_ing, beforeDungeon }
+    public enum Doing { Idle, beforebattle, battle_ing, beforeDungeon }
 
     public class Forsave()
     {
@@ -190,7 +170,7 @@ namespace ElonMusk
         public static void dungeonsetting()
         {
             isdungeonclear = false;
-            isclear = new Dictionary<int, string>(){
+            isclear = new Dictionary<int, string>(){ //방 표시용
             { 0,"X"},
             { 1,"X"},
             { 2,"X"},
@@ -210,7 +190,7 @@ namespace ElonMusk
 
     public class Dungeon : Scene
     {
-        public static Doing doing;       
+        public static Doing doing;
         public override void ShowInfo()
         {
             if (Forsave.Dungeonfirst == false)
@@ -218,8 +198,14 @@ namespace ElonMusk
                 Forsave.dungeonsetting();
                 Forsave.Dungeonfirst = true;
             }
-            Console.WriteLine("환영합니다.");
-            Console.WriteLine("입장하기 전 점검 모시깽");
+            Console.WriteLine("■■■■■■■■■■■");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("발표 준비하기");
+            Console.ResetColor();
+            Console.WriteLine("■■■■■■■■■■■");
+            Console.WriteLine();
+            Console.WriteLine("여기는 발표회장에 들어가기 전 마지막으로 디버깅 해보는 장소입니다.");
+            Console.WriteLine("입장하기 발생하는 오류들을 수정하고, 성공적으로 발표를 마쳐보세요!");
             Console.WriteLine();
             Console.WriteLine("0. 돌아가기");
             Console.WriteLine("1. 입장하기");
@@ -233,7 +219,7 @@ namespace ElonMusk
                 case 0:
                     Game.game.ChangeScene(new Idle());
                     break;
-                case 1:                                       
+                case 1:
                     Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] = 4; //처음 입장하는 곳 전투X
                     Game.game.ChangeScene(new Dungeon_move());
                     break;
@@ -250,7 +236,7 @@ namespace ElonMusk
             {
                 Board();
                 Console.WriteLine();
-                Console.WriteLine("현재위치 : H || 보스방 : B");
+                Console.WriteLine("현재위치 : H || 발표회장 : B");
                 Console.WriteLine("이동할 방향을 누르세요. ex) 4 : Left, 8 : up, 6 : Right, 2 : Down");
                 Console.WriteLine("0. 돌아가기");
                 Console.WriteLine();
@@ -383,11 +369,11 @@ namespace ElonMusk
             public override void ShowInfo()
             {
                 Console.Clear();
-                Console.WriteLine("스파르타 던전에 오신 여러분 환영합니다.");
-                Console.WriteLine("이제 전투를 시작할 수 있습니다.");
+                Console.WriteLine("버그를 발견했습니다.");
+                Console.WriteLine("이제 디버깅을 시작할 수 있습니다.");
                 Console.WriteLine();
                 Console.WriteLine("1. 상태 보기");
-                Console.WriteLine("2. 전투 시작");
+                Console.WriteLine("2. 디버깅 시작");
                 Console.WriteLine("3. 회복 아이템");
                 Console.WriteLine();
             }
@@ -412,11 +398,10 @@ namespace ElonMusk
 
             void Battleprepare() //던전에서 이동해서 전투 나왔을 때 안에 함수들 한번만 실행되게 작성
             {
-                //필수구현할 때 전투시작전 체력도 저장해야될듯
                 BfHp = Game.game.player.CurHP;
                 if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] != 5)
                 {
-                    for (int i = 0; i < rand.Next(1, 5); i++)
+                    for (int i = 0; i < rand.Next(1, 6); i++)
                     {
                         switch (rand.Next(5))
                         {
@@ -435,6 +420,9 @@ namespace ElonMusk
                             case 4:
                                 spawnlist.Add(new TypeError());
                                 break;
+                            case 5:
+                                spawnlist.Add(new runtimeerror());
+                                break;
                         }
                     }
                 }
@@ -450,7 +438,7 @@ namespace ElonMusk
                 {
                     Console.Clear();
                     Console.WriteLine("■■■■■■■■■■■■■■");
-                    ShowHighlithtesText("Battle!! - 플레이어 턴");
+                    ShowHighlithtesText("오류 수정!! - 플레이어 턴");
                     Console.WriteLine("■■■■■■■■■■■■■■");
                     Console.WriteLine();
                     foreach (Monster mob in spawnlist)
@@ -504,7 +492,7 @@ namespace ElonMusk
                 {
                     Console.Clear();
                     Console.WriteLine("■■■■■■■■■■■■■■");
-                    ShowHighlithtesText("Battle!!");
+                    ShowHighlithtesText("오류 수정!! - 플레이어 턴");
                     Console.WriteLine("■■■■■■■■■■■■■■");
                     Console.WriteLine();
                     int j = 1;
@@ -551,7 +539,7 @@ namespace ElonMusk
                                 case int:
                                     if (spawnlist[act - 1].IsDead)
                                     {
-                                        Console.WriteLine("이미 죽은 몬스터입니다.");
+                                        Console.WriteLine("이미 해결된 버그입니다.");
                                         Console.ReadKey();
                                     }
                                     else
@@ -595,7 +583,7 @@ namespace ElonMusk
                         {
                             damage = (int)MathF.Ceiling(damage * 1.6f);
                             mob.TakeDamage(damage);
-                            Console.WriteLine("플레이어의 공격!");
+                            Console.WriteLine($"{Game.game.player.name}의 오류 수정!");
                             Console.WriteLine();
                             Console.WriteLine($"Lv.{mob.Level} {mob.Name} 을(를) 맞췄습니다. [데미지 : {damage}] - 치명타 공격!!");
                             Console.WriteLine($"Lv.{mob.Level} {mob.Name}");
@@ -606,7 +594,7 @@ namespace ElonMusk
                         else
                         {
                             mob.TakeDamage(damage);
-                            Console.WriteLine("플레이어의 공격!");
+                            Console.WriteLine($"{Game.game.player.name}의 오류 수정!");
                             Console.WriteLine();
                             Console.WriteLine($"Lv.{mob.Level} {mob.Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
                             Console.WriteLine($"Lv.{mob.Level} {mob.Name}");
@@ -617,7 +605,7 @@ namespace ElonMusk
                     }
                     else
                     {
-                        Console.WriteLine("공격이 빗나갔습니다.");
+                        Console.WriteLine("수정이 실패했습니다.");
                         Console.ReadLine();
                     }
                 }
@@ -629,7 +617,7 @@ namespace ElonMusk
                 {
                     Console.Clear();
                     Console.WriteLine("■■■■■■■■■■■■■■");
-                    ShowHighlithtesText("Battle!! - 버그 알아보기");
+                    ShowHighlithtesText("오류 수정!! - 버그 알아보기");
                     Console.WriteLine("■■■■■■■■■■■■■■");
                     Console.WriteLine();
                     int j = 1;
@@ -706,7 +694,7 @@ namespace ElonMusk
                     int temp = Game.game.player.CurHP;
                     Console.Clear();
                     Console.WriteLine("■■■■■■■■■■■■■■");
-                    ShowHighlithtesText("Battle!! - 적 턴");
+                    ShowHighlithtesText("오류 수정!! - 적 턴");
                     Console.WriteLine("■■■■■■■■■■■■■■");
                     Console.WriteLine();
                     enemyattack();
@@ -760,21 +748,21 @@ namespace ElonMusk
             public class BattleEnd_win : Scene
             {
                 int sumexp;
-               
+
                 public override void ShowInfo()
                 {
                     Console.Clear();
                     Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] = 4; //전투에서 승리하고 나면 그 자리에 있으니까 현재위치로 표시
                     Console.WriteLine("■■■■■■■■■■■■■■");
-                    ShowHighlithtesText("Battle!! - Result");
+                    ShowHighlithtesText("오류 수정!! - Result");
                     Console.WriteLine("■■■■■■■■■■■■■■");
                     Console.WriteLine();
-                    PrintTextWithHighlighst(ConsoleColor.Green, "", "Victory", "");
-                    Forsave.KillCnt += spawnlist.Count;                    
+                    PrintTextWithHighlighst(ConsoleColor.Green, "", "디버깅 완료!", "");
+                    Forsave.KillCnt += spawnlist.Count;
                     if (!(spawnlist[0] is UncontrollableBug))
                     {
                         Console.WriteLine();
-                        Console.WriteLine($"던전에서 몬스터 {spawnlist.Count}마리를 잡았습니다.");
+                        Console.WriteLine($"디버깅에서 오류 {spawnlist.Count}개를 수정했습니다.");
                         Console.WriteLine();
                         Console.Write("현재까지 잡은 버그 갯수 : ");
                         Console.ForegroundColor = ConsoleColor.Green;
@@ -783,13 +771,13 @@ namespace ElonMusk
                     }
                     else if (spawnlist[0] is UncontrollableBug)
                     {
-                       // if ()
-                        Console.WriteLine("축하합니다! 던전을 클리어 하셨습니다!");                        
+                        // if ()
+                        Console.WriteLine("축하합니다! 발표를 성공적으로 마쳤습니다!");
                         Forsave.dungeonClearCnt++;
                         Console.WriteLine();
-                        Console.Write("던전 클리어 횟수 : ");
+                        Console.Write("진행한 발표 횟수 : ");
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("{0}",Forsave.dungeonClearCnt);
+                        Console.WriteLine("{0}", Forsave.dungeonClearCnt);
                         Console.ResetColor();
 
                         Console.Write("현재까지 잡은 버그 갯수 : ");
@@ -797,7 +785,7 @@ namespace ElonMusk
                         Console.WriteLine("{0}", Forsave.KillCnt);
                         Console.ResetColor();
                     }
-                    
+
                     foreach (Monster mob in spawnlist)
                     {
                         sumexp += mob.Level;
@@ -839,10 +827,10 @@ namespace ElonMusk
                 {
                     Console.Clear();
                     Console.WriteLine("■■■■■■■■■■■■■■");
-                    ShowHighlithtesText("Battle!! - Result");
+                    ShowHighlithtesText("오류 수정!! - Result");
                     Console.WriteLine("■■■■■■■■■■■■■■");
                     Console.WriteLine();
-                    PrintTextWithHighlighst(ConsoleColor.Red, "", "You Lose", "");
+                    PrintTextWithHighlighst(ConsoleColor.Red, "", "디버깅에 실패했습니다.", "");
                     Console.WriteLine();
                     spawnlist.Clear();
                     Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
@@ -955,7 +943,7 @@ namespace ElonMusk
                 {
                     Console.Clear();
                     Console.WriteLine("보상을 얻었습니다.");
-                    
+
                     Console.WriteLine();
                     Console.WriteLine("0. 돌아가기");
                 }
