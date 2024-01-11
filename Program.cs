@@ -270,6 +270,7 @@ namespace Elonmusk
             }
             else if (act > 0 && act < Game.game.player.items.Count + 1)
             {
+                string itenType = Game.game.player.items[act - 1].Item1.itemType.ToString();
                 Game.game.player.EquipOrDequip(act - 1);
             }
             else
@@ -575,7 +576,7 @@ namespace Elonmusk
             DEF = 5;
             MaxHP = 100;
             CurHP = 100;
-            GOLD = 10000;
+            GOLD = 1000000;
         }
 
         public void ShowPlayerProfile()
@@ -623,10 +624,19 @@ namespace Elonmusk
         {
             items[index] = (items[index].Item1, !(items[index].Item2));
         }
-
         public void AddItem(Item item)
         {
             items.Add((new Item(item), false));
+        }
+        public void CheckEquiped(string itemType, int index)
+        {
+            foreach(var i in items)
+            {
+                if(i.Item1.itemType.ToString().Equals(itemType) && i.Item2 ==true)
+                {
+                    Console.WriteLine("동일한 장비를 제거해주세요");
+                }
+            }
         }
     }
 }
