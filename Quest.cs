@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ElonMusk;
+using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Data;
@@ -17,10 +18,13 @@ namespace Elonmusk
     public class Quest : Scene
     {
         public List<(string, string, int, bool)> questList { get; protected set; }
+        public int QusetCnt;
+        public List<(string, string, bool)> menu { get; set; }
 
         //생성자 이면서 퀘스트 들어오면 체크하기
         public Quest()
         {
+            QusetCnt = 0;
             questList = new List<(string, string, int, bool)> ();
             questList.Add(new("퍼스트블러드", "버그를 처음 해결하였을 때", 1, false));
             questList.Add(new("팬타킬", "버그를 5마리 이상 해결하였을 때", 5, false));
@@ -30,34 +34,43 @@ namespace Elonmusk
             questList.Add(new("존버", "보유골드 1000골드 이하", 1000, false));
             questList.Add(new("타짜", "블랙젝으로 백만골드 이상 획득", 1000000, false));
             questList.Add(new("오징어게임", "경마로 456만골드 이상 획득", 4560000, false));
-            questList.Add(new("엔딩", "경마로 456만골드 이상 획득", 1, false));
-        }
+            questList.Add(new("인생패망-1", "블랙젝에서 연속으로 패배", 1, false));
+            questList.Add(new("인생패망-2", "경마에서 연속으로 패배", 1, false));
+
+            CheckQuest();
+         }
 
         public override void ShowInfo()
         {
             Console.WriteLine("도전과제");
             Console.WriteLine();
-            for (int i =0; i<questList.Count; i++)
+            for (int i =0; i< menu.Count; i++)
             {
-                if (questList[i].Item4) Console.ForegroundColor = ConsoleColor.Red;
+                if (menu[i].Item3)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red; 
+                    
+                }
                 else Console.ForegroundColor = ConsoleColor.Gray;
-                Console.Write($"{i + 1} - {questList[i].Item1}");
-                for (int n = 0; n < (8 - (int)questList[i].Item1.Length); n++)
+
+                Console.Write($"{i + 1} - {menu[i].Item1}");
+                for (int n = 0; n < (10 - (int)menu[i].Item1.Length); n++)
                 {
                     Console.Write("  ");
                 }
-                Console.Write($"| {questList[i].Item2}");
+                Console.Write($"| {menu[i].Item2}");
                 Console.WriteLine();
                 Console.ResetColor();
             }
             Console.WriteLine();
             Console.WriteLine();
+            Console.WriteLine(QusetCnt);
             Console.WriteLine("0. 나가기");
         }
 
         public override void GetAction(int act)
         {
-            if (act == 0) Game.game.ChangeScene(new Shop());
+            if (act == 0) Game.game.ChangeScene(Game.game.idle);
             else if (act == 1) Game.game.shop.TryBuyItem(act - 1);
             else
             {
@@ -65,6 +78,30 @@ namespace Elonmusk
             }
         }
 
-        
+         void CheckQuest()
+        {
+            menu = new List<(string, string, bool)>();
+            menu.Clear();
+            if (Forsave.KillCnt > 0) { menu.Add(new("퍼스트블러드", "버그를 처음 해결하였을 때", true)); QusetCnt += 1; }
+            else menu.Add(new("퍼스트블러드", "버그를 처음 해결하였을 때", false));
+            if (Forsave.KillCnt > 300) { menu.Add(new("팬타킬", "버그를 5마리 이상 해결하였을 때", true)); QusetCnt += 1; }
+            else menu.Add(new("팬타킬", "버그를 5마리 이상 해결하였을 때", false));
+            if (Forsave.KillCnt > 5) { menu.Add(new("스파르타", "버그는 잡아도 잡아도 계속 나오네요", true)); QusetCnt += 1; }
+            else menu.Add(new("스파르타", "버그는 잡아도 잡아도 계속 나오네요", false));
+            if (Forsave.dungeonClearCnt > 0) { menu.Add(new("승리", "던전을 처음 클리어 하였을 때", true)); QusetCnt += 1; }
+            else menu.Add(new("승리", "던전을 처음 클리어 하였을 때", false));
+            if (Game.game.player.GOLD > 100000000) { menu.Add(new("부자", "보유골드 1억골드 이상", true)); QusetCnt += 1; }
+            else menu.Add(new("부자", "보유골드 1억골드 이상", false));
+            if (Game.game.player.GOLD < 1000) { menu.Add(new("존버", "보유골드 1000골드 이하", true)); QusetCnt += 1; }
+            else menu.Add(new("존버", "보유골드 1000골드 이하", false));
+            if (Game.game.player.GOLD > 1000000) { menu.Add(new("타짜", "블랙젝으로 백만골드 이상 획득", true)); QusetCnt += 1; }
+            else menu.Add(new("타짜", "블랙젝으로 백만골드 이상 획득", false));
+            if (Game.game.player.GOLD > 4560000) { menu.Add(new("오징어게임", "경마로 456만골드 이상 획득", true)); QusetCnt += 1; }
+            else menu.Add(new("오징어게임", "경마로 456만골드 이상 획득", false));
+            if (Game.game.player.GOLD > 4560000) { menu.Add(new("인생패망-1", "블랙젝에서 연속으로 패배", true)); QusetCnt += 1; }
+            else menu.Add(new("인생패망-1", "블랙젝에서 연속으로 패배", false));
+            if (Game.game.player.GOLD > 4560000) { menu.Add(new("인생패망-2", "블랙젝에서 연속으로 패배", true)); QusetCnt += 1; }
+            else menu.Add(new("인생패망-2", "경마에서 연속으로 패배", false));
+        }
     }
 }

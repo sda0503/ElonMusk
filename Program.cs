@@ -45,6 +45,10 @@ namespace Elonmusk
 
         public Quest quset { get; private set; }
 
+        public Job job { get; private set; }
+
+        public Casino casino { get; private set; }
+
         public Game()
         {
             game = this;
@@ -69,6 +73,8 @@ namespace Elonmusk
             btestScene = new BTestScene();
             resume = new Resume();
             quset = new Quest();
+            job = new Job();
+            casino = new Casino();
 
             curScene = new Opening();
         }
@@ -121,7 +127,6 @@ namespace Elonmusk
             Console.WriteLine("(주)스파르타에 오신 여러분 환영합니다.");
             Console.WriteLine("");
             Console.WriteLine("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
-
             Console.WriteLine("           __________                                 ");
             Console.WriteLine("         .'----------`.                              ");
             Console.WriteLine("         | .--------. |                             ");
@@ -165,13 +170,13 @@ namespace Elonmusk
                     Game.game.ChangeScene(new Idle());
                     break;
                 case 4: //인사평가
-                    Game.game.ChangeScene(new Idle());
+                    Game.game.ChangeScene(new Job());
                     break;
                 case 5: //강원래드
-                    Game.game.ChangeScene(new Idle());
+                    Game.game.ChangeScene(new Casino());
                     break;
                 case 6: //퀘스트
-                    Game.game.ChangeScene(new Idle());
+                    Game.game.ChangeScene(new Quest());
                     break;
                 case 7: //저장
                     Game.game.ChangeScene(new Idle());
@@ -385,6 +390,7 @@ namespace Elonmusk
                     Game.game.player.AddItem(items[index].Item1);
                     Console.WriteLine("구매를 완료했습니다.");
                     items[index] = (items[index].Item1, true);
+                    Game.game.player.ConsumeGold(items[index].Item1.GOLD);
                 }
                 else Console.WriteLine("골드가 부족합니다.");
                 if (items[index].Item1.itemType.ToString() == "USE")
@@ -447,14 +453,6 @@ namespace Elonmusk
             desc = "ItemDescription";
         }
 
-        public Item(string name, string desc, int ATK, int DEF, int GOLD)
-        {
-            this.name = name;
-            this.desc = desc;
-            this.ATK = ATK;
-            this.DEF = DEF;
-            this.GOLD = GOLD;
-        }
 
         public Item(string name, string desc, int ATK, int DEF, int GOLD, ItemType thisType)
         {
@@ -473,6 +471,7 @@ namespace Elonmusk
             this.ATK = item.ATK;
             this.DEF = item.DEF;
             this.GOLD = item.GOLD;
+            this.itemType = item.itemType;
         }
 
         public string GetEffectScript()
@@ -534,6 +533,7 @@ namespace Elonmusk
         public List<(Item, bool)> items { get; private set; }
         private(string, bool) playerName;
         public string jobName;
+        public int jobNum;
         public (string, bool) PlayerName{get{ return playerName;}set { playerName = value; } }
         public enum JOB
         {
@@ -556,6 +556,18 @@ namespace Elonmusk
                 case JOB.SeniorProgrammer: jobName = "시니어개발자"; break;
             }
             return jobName;
+        }
+
+        public int JobToInt(JOB j)
+        {
+            switch (j)
+            {
+                case JOB.Intern: jobNum = 0; break;
+                case JOB.Assistant: jobNum = 1; break;
+                case JOB.JuniorProgrammer: jobNum = 2; break;
+                case JOB.SeniorProgrammer: jobNum = 3; break;
+            }
+            return jobNum;
         }
 
         public Stat EquipmentStat
