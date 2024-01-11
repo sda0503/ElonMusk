@@ -212,7 +212,7 @@ namespace ElonMusk
 
     public class Dungeon : Scene
     {
-        public static Doing doing;       
+        public static Doing doing;
         public override void ShowInfo()
         {
             while (Forsave.Dungeonfirst == false)
@@ -329,8 +329,6 @@ namespace ElonMusk
                     default:
                         break;
                 }
-
-
             }
             static void Board()
             {
@@ -499,7 +497,10 @@ namespace ElonMusk
                             Console.WriteLine("유효한 입력이 아닙니다!");
                             break;
                     }
+                    st.ToArray();
                 }
+
+                private SortedSet<int> st = new SortedSet<int>();
             }
 
             public class BattleAttack : Scene
@@ -741,9 +742,9 @@ namespace ElonMusk
                         else
                         {
                             //if (stage == bossStage)
-                                Game.game.ChangeScene(new HappyEndding());
+                                //Game.game.ChangeScene(new HappyEndding());
                             //else
-                                //Game.game.ChangeScene(new BattleEnd_win());
+                                Game.game.ChangeScene(new BattleEnd_win());
                         }
                     }
                     else
@@ -834,6 +835,7 @@ namespace ElonMusk
                     Console.WriteLine();
                     PrintTextWithHighlighst(ConsoleColor.Green, "", "Victory", "");
                     Forsave.KillCnt += spawnlist.Count;
+
                     if (!Forsave.isdungeonclear)
                     {
                         Console.WriteLine();
