@@ -7,8 +7,6 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-using static Elonmusk.Player;
-using static System.Net.Mime.MediaTypeNames;
 
 
 namespace ElonMusk
@@ -155,7 +153,7 @@ namespace ElonMusk
     {
         public UncontrollableBug()
         {
-            Name = "관객 공포증 버그";
+            Name = "\"관객 공포증\" 버그";
             Level = 10;
             Health = 70;
             ATK = 15;
@@ -174,11 +172,11 @@ namespace ElonMusk
                 IsDead = true;
                 Forsave.isdungeonclear = true;
             }
-
         }
     }
 
     public enum Doing { beforebattle, battle_ing, beforeDungeon }
+
     public class Forsave()
     {
         public static bool Dungeonfirst;
@@ -200,7 +198,7 @@ namespace ElonMusk
             { 4,"H"},
             { 5,"B"}
             };
-            dungeon = new int[3, 3] {
+            dungeon = new int[3, 3] { //보스방이랑 시작위치만 고정하고 나머지 방은 Random으로 섞어버리자. || 전투 4개, 함정 2개, 보상 1개 해서 배열 만든다음에 오더바이해서 섞어버리고 포문으로 넣어버리는 게 더 깔끔할 듯.
             { 5, 2, 0 },
             { 2, 1, 0 },
             { 0, 0, 3 } };
@@ -212,10 +210,10 @@ namespace ElonMusk
 
     public class Dungeon : Scene
     {
-        public static Doing doing;
+        public static Doing doing;       
         public override void ShowInfo()
         {
-            while (Forsave.Dungeonfirst == false)
+            if (Forsave.Dungeonfirst == false)
             {
                 Forsave.dungeonsetting();
                 Forsave.Dungeonfirst = true;
@@ -321,7 +319,7 @@ namespace ElonMusk
                         break;
                     case 3:
                         Console.Clear();
-                        Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] = 4;
+                        Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] = 4; //클리어한 방끼리 이동할 떄를 위해 작성
                         break;
                     case 5:
                         Game.game.ChangeScene(new Battle());
@@ -460,7 +458,7 @@ namespace ElonMusk
                         if (mob.IsDead == true)
                             Console.ForegroundColor = ConsoleColor.DarkGray;
                         Console.Write($"Lv.{mob.Level} ");
-                        Console.Write(PadRightForMixedText(mob.Name, 20));
+                        Console.Write(PadRightForMixedText(mob.Name, 25));
                         Console.WriteLine($"HP {mob.Health}");
                         Console.ResetColor();
                     }
@@ -484,7 +482,7 @@ namespace ElonMusk
                             Game.game.ChangeScene(new BattleAttack());
                             break;
                         case 2:
-                            Game.game.ChangeScene(new BattleSkillChoose());
+                            Game.game.ChangeScene(new BattleSkill());
                             break;
                         case 3:
                             Game.game.ChangeScene(new Battle_InfoBug());
@@ -497,10 +495,7 @@ namespace ElonMusk
                             Console.WriteLine("유효한 입력이 아닙니다!");
                             break;
                     }
-                    st.ToArray();
                 }
-
-                private SortedSet<int> st = new SortedSet<int>();
             }
 
             public class BattleAttack : Scene
@@ -691,76 +686,18 @@ namespace ElonMusk
                 }
             }
 
-        public class BattleSkillChoose : Scene
-        {
-            public override void ShowInfo()
+            public class BattleSkill : Scene
             {
-                Console.WriteLine("Battle!! - 플레이어 턴");
-                Console.WriteLine();
-                foreach (Monster mob in spawnlist)
+                public override void ShowInfo()
                 {
-                    if (mob.IsDead == true)
-                        Console.ForegroundColor = ConsoleColor.DarkGray;
-                    Console.WriteLine($"Lv.{mob.Level} {mob.Name}  HP {mob.Health}");
-                    Console.ResetColor();
-                }
-                Console.WriteLine();
-                Console.WriteLine("[내 정보]");
-                Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
-                Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
-                Console.WriteLine($"MP {Game.game.player.MaxMP}/{Game.game.player.CurMP}");
-                Console.WriteLine();
-                int i = 1;
-                foreach(var skill in Game.game.player.skills)
-                {
-                    Console.WriteLine($"{i++}. {skill.Name} - MP {skill.Cost}");
-                    Console.WriteLine($"- {skill.Description1}");
-                    Console.WriteLine($"{skill.Description2}");
-                    Console.WriteLine();
-                }
-                Console.WriteLine("0. 취소");
-            }
 
-            public override void GetAction(int act)
-            {
-                if(act <= Game.game.player.skills.Count && act >= 1)
-                {
-                    if (Game.game.player.skills[act -1].Cost <= Game.game.player.CurMP)
-                    {
-                        Game.game.player.skills[act - 1].UseSkill(spawnlist);
-                        bool isAlive = false;
-                        foreach (Monster mob in spawnlist)
-                        {
-                            if (!mob.IsDead)
-                            {
-                                isAlive = true;
-                                break;
-                            }
-                        }
-                        if (isAlive == true)
-                            Game.game.ChangeScene(new Battle_enemyturn());
-                        else
-                        {
-                            //if (stage == bossStage)
-                                //Game.game.ChangeScene(new HappyEndding());
-                            //else
-                                Game.game.ChangeScene(new BattleEnd_win());
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("MP가 부족합니다.");
-                    }
                 }
-                else if(act == 0)
-                {
-                    Game.game.ChangeScene(new Battle_myturn());
-                }
-                else
-                    Console.WriteLine("유효한 입력이 아닙니다!");
-            }
 
-        }
+                public override void GetAction(int act)
+                {
+
+                }
+            }
 
             public class Battle_enemyturn : Scene
             {
@@ -781,19 +718,18 @@ namespace ElonMusk
 
                 }
 
-            public override void GetAction(int act)
-            {
-                switch (act)
+                public override void GetAction(int act)
                 {
-                    default:
-                        if (Game.game.player.IsDead != true)
-                        Game.game.ChangeScene(new Battle_myturn());
-                        
-                        else
-                        Game.game.ChangeScene(new BadEndding());
-                        break;
+                    switch (act)
+                    {
+                        default:
+                            if (Game.game.player.IsDead != true)
+                                Game.game.ChangeScene(new Battle_myturn());
+                            else
+                                Game.game.ChangeScene(new BattleEnd_Lose());
+                            break;
+                    }
                 }
-            }
 
                 public void enemyattack()
                 {
@@ -834,9 +770,8 @@ namespace ElonMusk
                     Console.WriteLine("■■■■■■■■■■■■■■");
                     Console.WriteLine();
                     PrintTextWithHighlighst(ConsoleColor.Green, "", "Victory", "");
-                    Forsave.KillCnt += spawnlist.Count;
-
-                    if (!Forsave.isdungeonclear)
+                    Forsave.KillCnt += spawnlist.Count;                    
+                    if (!(spawnlist[0] is UncontrollableBug))
                     {
                         Console.WriteLine();
                         Console.WriteLine($"던전에서 몬스터 {spawnlist.Count}마리를 잡았습니다.");
@@ -846,8 +781,9 @@ namespace ElonMusk
                         Console.WriteLine("{0}", Forsave.KillCnt);
                         Console.ResetColor();
                     }
-                    else if (Forsave.isdungeonclear)
+                    else if (spawnlist[0] is UncontrollableBug)
                     {
+                       // if ()
                         Console.WriteLine("축하합니다! 던전을 클리어 하셨습니다!");                        
                         Forsave.dungeonClearCnt++;
                         Console.WriteLine();
