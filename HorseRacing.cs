@@ -1,11 +1,11 @@
 ﻿
-#define TEST
 
 using Elonmusk;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
@@ -110,48 +110,59 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
         int betGold = 0;
         int winHorse = 0;
 
+        static int WinStreak = 0;
+
         public override void ShowInfo()
-        {
-            // print
-            HorseRacingLobby.PrintGameTitle();
-
-            Console.WriteLine("1. 게임 시작");
-            Console.WriteLine("0. 돌아가기");
-
-#if TEST
-            Test(100000);
-#endif
-
-            Bet();
-        }
-
-        void Bet() 
         {
             Console.Clear();
             printHorseLane();
             Console.WriteLine();
             Console.WriteLine("먼저 배팅할 말을 지정해주세요 (1-5번, 0을 입력하면 돌아갑니다)");
             Console.WriteLine();
+
             // 배팅할 말 설정
-            int horseNum = -1;
-            do
-            {
-                horseNum = Game.GetPlayerInputInt();
-            }
-            while (!(horseNum >-1 && horseNum < 6));
+#if TEST
+            Test(100000);
+#endif
+        }
 
-            if(horseNum == 0 ) { return; }
-            else 
+        public override void GetAction(int act)
+        {
+            if (!isRunning)
             {
-                this.betHorseNum = horseNum;
+                switch (act)
+                {
+                    case 0:
+                        Game.game.ChangeScene(new HorseRacingLobby());
+                        break;
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                        this.betHorseNum = act;
+                        Bet();
+                        break;
+                    default:
+                        Console.WriteLine("유효한 입력이 아닙니다!");
+                        break;
+                }
             }
+        }
 
+
+        void Bet() 
+        {
             // 배팅할 금액 설정
+            Console.Clear();
+            printHorseLane();
             Console.WriteLine();
             Console.WriteLine($"현재 소지 금액 {Game.game.player.GOLD}");
             Console.WriteLine("배팅할 금액을 입력해주세요. (0을 입력하면 나갑니다)");
             Console.WriteLine();
-            
+            Console.WriteLine("원하시는 금액을 선택해주세요.");
+            Console.Write(">> ");
+
             int bet = -1;
             do
             {
@@ -207,11 +218,14 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
             if(betHorseNum == winHorse) 
             {
                 Console.WriteLine($"맞추셨습니다! {betGold * 5}만큼 골드를 받습니다.");
-                Game.game.player.gainGold(betGold * 5);
+                Game.game.player.gainGold(betGold * 4);
+                CasinoData.casinoData.horseRacingAchivement._winGold += betGold * 5;
+                betGold = 0;
             }
             else 
             {
                 Console.WriteLine($"승리한 말을 맞추지 못했습니다. 배팅한 금액을 잃습니다.");
+                CasinoData.casinoData.horseRacingAchivement._loseGold += betGold;
                 betGold = 0;
             }
 
@@ -227,6 +241,9 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
             int act = -1;
             do
             {
+                Console.WriteLine();
+                Console.WriteLine("원하시는 행동을 선택해주세요.");
+                Console.Write(">> ");
                 act = Game.GetPlayerInputInt();
             }
             while (act != 1 && act != 0);
@@ -234,24 +251,7 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
             if (act == 1)
                 Bet();
             else if (act == 0)
-                Game.game.ChangeScene((Scene)Activator.CreateInstance(this.GetType()));
-        }
-
-
-        public override void GetAction(int act)
-        {
-            if (!isRunning)
-            {
-                switch (act)
-                {
-                    case 0:
-                        Game.game.ChangeScene(new HorseRacingLobby());
-                        break;
-                    default:
-                        Console.WriteLine("유효한 입력이 아닙니다!");
-                        break;
-                }
-            }
+                Game.game.ChangeScene(new HorseRacingLobby());
         }
 
         void printHorseLane()
@@ -428,6 +428,38 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
             public void Run() 
             {
                 length += speed;
+            }
+        }
+
+        public void CountWinStreak(WINFLAG flag)
+        {
+            if (WinStreak == 0)
+                WinStreak += (int)flag;
+            else if (WinStreak > 0)
+            {
+                if (flag != WINFLAG.WIN)
+                    WinStreak = (int)flag;
+                else
+                {
+                    WinStreak++;
+                    if (WinStreak > CasinoData.casinoData.horseRacingAchivement._maxWinStreak)
+                    {
+                        CasinoData.casinoData.horseRacingAchivement._maxWinStreak = WinStreak;
+                    }
+                }
+            }
+            else
+            {
+                if (flag != WINFLAG.LOSE)
+                    WinStreak = (int)flag;
+                else
+                {
+                    WinStreak--;
+                    if (WinStreak < CasinoData.casinoData.horseRacingAchivement._maxLoseStreak)
+                    {
+                        CasinoData.casinoData.horseRacingAchivement._maxLoseStreak = WinStreak;
+                    }
+                }
             }
         }
     }
