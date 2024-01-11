@@ -444,7 +444,7 @@ namespace Elonmusk
 
         public enum ItemType { NONE, WEAPON, ARMOR, ACCESSORY, USE };
 
-        public ItemType itemType { get; protected set; }//= ItemType.NONE;
+        public ItemType itemType = ItemType.NONE;
         public Item()
         {
             name = "Item";
@@ -477,6 +477,7 @@ namespace Elonmusk
             this.ATK = item.ATK;
             this.DEF = item.DEF;
             this.GOLD = item.GOLD;
+            this.itemType = item.itemType;
         }
 
         public string GetEffectScript()
@@ -664,6 +665,13 @@ namespace Elonmusk
         public void SetPlayerMP(int value)
         {
             CurMP -= value;
+            if (CurMP >= MaxMP)
+                CurMP = MaxMP;
+            else if (CurMP <= 0)
+            {
+                CurMP = 0;
+                
+            }
         }
 
         public void Addexp(int value)

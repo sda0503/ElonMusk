@@ -1001,6 +1001,7 @@ namespace ElonMusk
 
             public class UsePotion_Find : Scene
             {
+                List<int> itemindex = new List<int>();
                 public override void ShowInfo()
                 {
                     Console.Clear();
@@ -1008,31 +1009,53 @@ namespace ElonMusk
                     ShowHighlithtesText("다른 건 뭐가 있을까");
                     Console.WriteLine("■■■■■■■■■■■■■■");
                     Console.WriteLine();
+                    
                     int j = 1;
                     for (int i = 0; i < Game.game.player.items.Count; i++)
                     {
-                        if (Game.game.player.items[i].Item1.itemType == Item.ItemType.USE)
+                        (Item, bool) item = Game.game.player.items[i];
+                        if (item.Item1.itemType == Item.ItemType.USE)
                         {
-                            Console.WriteLine($"-{j++} {Game.game.player.items[i].Item1.name}  {Game.game.player.items[i].Item1.desc} ");
+                            itemindex.Add(i);
+                            Console.WriteLine($" - {j++} {Game.game.player.items[i].Item1.name}  {Game.game.player.items[i].Item1.desc} ");
                         }
                     }
-                    j = 1;
-                    Console.WriteLine("1. 사용하기");
+                    j = 1;                    
                     Console.WriteLine("0. 나가기");
                     Console.WriteLine();
                 }
 
                 public override void GetAction(int act)
                 {
-                    switch (act)
+                    if (act >= 0 && act <= itemindex.Count)
                     {
-                        case 0:
-                            Game.game.ChangeScene(new UsePotion());
-                            break;
-                        default:
-                            Console.WriteLine("유효한 입력이 아닙니다!");
-                            break;
+                        switch (act)
+                        {
+                            case 0:
+                                Game.game.ChangeScene(new UsePotion());
+                                break;
+                            case int:
+                                string name = Game.game.player.items[itemindex[act-1]].Item1.name;
+                                switch (name)
+                                {
+                                    case "코카콜라(빨간포션)":
+                                        Game.game.player.SetPlayerHP(10);
+                                        break;
+                                    case "팹시(파란포션)":
+                                        Game.game.player.SetPlayerMP(-10);
+                                        break;
+                                    case "아이스아메리카노":
+                                        Game.game.player.SetPlayerMP(-30);
+                                        break;
+                                    case "샌드위치":
+                                        Game.game.player.SetPlayerHP(50);
+                                        break;
+                                }
+                                Game.game.player.items.RemoveAt(itemindex[act-1]);
+                                break;                           
+                        }
                     }
+
                 }
             }
 
