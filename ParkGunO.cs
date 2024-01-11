@@ -881,7 +881,7 @@ namespace ElonMusk
                     Console.WriteLine($" {Game.game.player.name}");
                     Console.WriteLine($"exp {Game.game.player.EXP} -> {Game.game.player.EXP + sumexp}");
                     Game.game.player.Addexp(sumexp);
-                    Game.game.player.Levelup();
+                    Game.game.player.LevelCal();
                     Console.WriteLine();
                     //Console.WriteLine("[획득 아이템]"); //확률에 따라서 그냥 랜덤 아이템 레어도 가격 낮은 걸로 드랍.
                     sumexp = 0;

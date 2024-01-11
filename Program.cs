@@ -669,59 +669,46 @@ namespace Elonmusk
                 CurMP = MaxMP;
             else if (CurMP <= 0)
             {
-                CurMP = 0;
-                
+                CurMP = 0;                
             }
         }
 
         public void Addexp(int value)
         {
-            EXP += value;
+            if (EXP <= 100)
+                EXP += value;
+            else if (EXP > 100)
+                EXP = 100;
         }
 
-        public void Levelup()
+        public void Levelup(int value)
+        {
+            Console.WriteLine("레벨 업!");
+            Console.WriteLine($"Lv. {level} -> {level + 1} {name}");
+            level++;
+            ATK += 0.5f;
+            DEF += 1;
+        }
+
+        public void LevelCal()
         {
             switch (level)
             {
                 case 1:
                     if (EXP >= 10)
-                    {                        
-                        Console.WriteLine("레벨 업!");
-                        Console.WriteLine($"Lv. {level} -> {level+1} {name}");
-                        level++;
-                        ATK += 0.5f;
-                        DEF += 1;
-                    }
+                        Levelup(level);
                     break;
                 case 2:
                     if (EXP >= 35)
-                    {
-                        Console.WriteLine("레벨 업!");
-                        Console.WriteLine($"Lv. {level} -> {level + 1} {name}");
-                        level++;
-                        ATK += 0.5f;
-                        DEF += 1;
-                    }
+                        Levelup(level);
                     break;
                 case 3:
                     if (EXP >= 65)
-                    {
-                        Console.WriteLine("레벨 업!");
-                        Console.WriteLine($"Lv. {level} -> {level + 1} {name}");
-                        level++;
-                        ATK += 0.5f;
-                        DEF += 1;
-                    }
+                        Levelup(level);
                     break;
                 case 4:
                     if (EXP >= 100)
-                    {
-                         Console.WriteLine("레벨 업!");
-                        Console.WriteLine($"Lv. {level} -> {level+1} {name}");
-                        level++;
-                        ATK += 0.5f;
-                        DEF += 1;
-                    }
+                        Levelup(level);
                     break;
             }
         }
