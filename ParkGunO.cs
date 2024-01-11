@@ -49,11 +49,11 @@ namespace ElonMusk
     {
         public Null() //밸런스 잡힌 타입
         {
-            Name = "Null";
+            Name = "Null Reference Exception";
             Level = 2;
             Health = 15;
             ATK = 6;
-            ACC = 5;
+            ACC = 16;
             Evade = 5;
             Description = "Null의 값을 가질 수 없는 Object에 Null을 할당했기에 발생하거나, 참조하려는 개체가 Null일 때 발생합니다.";
         }
@@ -66,21 +66,21 @@ namespace ElonMusk
             Name = "OutofRange";
             Level = 5;
             Health = 25;
-            ATK = 15;
-            ACC = 3;
+            ATK = 10;
+            ACC = 10;
             Evade = 0;
-            Description = "배열의 크기를 벗어나 접근할 때 발생합니다.";
+            Description = "배열의 크기를 벗어나 접근할 때 발생합니다. 혹시 Array[Length]가 되어있진 않나요?";
         }
     }
 
     public class OthersCode : Monster
     {
-        public OthersCode() //체력, 공격력 낮은 대신 명중,회피가 높음
+        public OthersCode() //별로 위협적이진 않지만 크게 데일수 있다는 느낌으로 명중0회피0에 데미지만 쎄게
         {
             Name = "남이 작성한 코드";
             Level = 1;
             Health = 5;
-            ATK = 5;
+            ATK = 20;
             ACC = 5;
             Evade = 0;
             Description = "남이 작성한 코드입니다. 이해하려면 시간이 걸립니다. 설명이 없다면 더더욱, 주석을 생활화합시다.";
@@ -94,10 +94,10 @@ namespace ElonMusk
             Name = "연결끊김";
             Level = 7;
             Health = 20;
-            ATK = 3;
-            ACC = 5;
-            Evade = 3;
-            Description = "인터넷이 끊겼습니다. 재앙이 아닐 수 없군요.";
+            ATK = 8;
+            ACC = 14;
+            Evade = 12;
+            Description = "인터넷이 끊겼습니다. 재앙이 아닐 수 없군요. 당신은 가진 지식으로 문제를 헤쳐나가야 합니다.";
         }
     }
 
@@ -105,13 +105,13 @@ namespace ElonMusk
     {
         public TypeError()
         {
-            Name = "형변환 오류";
+            Name = "TypeError";
             Level = 6;
             Health = 25;
             ATK = 7;
-            ACC = 5;
-            Evade = 3;
-            Description = "암시적 형변환으로 충분치 않을 때 발생합니다.";
+            ACC = 15;
+            Evade = 8;
+            Description = "암시적 형변환으로 충분치 않을 때 발생합니다. int num = (int)10.5f 처럼 명시적으로 작성해보세요.";
         }
     }
 
@@ -120,12 +120,12 @@ namespace ElonMusk
         public runtimeerror()
         {
             Name = "runtime error";
-            Level = 8;
+            Level = 9;
             Health = 30;
             ATK = 10;
-            ACC = 5;
-            Evade = 3;
-            Description = "갖은 이유로 실행 중 발생한 오류입니다.";
+            ACC = 16;
+            Evade = 12;
+            Description = "갖은 이유로 실행 중 발생한 오류입니다. 오류 코드를 잘 읽고 디버깅 해보도록 합시다.";
         }
     }
 
@@ -137,8 +137,8 @@ namespace ElonMusk
             Level = 10;
             Health = 70;
             ATK = 15;
-            ACC = 10;
-            Evade = 5;
+            ACC = 16;
+            Evade = 9;
             Description = "컨트롤 할 수 없는, 중요한 자리에서 발생한 버그입니다.";
         }
 
@@ -452,7 +452,7 @@ namespace ElonMusk
                     }
                     Console.WriteLine();
                     Console.WriteLine("[내 정보]");
-                    Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
+                    Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.PlayerName.Item1}");
                     Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
                     Console.WriteLine();
                     Console.WriteLine("1. 디버그");
@@ -577,7 +577,9 @@ namespace ElonMusk
                     int error = (int)MathF.Ceiling(PlayerATK / 10f);
                     int damage = rand.Next(PlayerATK - error, PlayerATK + error);
                     int temp = mob.Health;
-                    if (Game.game.player.ACC + rand.Next(20) > mob.Evade + rand.Next(20))
+                    int ACC= Game.game.player.ACC + rand.Next(20);
+                    int Evade = mob.Evade + rand.Next(20);
+                    if (ACC >=Evade)
                     {
                         if (rand.Next(100) > 84)
                         {
@@ -706,6 +708,7 @@ namespace ElonMusk
 
                 public override void GetAction(int act)
                 {
+                    
                     if (act <= Game.game.player.skills.Count && act >= 1)
                     {
                         if (Game.game.player.skills[act - 1].Cost <= Game.game.player.CurMP)
@@ -784,8 +787,9 @@ namespace ElonMusk
                     {
                         if (mob.IsDead != true)
                         {
-
-                            if (Game.game.player.Evade + rand.Next(20) < mob.ACC + rand.Next(20))
+                            int Evade = Game.game.player.Evade + rand.Next(20);
+                            int ACC = mob.ACC + rand.Next(20);
+                            if ( Evade < ACC )
                             {
                                 Game.game.player.TakeDamage(mob.ATK);
                                 Console.WriteLine($"Lv.{mob.Level} {mob.Name}의 공격!");
@@ -810,6 +814,7 @@ namespace ElonMusk
                 public override void ShowInfo()
                 {
                     Console.Clear();
+                    string togo = "";
                     Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] = 4; //전투에서 승리하고 나면 그 자리에 있으니까 현재위치로 표시
                     Console.WriteLine("■■■■■■■■■■■■■■");
                     ShowHighlithtesText("오류 수정!! - Result");
@@ -826,6 +831,7 @@ namespace ElonMusk
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("{0}", Forsave.KillCnt);
                         Console.ResetColor();
+                        togo = "준비과정으로 돌아가기";
                     }
                     else if (spawnlist[0] is UncontrollableBug)
                     {
@@ -842,6 +848,7 @@ namespace ElonMusk
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("{0}", Forsave.KillCnt);
                         Console.ResetColor();
+                        togo = "회사로 돌아가기";
                     }
 
                     foreach (Monster mob in spawnlist)
@@ -859,7 +866,7 @@ namespace ElonMusk
                     //Console.WriteLine();
                     //Console.WriteLine("[획득 아이템]");
                     sumexp = 0;
-                    Console.WriteLine("0. 돌아가기");
+                    Console.WriteLine($"0. {togo}");
                 }
                 public override void GetAction(int act)
                 {
@@ -893,14 +900,14 @@ namespace ElonMusk
                     spawnlist.Clear();
                     Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
                     Console.WriteLine($"Hp {BfHp} -> {Game.game.player.CurHP}");
-                    Console.WriteLine("0. 돌아가기");
+                    Console.WriteLine("0. 회사로 돌아가기");
                 }
                 public override void GetAction(int act)
                 {
                     switch (act)
                     {
                         default:
-                            //마을로 돌아가게 구현
+                            Game.game.ChangeScene(Game.game.idle);
                             break;
                     }
                 }

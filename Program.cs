@@ -595,9 +595,9 @@ namespace Elonmusk
             ATK = 10;
             DEF = 5;
             MaxHP = 100;
-            CurHP = 100;
+            CurHP = 100; 
             ACC = 100;
-            Evade = 10;
+            Evade = 16;
             GOLD = 1500;
             MaxMP = 100;
             CurMP = 100;
