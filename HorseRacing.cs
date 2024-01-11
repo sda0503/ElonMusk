@@ -119,7 +119,7 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
             Console.WriteLine("0. 돌아가기");
 
 #if TEST
-            Test(1000000);
+            Test(100000);
 #endif
 
             Bet();
@@ -326,7 +326,9 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
                 }
 
                 // 이게 1000번 호출됨
+#if !TEST
                 Thread.Sleep(10);
+#endif
             }
 
             for(int i=0; i<horses.Count; i++) 
