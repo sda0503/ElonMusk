@@ -51,7 +51,7 @@ namespace ElonMusk
         {
             Name = "Null Reference Exception";
             Level = 2;
-            Health = 15;
+            Health = 10;
             ATK = 6;
             ACC = 16;
             Evade = 5;
@@ -64,8 +64,8 @@ namespace ElonMusk
         public IndexOutOfRange() //체력, 공격력 높은 대신 명중,회피가 낮음
         {
             Name = "OutofRange";
-            Level = 5;
-            Health = 25;
+            Level = 4;
+            Health = 20;
             ATK = 10;
             ACC = 10;
             Evade = 0;
@@ -106,7 +106,7 @@ namespace ElonMusk
         public TypeError()
         {
             Name = "TypeError";
-            Level = 6;
+            Level = 5;
             Health = 25;
             ATK = 7;
             ACC = 15;
@@ -170,6 +170,8 @@ namespace ElonMusk
         public static void dungeonsetting()
         {
             isdungeonclear = false;
+            int[] EventList = new int[7] {0,0,0,0,1,1,2}; //이벤트 갯수 정하기
+            EventList.OrderBy(item => new Random().Next());
             isclear = new Dictionary<int, string>(){ //방 표시용
             { 0,"X"},
             { 1,"X"},
@@ -179,9 +181,22 @@ namespace ElonMusk
             { 5,"B"}
             };
             dungeon = new int[3, 3] { //보스방이랑 시작위치만 고정하고 나머지 방은 Random으로 섞어버리자. || 전투 4개, 함정 2개, 보상 1개 해서 배열 만든다음에 오더바이해서 섞어버리고 포문으로 넣어버리는 게 더 깔끔할 듯.
-            { 5, 2, 0 },
-            { 2, 1, 0 },
+            { 5, 0, 0 },
+            { 0, 0, 0 },
             { 0, 0, 3 } };
+            int k = 0;
+            for (int i= 0; i< dungeon.GetLength(0); i++) //고정위치 빼고 남은 방에 이벤트 분배
+            {
+                for (int j =0; j<dungeon.GetLength(1); j++)
+                {
+                    if (dungeon[i, j] == 0)
+                    {
+                        dungeon[i, j] = EventList[k];
+                        k++;
+                    }
+                }
+            }
+            k = 0;
 
             Forsave.dungeonposx = Forsave.dungeon.GetLength(0) - 1;
             Forsave.dungeonposy = Forsave.dungeon.GetLength(1) - 1;
@@ -399,29 +414,31 @@ namespace ElonMusk
             void Battleprepare() //던전에서 이동해서 전투 나왔을 때 안에 함수들 한번만 실행되게 작성
             {
                 BfHp = Game.game.player.CurHP;
+                int spawnCut = (Game.game.player.level < 3 ? 3 : 5);
+                int LevelCut = (Game.game.player.level < 3 ? 3 : 6);
                 if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] != 5)
                 {
-                    for (int i = 0; i < rand.Next(1, 6); i++)
+                    for (int i = 0; i < rand.Next(1, spawnCut); i++)
                     {
-                        switch (rand.Next(5))
+                        switch (rand.Next(LevelCut))
                         {
                             case 0:
-                                spawnlist.Add(new Null());
+                                spawnlist.Add(new OthersCode()); //레벨1                                
                                 break;
                             case 1:
-                                spawnlist.Add(new IndexOutOfRange());
+                                spawnlist.Add(new Null()); //레벨2                                
                                 break;
                             case 2:
-                                spawnlist.Add(new OthersCode());
+                                spawnlist.Add(new IndexOutOfRange()); //레벨4
                                 break;
                             case 3:
-                                spawnlist.Add(new Offline());
+                                spawnlist.Add(new TypeError()); //레벨5
                                 break;
                             case 4:
-                                spawnlist.Add(new TypeError());
+                                spawnlist.Add(new Offline()); //레벨7                               
                                 break;
                             case 5:
-                                spawnlist.Add(new runtimeerror());
+                                spawnlist.Add(new runtimeerror()); //레벨9
                                 break;
                         }
                     }
@@ -791,7 +808,7 @@ namespace ElonMusk
                             int ACC = mob.ACC + rand.Next(20);
                             if ( Evade < ACC )
                             {
-                                Game.game.player.TakeDamage(mob.ATK);
+                                Game.game.player.SetPlayerHP(-mob.ATK);
                                 Console.WriteLine($"Lv.{mob.Level} {mob.Name}의 공격!");
                                 Console.WriteLine($"{Game.game.player.name} 을(를) 맞췄습니다. [데미지 : {mob.ATK}]");
                                 Console.WriteLine();
@@ -981,7 +998,7 @@ namespace ElonMusk
                     Console.Clear();
                     Console.WriteLine("함정에 빠졌습니다.");
                     Console.WriteLine("체력 -10");
-                    Game.game.player.TakeDamage(10);
+                    Game.game.player.SetPlayerHP(-10);
                     Console.WriteLine();
                     Console.WriteLine("0. 돌아가기");
                 }
@@ -999,8 +1016,6 @@ namespace ElonMusk
                     }
                 }
             }
-
-
 
             public class Battle_Price : Scene
             {

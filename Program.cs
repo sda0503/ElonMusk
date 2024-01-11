@@ -500,6 +500,7 @@ namespace Elonmusk
         public int Evade { get; protected set; }
 
         public int GOLD { get; protected set; }
+        public int EXP { get; protected set; }
 
         public bool IsDead { get; protected set; }
 
@@ -646,16 +647,7 @@ namespace Elonmusk
             {
                 this.GOLD -= gold;
             }
-        }
-        public void TakeDamage(int damage)
-        {
-            CurHP -= damage;
-            if (CurHP <= 0)
-            {
-                CurHP = 0;
-                IsDead = true;
-            }
-        }
+        }        
 
         public void SetPlayerHP(int value)
         {
