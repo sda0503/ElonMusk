@@ -150,17 +150,17 @@ namespace ElonMusk
             {
                 Health = 0;
                 IsDead = true;
-                Forsave.isdungeonclear = true;
+                Forsave.isdungeonclear = true; // 보스 잡을 때 엔딩분기 가르기용으로 작성됨.
             }
         }
     }
 
-    public enum Doing { Idle, beforebattle, battle_ing, beforeDungeon }
+    public enum Doing { Idle, beforebattle, battle_ing, beforeDungeon } //상태보기 선택지가 많아서 내가 어디서 왔는 지 구분하기 위해 작성됨
 
     public class Forsave()
     {
-        public static bool Dungeonfirst;
-        public static bool isdungeonclear;
+        public static bool Dungeonfirst; //던전 첫 입장인지 확인
+        public static bool isdungeonclear; 
         public static int dungeonposx;
         public static int dungeonposy;
         public static int dungeonClearCnt; //던전 클리어 횟수 - 둘다 퀘스트나 전직에 사용
@@ -208,7 +208,7 @@ namespace ElonMusk
         public static Doing doing;
         public override void ShowInfo()
         {
-            if (Forsave.Dungeonfirst == false)
+            if (Forsave.Dungeonfirst == false) //최초 입장 시에만 던전 초기화
             {
                 Forsave.dungeonsetting();
                 Forsave.Dungeonfirst = true;
@@ -310,7 +310,7 @@ namespace ElonMusk
                 switch (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy])
                 {
                     case 0:
-                        Game.game.ChangeScene(new Battle()); //돌아가기 했을 때 현재위치가 True로 찍혀있어서 이벤트 발생 안함.
+                        Game.game.ChangeScene(new Battle()); 
                         break;
                     case 1:
                         Game.game.ChangeScene(new Battle.Battle_Trap());
@@ -331,7 +331,7 @@ namespace ElonMusk
             }
             static void Board()
             {
-                string[] roomname = new string[9];
+                string[] roomname = new string[9]; //던전 크기에 따라 바꿔야됨.
                 int j = 0;
                 foreach (int i in Forsave.dungeon)
                 {
@@ -375,7 +375,7 @@ namespace ElonMusk
         public class Battle : Scene
         {
             static Random rand = new Random();
-            static List<Monster> spawnlist = new List<Monster>(4);
+            static List<Monster> spawnlist = new List<Monster>(4); //몬스터 최대 4마리까지
             static int BfHp = 0; //전투 시작 전 체력
             static int potion = 3;
 
@@ -398,7 +398,7 @@ namespace ElonMusk
                 switch (act)
                 {
                     case 1:
-                        doing = Doing.beforebattle;
+                        doing = Doing.beforebattle; //상태보기로 이동 시, enum을 변경해서 다시 이 Scene으로 돌아올 수 있도록 작성
                         Game.game.ChangeScene(new PlayerInfo());
                         break;
                     case 2:
@@ -590,7 +590,7 @@ namespace ElonMusk
                 {
                     Console.Clear();
                     Random rand = new Random();
-                    float PlayerATK = Game.game.player.ATK + Game.game.player.EquipmentStat.ATK;
+                    float PlayerATK = Game.game.player.ATK + Game.game.player.EquipmentStat.ATK; //기본 공격력 + 장비 공격력
                     int error = (int)MathF.Ceiling(PlayerATK / 10f);
                     int damage = rand.Next((int)MathF.Ceiling(PlayerATK) - error, (int)MathF.Ceiling(PlayerATK) + error);
                     int temp = mob.Health;
@@ -807,9 +807,13 @@ namespace ElonMusk
                         {
                             int Evade = Game.game.player.Evade + rand.Next(20);
                             int ACC = mob.ACC + rand.Next(20);
+                            int damage = Game.game.player.DEF - mob.ATK;
+                            if (damage < 0)
+                                damage = 0;
+                            
                             if ( Evade < ACC )
                             {
-                                Game.game.player.SetPlayerHP(-mob.ATK);
+                                Game.game.player.SetPlayerHP(-damage);
                                 Console.WriteLine($"Lv.{mob.Level} {mob.Name}의 공격!");
                                 Console.WriteLine($"{Game.game.player.name} 을(를) 맞췄습니다. [데미지 : {mob.ATK}]");
                                 Console.WriteLine();
@@ -840,7 +844,7 @@ namespace ElonMusk
                     Console.WriteLine();
                     PrintTextWithHighlighst(ConsoleColor.Green, "", "디버깅 완료!", "");
                     Forsave.KillCnt += spawnlist.Count;
-                    if (!(spawnlist[0] is UncontrollableBug))
+                    if (!(spawnlist[0] is UncontrollableBug)) //보스 판별
                     {
                         Console.WriteLine();
                         Console.WriteLine($"디버깅에서 오류 {spawnlist.Count}개를 수정했습니다.");
@@ -917,6 +921,8 @@ namespace ElonMusk
                     PrintTextWithHighlighst(ConsoleColor.Red, "", "디버깅에 실패했습니다.", "");
                     Console.WriteLine();
                     spawnlist.Clear();
+                    Console.WriteLine("준비해서 다시 도전합시다.");
+                    Console.WriteLine();
                     Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
                     Console.WriteLine($"Hp {BfHp} -> {Game.game.player.CurHP}");
                     Console.WriteLine("0. 회사로 돌아가기");
@@ -933,7 +939,7 @@ namespace ElonMusk
             }
 
 
-            public class UsePotion : Scene
+            public class UsePotion : Scene //기본으로 3개 주어지는 포션
             {
                 public override void ShowInfo()
                 {
@@ -944,7 +950,7 @@ namespace ElonMusk
                     Console.WriteLine("비밀의 드링크를 사용하면 체력을 30 회복 할 수 있습니다.  (남은 드링크 : {0})", potion);
                     Console.WriteLine();
                     Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
-                    Console.WriteLine($"MP {Game.game.player.MaxMP}/{Game.game.player.CurMP}");
+                    Console.WriteLine($"MP {Game.gam .player.MaxMP}/{Game.game.player.CurMP}");
                     Console.WriteLine("1. 사용하기");
                     Console.WriteLine("2. 이건 싫다. 다른 건 없나?");
                     Console.WriteLine("0. 나가기");
@@ -999,7 +1005,7 @@ namespace ElonMusk
                 }
             }
 
-            public class UsePotion_Find : Scene
+            public class UsePotion_Find : Scene //구매한 아이템 사용하기
             {
                 List<int> itemindex = new List<int>();
                 public override void ShowInfo()
@@ -1066,7 +1072,9 @@ namespace ElonMusk
                 {
                     Console.Clear();
                     Console.WriteLine("함정에 빠졌습니다.");
-                    Console.WriteLine("체력 -10");
+                    PrintTextWithHighlighst(ConsoleColor.Magenta, "Lv. ", $"{Game.game.player.level} ", $" {Game.game.player.name}");
+                    Console.WriteLine();
+                    Console.WriteLine($"HP {Game.game.player.CurHP} -> {Game.game.player.CurHP-10}");
                     Game.game.player.SetPlayerHP(-10);
                     Console.WriteLine();
                     Console.WriteLine("0. 돌아가기");
@@ -1092,7 +1100,7 @@ namespace ElonMusk
                 {
                     Console.Clear();
                     Console.WriteLine("보상을 얻었습니다.");
-
+                    //나중에 히든 아이템 추가하기
                     Console.WriteLine();
                     Console.WriteLine("0. 돌아가기");
                 }
