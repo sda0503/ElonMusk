@@ -319,7 +319,7 @@ namespace ElonMusk
                         break;
                     case 3:
                         Console.Clear();
-                        Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] = 4;
+                        Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] = 4; //클리어한 방끼리 이동할 떄를 위해 작성
                         break;
                     case 5:
                         Game.game.ChangeScene(new Battle());
@@ -770,7 +770,7 @@ namespace ElonMusk
                     Console.WriteLine("■■■■■■■■■■■■■■");
                     Console.WriteLine();
                     PrintTextWithHighlighst(ConsoleColor.Green, "", "Victory", "");
-                    Forsave.KillCnt += spawnlist.Count;
+                    Forsave.KillCnt += spawnlist.Count;                    
                     if (!(spawnlist[0] is UncontrollableBug))
                     {
                         Console.WriteLine();
