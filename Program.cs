@@ -41,6 +41,8 @@ namespace Elonmusk
         public Idle idle { get; private set; }
         public Equipment equipment { get; private set; }
 
+        public Quest quset { get; private set; }
+
         public Game()
         {
             game = this;
@@ -64,9 +66,9 @@ namespace Elonmusk
             opening = new Opening();
             btestScene = new BTestScene();
             resume = new Resume();
+            quset = new Quest();
 
-
-            curScene = new Opening();
+            curScene = new Quest();
         }
 
         void Loop()

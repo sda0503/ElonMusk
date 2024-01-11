@@ -17,6 +17,10 @@ namespace Elonmusk
     {
         public List<(string, bool)> JobList { get; protected set; }
 
+        private int currentGold;
+        private int killCount;
+        private int cleraDungoen;
+
         public Job()
         {
             JobList = new List<(string, bool)>();
@@ -24,6 +28,8 @@ namespace Elonmusk
             JobList.Add(("신입개발자", false));
             JobList.Add(("주니어개발자", false));
             JobList.Add(("시니어개발자", false));
+
+            currentGold = 100000 * Game.game.player.level;
         }
 
         public override void ShowInfo()
@@ -38,11 +44,12 @@ namespace Elonmusk
             Console.WriteLine($"{Game.game.player.JobToString(Game.game.player.job + 1)}");
             Console.WriteLine(); 
             Console.WriteLine("[진급조건]");
-            Console.WriteLine("보유골드 : ");
-            Console.WriteLine("버그소탕 : ");
-            Console.WriteLine("완료파일 : ");
+            Console.WriteLine("보유골드 : "+ Game.game.player.GOLD + "/"+ currentGold);
+            Console.WriteLine("버그소탕 : "+ Game.game.player.GOLD + "/"+ killCount);
+            Console.WriteLine("완료파일 : "+ Game.game.player.GOLD + "/"+ cleraDungoen);
             Console.WriteLine();
             Console.WriteLine();
+            Console.WriteLine("1. 진급");
             Console.WriteLine("0. 나가기");
         }
 
@@ -53,7 +60,7 @@ namespace Elonmusk
                 Game.game.ChangeScene(Game.game.shop);
             }
 
-            else if (act > 0 && act < Game.game.shop.items.Count + 1)
+            else if (act == 1)
             {
                 Game.game.shop.TryBuyItem(act - 1);
             }
