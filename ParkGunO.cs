@@ -470,7 +470,7 @@ namespace ElonMusk
                             Game.game.ChangeScene(new BattleAttack());
                             break;
                         case 2:
-                            Game.game.ChangeScene(new BattleSkill());
+                            Game.game.ChangeScene(new BattleSkillChoose());
                             break;
                         case 3:
                             Game.game.ChangeScene(new Battle_InfoBug());
@@ -674,17 +674,75 @@ namespace ElonMusk
                 }
             }
 
-            public class BattleSkill : Scene
+            public class BattleSkillChoose : Scene
             {
                 public override void ShowInfo()
                 {
-
+                    Console.WriteLine("Battle!! - 플레이어 턴");
+                    Console.WriteLine();
+                    foreach (Monster mob in spawnlist)
+                    {
+                        if (mob.IsDead == true)
+                            Console.ForegroundColor = ConsoleColor.DarkGray;
+                        Console.WriteLine($"Lv.{mob.Level} {mob.Name}  HP {mob.Health}");
+                        Console.ResetColor();
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine("[내 정보]");
+                    Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
+                    Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
+                    Console.WriteLine($"MP {Game.game.player.MaxMP}/{Game.game.player.CurMP}");
+                    Console.WriteLine();
+                    int i = 1;
+                    foreach (var skill in Game.game.player.skills)
+                    {
+                        Console.WriteLine($"{i++}. {skill.Name} - MP {skill.Cost}");
+                        Console.WriteLine($"- {skill.Description1}");
+                        Console.WriteLine($"{skill.Description2}");
+                        Console.WriteLine();
+                    }
+                    Console.WriteLine("0. 취소");
                 }
 
                 public override void GetAction(int act)
                 {
-
+                    if (act <= Game.game.player.skills.Count && act >= 1)
+                    {
+                        if (Game.game.player.skills[act - 1].Cost <= Game.game.player.CurMP)
+                        {
+                            Game.game.player.skills[act - 1].UseSkill(spawnlist);
+                            bool isAlive = false;
+                            foreach (Monster mob in spawnlist)
+                            {
+                                if (!mob.IsDead)
+                                {
+                                    isAlive = true;
+                                    break;
+                                }
+                            }
+                            if (isAlive == true)
+                                Game.game.ChangeScene(new Battle_enemyturn());
+                            else
+                            {
+                                //if (stage == bossStage)
+                                //Game.game.ChangeScene(new HappyEndding());
+                                //else
+                                Game.game.ChangeScene(new BattleEnd_win());
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("MP가 부족합니다.");
+                        }
+                    }
+                    else if (act == 0)
+                    {
+                        Game.game.ChangeScene(new Battle_myturn());
+                    }
+                    else
+                        Console.WriteLine("유효한 입력이 아닙니다!");
                 }
+
             }
 
             public class Battle_enemyturn : Scene
