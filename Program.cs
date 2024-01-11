@@ -675,8 +675,9 @@ namespace Elonmusk
             CurHP += 30;
             if (CurHP >= 100)
             {
-                CurHP = 100;                
-            }            
+                CurHP = 100;
+            }
+        }     
         public void EquipOrDequip(int index)
         {
             items[index] = (items[index].Item1, !(items[index].Item2));
