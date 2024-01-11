@@ -143,9 +143,10 @@ namespace Elonmusk
             Console.WriteLine("2. 상점");
             Console.WriteLine("3. 일하기");
             Console.WriteLine("4. 인사평가");
-            Console.WriteLine("5. 강원랜드");
-            Console.WriteLine("6. 퀘스트");
-            Console.WriteLine("7. 저장");
+            Console.WriteLine("5. 발표하기");
+            Console.WriteLine("6. 강원랜드");
+            Console.WriteLine("7. 도전과제");
+            Console.WriteLine("8. 저장");
         }
         public override void GetAction(int act)
         {
@@ -167,13 +168,16 @@ namespace Elonmusk
                 case 4: //인사평가
                     Game.game.ChangeScene(new Idle());
                     break;
-                case 5: //강원래드
+                case 5: //던전입장
+                    Game.game.ChangeScene(new Dungeon());
+                    break;
+                case 6: //강원래드
                     Game.game.ChangeScene(new Idle());
                     break;
-                case 6: //퀘스트
+                case 7: //퀘스트
                     Game.game.ChangeScene(new Idle());
                     break;
-                case 7: //저장
+                case 8: //저장
                     Game.game.ChangeScene(new Idle());
                     break;
                 case 99:
@@ -303,9 +307,9 @@ namespace Elonmusk
             items.Add((new Item("개발자의 체크 난방", "디자인은 별로이지만 코딩력이 상당히 높아보이는 옷", 0, 30, 100000, Item.ItemType.ARMOR), false));
             items.Add((new Item("오래된 키보드&마우스세트", "오래되어 작동이 잘안되는 키보드와 마우스 세트", 15, 0, 10000, Item.ItemType.WEAPON), false));
             items.Add((new Item("무소음 키보드&마우스세트", "키를 입력하거나 클릭을 할 때 소음이 없다", 30, 0, 200000, Item.ItemType.WEAPON), false));
-            items.Add((new Item("C# 전공책", "냄비 받침으로 쓰기 좋은 두꺼운 전공책", 5, 0, 30000, Item.ItemType.ACC), false));
-            items.Add((new Item("오래된 노트북", "메모장이 겨우 돌아가는 노트북!.", 12, 0, 300000, Item.ItemType.ACC), false));
-            items.Add((new Item("최신형 맥북", "최신형 맥북 개발자라면 맥 정도는 써야지요", 25, 0, 1700000, Item.ItemType.ACC), false));
+            items.Add((new Item("C# 전공책", "냄비 받침으로 쓰기 좋은 두꺼운 전공책", 5, 0, 30000, Item.ItemType.ACCESSORY), false));
+            items.Add((new Item("오래된 노트북", "메모장이 겨우 돌아가는 노트북!.", 12, 0, 300000, Item.ItemType.ACCESSORY), false));
+            items.Add((new Item("최신형 맥북", "최신형 맥북 개발자라면 맥 정도는 써야지요", 25, 0, 1700000, Item.ItemType.ACCESSORY), false));
             items.Add((new Item("Chat GPT 코칭권", "무엇이든지 답해주는 있는 만능 아이템", 0, 0, 50000, Item.ItemType.USE), false));
             items.Add((new Item("아이스아메리카노", "추운날에도 나를 깨워주는 각성제", 0, 0, 1000, Item.ItemType.USE), false));
             items.Add((new Item("코카콜라(빨간포션)", "먹으면 체력을 회복해주는 아이템", 0, 0, 1500, Item.ItemType.USE), false));
@@ -441,7 +445,7 @@ namespace Elonmusk
     {
         public string desc { get; private set; }
 
-        public enum ItemType { NONE, WEAPON, ARMOR, ACC, USE };
+        public enum ItemType { NONE, WEAPON, ARMOR, ACCESSORY, USE };
 
         public ItemType itemType = ItemType.NONE;
         public Item()
