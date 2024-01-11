@@ -171,7 +171,7 @@ namespace ElonMusk
         {
             isdungeonclear = false;
             int[] EventList = new int[7] {0,0,0,0,1,1,2}; //이벤트 갯수 정하기
-            EventList.OrderBy(item => new Random().Next());
+            EventList = EventList.OrderBy(item => new Random().Next()).ToArray() ;
             isclear = new Dictionary<int, string>(){ //방 표시용
             { 0,"X"},
             { 1,"X"},
@@ -471,6 +471,7 @@ namespace ElonMusk
                     Console.WriteLine("[내 정보]");
                     Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.PlayerName.Item1}");
                     Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
+                    Console.WriteLine($"MP {Game.game.player.MaxMP}/{Game.game.player.CurMP}");
                     Console.WriteLine();
                     Console.WriteLine("1. 디버그");
                     Console.WriteLine("2. 스킬");
@@ -536,6 +537,7 @@ namespace ElonMusk
                     Console.WriteLine("[내 정보]");
                     Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
                     Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
+                    Console.WriteLine($"MP {Game.game.player.MaxMP}/{Game.game.player.CurMP}");
                     Console.WriteLine();
                     Console.WriteLine("0. 돌아가기");
                 }
@@ -584,10 +586,11 @@ namespace ElonMusk
                     }
                 }
 
-                public void attack(float PlayerATK, Monster mob)
+                public void attack(float ATK, Monster mob)
                 {
                     Console.Clear();
                     Random rand = new Random();
+                    float PlayerATK = Game.game.player.ATK + Game.game.player.EquipmentStat.ATK;
                     int error = (int)MathF.Ceiling(PlayerATK / 10f);
                     int damage = rand.Next((int)MathF.Ceiling(PlayerATK) - error, (int)MathF.Ceiling(PlayerATK) + error);
                     int temp = mob.Health;
@@ -660,6 +663,7 @@ namespace ElonMusk
                     Console.WriteLine("[내 정보]");
                     Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
                     Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
+                    Console.WriteLine($"MP {Game.game.player.MaxMP}/{Game.game.player.CurMP}");
                     Console.WriteLine();
                     Console.WriteLine("0. 돌아가기");
                 }
@@ -939,7 +943,10 @@ namespace ElonMusk
                     Console.WriteLine("■■■■■■■■■■■■■■");
                     Console.WriteLine("비밀의 드링크를 사용하면 체력을 30 회복 할 수 있습니다.  (남은 드링크 : {0})", potion);
                     Console.WriteLine();
+                    Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
+                    Console.WriteLine($"MP {Game.game.player.MaxMP}/{Game.game.player.CurMP}");
                     Console.WriteLine("1. 사용하기");
+                    Console.WriteLine("2. 이건 싫다. 다른 건 없나?");
                     Console.WriteLine("0. 나가기");
                     Console.WriteLine();
                 }
@@ -982,12 +989,53 @@ namespace ElonMusk
                                 Console.ReadLine();
                             }
                             break;
+                        case 2:
+                            Game.game.ChangeScene(new UsePotion_Find());
+                            break;
                         default:
                             Console.WriteLine("유효한 입력이 아닙니다!");
                             break;
                     }
                 }
             }
+
+            public class UsePotion_Find : Scene
+            {
+                public override void ShowInfo()
+                {
+                    Console.Clear();
+                    Console.WriteLine("■■■■■■■■■■■■■■");
+                    ShowHighlithtesText("다른 건 뭐가 있을까");
+                    Console.WriteLine("■■■■■■■■■■■■■■");
+                    Console.WriteLine();
+                    int j = 1;
+                    for (int i = 0; i < Game.game.player.items.Count; i++)
+                    {
+                        if (Game.game.player.items[i].Item1.itemType == Item.ItemType.USE)
+                        {
+                            Console.WriteLine($"-{j++} {Game.game.player.items[i].Item1.name}  {Game.game.player.items[i].Item1.desc} ");
+                        }
+                    }
+                    j = 1;
+                    Console.WriteLine("1. 사용하기");
+                    Console.WriteLine("0. 나가기");
+                    Console.WriteLine();
+                }
+
+                public override void GetAction(int act)
+                {
+                    switch (act)
+                    {
+                        case 0:
+                            Game.game.ChangeScene(new UsePotion());
+                            break;
+                        default:
+                            Console.WriteLine("유효한 입력이 아닙니다!");
+                            break;
+                    }
+                }
+            }
+
 
             public class Battle_Trap : Scene
             {

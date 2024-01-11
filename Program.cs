@@ -444,7 +444,7 @@ namespace Elonmusk
 
         public enum ItemType { NONE, WEAPON, ARMOR, ACCESSORY, USE };
 
-        public ItemType itemType = ItemType.NONE;
+        public ItemType itemType { get; protected set; }//= ItemType.NONE;
         public Item()
         {
             name = "Item";
@@ -708,8 +708,8 @@ namespace Elonmusk
                 case 4:
                     if (EXP >= 100)
                     {
-                        Console.WriteLine("레벨 업!");
-                        Console.WriteLine($"Lv. {level} -> {level + 1} {name}");
+                         Console.WriteLine("레벨 업!");
+                        Console.WriteLine($"Lv. {level} -> {level+1} {name}");
                         level++;
                         ATK += 0.5f;
                         DEF += 1;

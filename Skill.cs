@@ -58,7 +58,7 @@ namespace ElonMusk
             }
             
             Game.game.player.SetPlayerMP(Cost);
-            int damage = (int)(Game.game.player.ATK * 2);
+            int damage = (int)((Game.game.player.ATK+Game.game.player.EquipmentStat.ATK) * 2);
             int temp = spawnList[index-1].Health;
             spawnList[index-1].TakeDamage(damage);
             Console.Clear();
@@ -137,11 +137,11 @@ namespace ElonMusk
 
             if (random.Next(0, 2) == 0)
             {
-                damage = (int)Math.Ceiling(Game.game.player.ATK * 1.5);
+                damage = (int)Math.Ceiling((Game.game.player.ATK+Game.game.player.EquipmentStat.ATK) * 1.5);
             }
             else
             {
-                damage = (int)MathF.Ceiling(Game.game.player.ATK * 3);
+                damage = (int)MathF.Ceiling((Game.game.player.ATK + Game.game.player.EquipmentStat.ATK) * 3);
             }
             
             int temp = spawnList[index - 1].Health;
@@ -192,7 +192,7 @@ namespace ElonMusk
 
         public override void UseSkill(List<Monster> spawnList)
         {
-            int damage = (int)MathF.Ceiling(Game.game.player.ATK);
+            int damage = (int)MathF.Ceiling(Game.game.player.ATK+ Game.game.player.EquipmentStat.ATK);
             Game.game.player.SetPlayerMP(Cost);
             Console.Clear();
             Console.WriteLine($"플레이어의 '{Name}' 스킬 사용");
