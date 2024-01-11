@@ -70,7 +70,7 @@ namespace Elonmusk
             resume = new Resume();
             quset = new Quest();
 
-            curScene = new Quest();
+            curScene = new Opening();
         }
 
         void Loop()
@@ -144,7 +144,7 @@ namespace Elonmusk
             Console.WriteLine("3. 일하기");
             Console.WriteLine("4. 인사평가");
             Console.WriteLine("5. 강원랜드");
-            Console.WriteLine("6. 퀘스트");
+            Console.WriteLine("6. 도전과제");
             Console.WriteLine("7. 저장");
         }
         public override void GetAction(int act)
