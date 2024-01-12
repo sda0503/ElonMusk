@@ -550,20 +550,7 @@ namespace Elonmusk
             Manager                 //과장
         }
 
-        public JOB job;
-
-        public int jobNum;
-        public int JobToInt(JOB j)
-        {
-            switch (j)
-            {
-                case JOB.Intern: jobNum = 0; break;
-                case JOB.Assistant: jobNum = 1; break;
-                case JOB.JuniorProgrammer: jobNum = 2; break;
-                case JOB.SeniorProgrammer: jobNum = 3; break;
-            }
-            return jobNum;
-        }
+        public JOB job;        
 
         public string JobToString(JOB j)
         {

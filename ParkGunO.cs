@@ -469,9 +469,9 @@ namespace ElonMusk
                         }
                     }
                 }
-                else if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == 5 && Game.game.player.JobToInt(Game.game.player.job) < 2) //일반보스 조건 더걸기
+                else if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == 5 && (int)Game.game.player.job < 2) //일반보스 조건 더걸기
                     spawnlist.Add(new UncontrollableBug());
-                else if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == 5 && Game.game.player.JobToInt(Game.game.player.job) >= 2) //찐보스 조건 더걸기
+                else if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == 5 && (int)Game.game.player.job >= 2) //찐보스 조건 더걸기
                     spawnlist.Add(new Investor());
 
                 Game.game.ChangeScene(new Battle_myturn());
