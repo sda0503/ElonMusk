@@ -151,7 +151,7 @@ namespace Elonmusk
             Console.WriteLine("0. 상태창");
             Console.WriteLine("1. 가방");
             Console.WriteLine("2. 상점");
-            Console.WriteLine("3. 발표하기");
+            Console.WriteLine("3. 일하기");
             Console.WriteLine("4. 인사평가");
             Console.WriteLine("5. 발표하기");
             Console.WriteLine("6. 강원랜드");
@@ -187,7 +187,7 @@ namespace Elonmusk
                     Game.game.ChangeScene(new Casino());
                     break;
                 case 7: //퀘스트
-                    Game.game.ChangeScene(new Idle());
+                    Game.game.ChangeScene(new Quest());
 
                     break;
                 case 8: //저장
@@ -359,7 +359,7 @@ namespace Elonmusk
             Console.WriteLine($" [장신구]");
             foreach (var item in items)
             {
-                if (item.Item1.itemType.ToString() == "ACC")
+                if (item.Item1.itemType.ToString() == "ACCESSORY")
                 {
                     Console.WriteLine($"- {item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}G");
                 }
@@ -420,7 +420,7 @@ namespace Elonmusk
         }
         public void TrySellItem(int index)
         {
-            
+            Game.game.player.RemoveItem(index);
         }
     }
 
@@ -557,7 +557,8 @@ namespace Elonmusk
         public List<Item> equipedItems {  get; private set; }
         private(string, bool) playerName;
         public string jobName;
-        
+        public int QusetCnt =0;
+
         public (string, bool) PlayerName{get{ return playerName;}set { playerName = value; } }
         public enum JOB
         {
@@ -742,6 +743,11 @@ namespace Elonmusk
         public void AddItem(Item item)
         {
             items.Add((new Item(item), false));
+        }
+
+        public void RemoveItem(int index)
+        {
+            items.RemoveAt(index);
         }
     }
 }

@@ -52,9 +52,8 @@ namespace Elonmusk
             Console.WriteLine("보유골드 : "+ Game.game.player.GOLD + "/"+ currentGold);
             Console.WriteLine("버그소탕 : "+ Forsave.KillCnt + "/"+ killCount);
             Console.WriteLine("완료파일 : "+ Forsave.dungeonClearCnt + "/"+ cleraDungoen);
-            Console.WriteLine("도전과제 : "+ Game.game.quset.QusetCnt + "/" + cleraQuest);
+            Console.WriteLine("도전과제 : "+ Game.game.player.QusetCnt + "/" + cleraQuest);
             Console.WriteLine();
-            Console.WriteLine(Game.game.quset.QusetCnt);
             Console.WriteLine("1. 진급");
             Console.WriteLine("0. 나가기");
         }
@@ -88,7 +87,7 @@ namespace Elonmusk
 
         public bool checkPlayerInfo()
         {
-            if(Game.game.player.GOLD > currentGold && Forsave.KillCnt > killCount && Forsave.dungeonClearCnt> cleraDungoen && Game.game.quset.QusetCnt> cleraQuest)
+            if(Game.game.player.GOLD > currentGold && Forsave.KillCnt > killCount && Forsave.dungeonClearCnt> cleraDungoen && Game.game.player.QusetCnt> cleraQuest)
                 return true;
             else
                 return false;
