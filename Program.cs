@@ -271,6 +271,10 @@ namespace Elonmusk
             for (int i = 0; i < Game.game.player.items.Count; i++)
             {
                 (Item, bool) item = Game.game.player.items[i];
+                if(item.Item1.itemType.ToString() == "NONE" || item.Item1.itemType.ToString()=="USE")
+                {
+                    continue;
+                }
                 String strEquipped = (item.Item2) ? "[E]" : String.Empty;
                 Console.WriteLine($"- {i + 1} {strEquipped}{item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}");
             }
