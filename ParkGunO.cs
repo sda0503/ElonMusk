@@ -633,7 +633,8 @@ namespace ElonMusk
                     int Evade = mob.Evade + rand.Next(20);
                     if (ACC >=Evade)
                     {
-                        if (rand.Next(100) > 84)
+                        int Crit = rand.Next(100);
+                        if (Crit> 84)
                         {
                             damage = (int)MathF.Ceiling(damage * 1.6f);
                             mob.TakeDamage(damage);
