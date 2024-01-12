@@ -248,6 +248,56 @@ namespace ElonMusk
         }
     }
 
+    public class Skill_Interrogation : Skill
+    {
+        public Skill_Interrogation()
+        {
+            Name = "질문 공세";
+            Description1 = "엄청난 질문들이 날아온다.";
+            Description2 = "압박 질문 두 개를 소환합니다.";
+        }
+        public override void UseSkill(List<Monster> spawnList)
+        {
+            Monster boss = null;
+            foreach (var monster in spawnList)
+            {
+                if (monster is Investor)
+                {
+                    boss = (Investor)monster;
+                }
+            }
+            Console.WriteLine($"Lv.{boss.Level} {boss.Name}의 {Name}!");
+            Console.WriteLine(Description1);
+            Console.WriteLine(Description2);
+            Console.WriteLine();
+            spawnList.Add(new Question());
+            spawnList.Add(new Question());
+        }
+    }
+
+    public class Skill_Pressure : Skill
+    {
+        public Skill_Pressure()
+        {
+            Name = "압박감 주기";
+            Description1 = "굉장한 압박감이 느껴진다. 아무것도 하지 못한 채 턴이 넘어갔다.";
+        }
+        public override void UseSkill(List<Monster> spawnList)
+        {
+            Monster boss = null;
+            foreach (var monster in spawnList)
+            {
+                if (monster is Investor)
+                {
+                    boss = (Investor)monster;
+                }
+            }
+            Console.WriteLine($"Lv.{boss.Level} {boss.Name}의 {Name}!");
+            Console.WriteLine(Description1);
+            Console.WriteLine();
+        }
+    }
+
     #endregion
     public static class ConsoleDraw
     {

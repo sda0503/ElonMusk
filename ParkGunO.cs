@@ -33,6 +33,13 @@ namespace ElonMusk
         public string Description { get; protected set; }
         public bool IsDead { get; set; }
 
+        public int DropGold { get; set; }
+
+        public Monster(int gold = 150) 
+        {
+            DropGold = gold;
+        }
+
         public virtual void TakeDamage(int damage)
         {
             Health -= damage;
@@ -46,7 +53,7 @@ namespace ElonMusk
 
     public class Null : Monster
     {
-        public Null() //밸런스 잡힌 타입
+        public Null()//밸런스 잡힌 타입
         {
             Name = "Null Reference Exception";
             Level = 2;
@@ -55,6 +62,7 @@ namespace ElonMusk
             ACC = 16;
             Evade = 5;
             Description = "Null의 값을 가질 수 없는 Object에 Null을 할당했기에 발생하거나, 참조하려는 개체가 Null일 때 발생합니다.";
+            DropGold *= Level;
         }
     }
 
@@ -69,6 +77,7 @@ namespace ElonMusk
             ACC = 10;
             Evade = 0;
             Description = "배열의 크기를 벗어나 접근할 때 발생합니다. 혹시 Array[Length]가 되어있진 않나요?";
+            DropGold *= Level;
         }
     }
 
@@ -83,6 +92,7 @@ namespace ElonMusk
             ACC = 5;
             Evade = 0;
             Description = "남이 작성한 코드입니다. 이해하려면 시간이 걸립니다. 설명이 없다면 더더욱, 주석을 생활화합시다.";
+            DropGold *= Level;
         }
     }
 
@@ -97,6 +107,7 @@ namespace ElonMusk
             ACC = 14;
             Evade = 12;
             Description = "인터넷이 끊겼습니다. 재앙이 아닐 수 없군요. 당신은 가진 지식으로 문제를 헤쳐나가야 합니다.";
+            DropGold *= Level;
         }
     }
 
@@ -111,6 +122,7 @@ namespace ElonMusk
             ACC = 15;
             Evade = 8;
             Description = "암시적 형변환으로 충분치 않을 때 발생합니다. int num = (int)10.5f 처럼 명시적으로 작성해보세요.";
+            DropGold *= Level;
         }
     }
 
@@ -125,6 +137,7 @@ namespace ElonMusk
             ACC = 16;
             Evade = 12;
             Description = "갖은 이유로 실행 중 발생한 오류입니다. 오류 코드를 잘 읽고 디버깅 해보도록 합시다.";
+            DropGold *= Level;
         }
     }
 
@@ -139,6 +152,22 @@ namespace ElonMusk
             ACC = 10;
             Evade = 3;
             Description = "\'관객 공포증\' 버그가 생성한 또 다른 버그입니다.";
+            DropGold = 0;
+        }
+    }
+
+    public class Question : Monster
+    {
+        public Question()
+        {
+            Name = "압박 질문";
+            Level = 10;
+            Health = 50;
+            ATK = 15;
+            ACC = 13;
+            Evade = 3;
+            Description = "투자자의 매서운 질문. 잘 생각하고 대답하자.";
+            DropGold = 0;
         }
     }
 
@@ -147,7 +176,7 @@ namespace ElonMusk
         public int turn;
         public Skill_SpawnError spawnError = new Skill_SpawnError();
         public Skill_ErrorIncrease errorIncrease = new Skill_ErrorIncrease();
-        public UncontrollableBug()
+        public UncontrollableBug() : base(5000)
         {
             Name = "\"관객 공포증\" 버그";
             Level = 10;
@@ -173,7 +202,11 @@ namespace ElonMusk
 
     public class Investor : Monster //보스
     {
-        public Investor()
+        public int turn;
+        public Skill_Pressure pressure = new Skill_Pressure();
+        public Skill_Interrogation interrogation = new Skill_Interrogation();
+
+        public Investor() : base(300000)
         {
             Name = "\"THE\" 투자자";
             Level = 15;
@@ -182,6 +215,7 @@ namespace ElonMusk
             ACC = 16;
             Evade = 13;
             Description = "여러분에게 관심이 있는 투자자입니다. 투자자를 설득하고 더 큰 바다로 나아가세요.";
+            turn = 0;
         }
 
         public override void TakeDamage(int damage)
@@ -227,7 +261,7 @@ namespace ElonMusk
             dungeon = new int[3, 3] { //보스방이랑 시작위치만 고정하고 나머지 방은 Random으로 섞어버리자. || 전투 4개, 함정 2개, 보상 1개 해서 배열 만든다음에 오더바이해서 섞어버리고 포문으로 넣어버리는 게 더 깔끔할 듯.
             { 5, 0, 0 },
             { 0, 0, 0 },
-            { 0, 0, 3 } };
+            { 0, 5, 3 } };
             int k = 0;
             for (int i= 0; i< dungeon.GetLength(0); i++) //고정위치 빼고 남은 방에 이벤트 분배
             {
@@ -819,6 +853,7 @@ namespace ElonMusk
 
             public class Battle_enemyturn : Scene
             {
+                Scene nextScene = new Battle_myturn();
                 public override void ShowInfo()
                 {
                     int temp = Game.game.player.CurHP;
@@ -842,7 +877,7 @@ namespace ElonMusk
                     {
                         default:
                             if (Game.game.player.IsDead != true)
-                                Game.game.ChangeScene(new Battle_myturn());
+                                Game.game.ChangeScene(nextScene);
                             else
                                 Game.game.ChangeScene(new BattleEnd_Lose());
                             break;
@@ -872,10 +907,28 @@ namespace ElonMusk
                                 }
                                 boss.turn++;
                             }
+
+                            if (mob is Investor investor)
+                            {
+                                if (investor.turn == 0)
+                                {
+                                    investor.interrogation.UseSkill(spawnlist);
+                                    investor.turn++;
+                                    break;
+                                }
+                                else if (investor.turn % 4 == 0)
+                                {
+                                    investor.pressure.UseSkill(spawnlist);
+                                    investor.turn++;
+                                    nextScene = new Battle_enemyturn();
+                                    continue;
+                                }
+                                investor.turn++;
+                            }
                             //if (Game.game.player.Evade + rand.Next(20) < mob.ACC + rand.Next(20))
                             int Evade = Game.game.player.Evade + rand.Next(20);
                             int ACC = mob.ACC + rand.Next(20);
-                            int damage = Game.game.player.DEF - mob.ATK;
+                            int damage = mob.ATK - Game.game.player.DEF;
                             if (damage < 0)
                                 damage = 0;
                             
@@ -883,7 +936,7 @@ namespace ElonMusk
                             {
                                 Game.game.player.SetPlayerHP(-damage);
                                 Console.WriteLine($"Lv.{mob.Level} {mob.Name}의 공격!");
-                                Console.WriteLine($"{Game.game.player.name} 을(를) 맞췄습니다. [데미지 : {mob.ATK}]");
+                                Console.WriteLine($"{Game.game.player.name} 을(를) 맞췄습니다. [데미지 : {damage}]");
                                 Console.WriteLine();
                             }
                             else
@@ -900,7 +953,7 @@ namespace ElonMusk
             public class BattleEnd_win : Scene
             {
                 int sumexp;
-
+                int sumDropGold;
                 public override void ShowInfo()
                 {
                     Console.Clear();
@@ -953,6 +1006,7 @@ namespace ElonMusk
                     foreach (Monster mob in spawnlist)
                     {
                         sumexp += mob.Level;
+                        sumDropGold += mob.DropGold;
                     }
                     
                     Console.Write($"Lv. ");
@@ -963,21 +1017,24 @@ namespace ElonMusk
                     Console.WriteLine($"exp {Game.game.player.EXP} -> {Game.game.player.EXP + sumexp}");
                     Console.WriteLine();
                     Console.WriteLine("[획득 아이템]");
-                    if (!(spawnlist[0] is UncontrollableBug) && !(spawnlist[0] is Investor))
-                    {
-                        PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{spawnlist.Count * 150} G");
-                        Game.game.player.gainGold(spawnlist.Count * 150);
-                    }
-                    else if (spawnlist[0] is UncontrollableBug)
-                    {
-                        PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{spawnlist.Count * 5000} G");
-                        Game.game.player.gainGold(spawnlist.Count * 5000);
-                    }
-                    else if (spawnlist[0] is Investor)
-                    {
-                        PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{spawnlist.Count * 300000} G");
-                        Game.game.player.gainGold(spawnlist.Count * 300000);
-                    }
+
+                    PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{sumDropGold} G");
+                    Game.game.player.gainGold(sumDropGold);
+                    //if (!(spawnlist[0] is UncontrollableBug) && !(spawnlist[0] is Investor))
+                    //{
+                    //    PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{spawnlist.Count * 150} G");
+                    //    Game.game.player.gainGold(spawnlist.Count * 150);
+                    //}
+                    //else if (spawnlist[0] is UncontrollableBug)
+                    //{
+                    //    PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{spawnlist.Count * 5000} G");
+                    //    Game.game.player.gainGold(spawnlist.Count * 5000);
+                    //}
+                    //else if (spawnlist[0] is Investor)
+                    //{
+                    //    PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{spawnlist.Count * 300000} G");
+                    //    Game.game.player.gainGold(spawnlist.Count * 300000);
+                    //}
                     int getpotion = rand.Next(100);
                     if (getpotion >= 80)
                     {

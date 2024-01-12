@@ -592,8 +592,8 @@ namespace Elonmusk
             items = new List<(Item, bool)>();
             playerName.Item2 = false;
             name = "Victor";
-            level = 1;
-            job = JOB.Intern;
+            level = 5;
+            job = JOB.SeniorProgrammer;
             ATK = 10;
             DEF = 5;
             MaxHP = 100;
