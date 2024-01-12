@@ -662,6 +662,14 @@ namespace Elonmusk
                 IsDead = true;
             }
         }
+        public void Revive()
+        {
+            if (IsDead == true)
+            {
+                IsDead = false;
+                SetPlayerHP(1);
+            }
+        }
 
         public void SetPlayerMP(int value)
         {

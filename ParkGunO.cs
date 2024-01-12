@@ -1030,6 +1030,7 @@ namespace ElonMusk
                     switch (act)
                     {
                         default:
+                            Game.game.player.Revive();
                             Game.game.ChangeScene(Game.game.idle);
                             break;
                     }
@@ -1195,7 +1196,10 @@ namespace ElonMusk
                     Console.WriteLine();
                     PrintTextWithHighlighst(ConsoleColor.Magenta, "Lv. ", $"{Game.game.player.level} ", $" {Game.game.player.PlayerName.Item1}");
                     Console.WriteLine();
-                    Console.WriteLine($"HP {Game.game.player.CurHP} -> {Game.game.player.CurHP-10}");
+                    if (Game.game.player.CurHP -10 <0)
+                        Console.WriteLine($"HP {Game.game.player.CurHP} -> 0");
+                    else
+                        Console.WriteLine($"HP {Game.game.player.CurHP} -> {Game.game.player.CurHP - 10}");
                     Game.game.player.SetPlayerHP(-10);
                     Console.WriteLine(); 
                     Console.WriteLine("0. 돌아가기");
@@ -1207,7 +1211,10 @@ namespace ElonMusk
                     {
                         case 0:
                             Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] = 4;
-                            Game.game.ChangeScene(new Dungeon_move());
+                            if (Game.game.player.IsDead == true)
+                                Game.game.ChangeScene(new Dungeon.Battle.BattleEnd_Lose());
+                            else
+                                Game.game.ChangeScene(new Dungeon_move());
                             break;
                         default:
                             break;
