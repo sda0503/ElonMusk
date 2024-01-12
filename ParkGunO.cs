@@ -1,5 +1,4 @@
 ﻿using Elonmusk;
-using ElonMusk;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -143,8 +142,7 @@ namespace ElonMusk
         }
 
         public override void TakeDamage(int damage)
-        {
-            //base.TakeDamage(damage);
+        {            
             Health -= damage;
             if (Health <= 0)
             {
@@ -169,8 +167,7 @@ namespace ElonMusk
         }
 
         public override void TakeDamage(int damage)
-        {
-            //base.TakeDamage(damage);
+        {            
             Health -= damage;
             if (Health <= 0)
             {
@@ -333,7 +330,7 @@ namespace ElonMusk
                         break;
 
                     default:
-                        Console.WriteLine("그곳으론 갈 수 없습니다..");
+                        Console.WriteLine("그곳으로는 갈 수 없습니다..");
                         break;
                 }
                 switch (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy])
@@ -942,7 +939,7 @@ namespace ElonMusk
                         Game.game.player.gainGold(spawnlist.Count * 300000);
                     }
                     int getpotion = rand.Next(100);
-                    if (getpotion >= 60)
+                    if (getpotion >= 80)
                     {
                         Console.Write("포션 ");
                         Console.ForegroundColor= ConsoleColor.Magenta;
@@ -1169,12 +1166,13 @@ namespace ElonMusk
                 public override void ShowInfo()
                 {
                     Console.Clear();
-                    Console.WriteLine("함정에 빠졌습니다.");
-                    PrintTextWithHighlighst(ConsoleColor.Magenta, "Lv. ", $"{Game.game.player.level} ", $" {Game.game.player.name}");
+                    Console.WriteLine("너무 열심히 일한 나머지 지쳤습니다.");
+                    Console.WriteLine();
+                    PrintTextWithHighlighst(ConsoleColor.Magenta, "Lv. ", $"{Game.game.player.level} ", $" {Game.game.player.PlayerName.Item1}");
                     Console.WriteLine();
                     Console.WriteLine($"HP {Game.game.player.CurHP} -> {Game.game.player.CurHP-10}");
                     Game.game.player.SetPlayerHP(-10);
-                    Console.WriteLine();
+                    Console.WriteLine(); 
                     Console.WriteLine("0. 돌아가기");
                 }
 
@@ -1197,7 +1195,11 @@ namespace ElonMusk
                 public override void ShowInfo()
                 {
                     Console.Clear();
-                    Console.WriteLine("보상을 얻었습니다.");
+                    Console.WriteLine("지나가다 돈을 주웠습니다.");
+                    Console.WriteLine();
+                    PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{50000} G");
+                    Game.game.player.gainGold(50000);
+                    Console.WriteLine();
                     //나중에 히든 아이템 추가하기
                     Console.WriteLine();
                     Console.WriteLine("0. 돌아가기");
