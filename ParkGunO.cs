@@ -176,6 +176,7 @@ namespace ElonMusk
             {
                 Health = 0;
                 IsDead = true;
+                Forsave.isdungeonclear = true;
                 Forsave.isGameclear = true; // 보스 잡을 때 엔딩분기 가르기용으로 작성됨.
             }
         }
@@ -471,10 +472,10 @@ namespace ElonMusk
                         }
                     }
                 }
-                else if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == 5) //일반보스 조건 더걸기
+                else if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == 5 && Game.game.player.JobToInt(Game.game.player.job) < 2) //일반보스 조건 더걸기
                     spawnlist.Add(new UncontrollableBug());
-                //else if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == 5) //찐보스 조건 더걸기
-                    //spawnlist.Add(new Investor());
+                else if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == 5 && Game.game.player.JobToInt(Game.game.player.job) >= 2) //찐보스 조건 더걸기
+                    spawnlist.Add(new Investor());
 
                 Game.game.ChangeScene(new Battle_myturn());
             }
@@ -558,7 +559,7 @@ namespace ElonMusk
                             Console.ResetColor();
                         }
                         Console.Write($"Lv.{mob.Level} ");
-                        Console.Write(PadRightForMixedText(mob.Name, 20));
+                        Console.Write(PadRightForMixedText(mob.Name, 25));
                         Console.WriteLine($"HP {mob.Health}");
                         Console.ResetColor();
                     }
@@ -684,7 +685,7 @@ namespace ElonMusk
                             Console.ResetColor();
                         }
                         Console.Write($"Lv.{mob.Level} ");
-                        Console.Write(PadRightForMixedText(mob.Name, 12));
+                        Console.Write(PadRightForMixedText(mob.Name, 25));
                         Console.WriteLine($"HP {mob.Health}");
                         Console.ResetColor();
                     }
@@ -908,7 +909,7 @@ namespace ElonMusk
                         Console.WriteLine("수많은 버그를 뚫고 이뤄낸 성과!");
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine("당신은 영웅입니다!");
-                        Console.ResetColor();
+                        Console.ResetColor();                        
                         //여기서 엔딩으로 넘어가면 될 듯
                     }
 
@@ -925,7 +926,21 @@ namespace ElonMusk
                     Console.WriteLine($"exp {Game.game.player.EXP} -> {Game.game.player.EXP + sumexp}");
                     Console.WriteLine();
                     Console.WriteLine("[획득 아이템]");
-                    PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{spawnlist.Count*150} G");
+                    if (!(spawnlist[0] is UncontrollableBug) && !(spawnlist[0] is Investor))
+                    {
+                        PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{spawnlist.Count * 150} G");
+                        Game.game.player.gainGold(spawnlist.Count * 150);
+                    }
+                    else if (spawnlist[0] is UncontrollableBug)
+                    {
+                        PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{spawnlist.Count * 5000} G");
+                        Game.game.player.gainGold(spawnlist.Count * 5000);
+                    }
+                    else if (spawnlist[0] is Investor)
+                    {
+                        PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{spawnlist.Count * 300000} G");
+                        Game.game.player.gainGold(spawnlist.Count * 300000);
+                    }
                     int getpotion = rand.Next(100);
                     if (getpotion >= 60)
                     {
@@ -935,7 +950,7 @@ namespace ElonMusk
                         Console.ResetColor();
                         Forsave.potion++;
                     }
-                    Game.game.player.gainGold(spawnlist.Count * 150);
+                    
                     Game.game.player.Addexp(sumexp);
                     Game.game.player.LevelCal();
                     spawnlist.Clear();
@@ -951,7 +966,15 @@ namespace ElonMusk
                         case 0:
                             if (!Forsave.isdungeonclear)
                                 Game.game.ChangeScene(new Dungeon_move());
-                            else if (Forsave.isdungeonclear)
+                            else if (Forsave.isdungeonclear && Forsave.isGameclear)
+                            {
+                                {
+                                    //Game.game.ChangeScene(new Dungeon()); //엔딩으로 넘어가기
+                                    Forsave.isdungeonclear = false;
+                                    Forsave.Dungeonfirst = false;
+                                }
+                            }
+                            else if (Forsave.isdungeonclear && !Forsave.isGameclear)
                             {
                                 Game.game.ChangeScene(new Dungeon());
                                 Forsave.isdungeonclear = false;
@@ -1004,6 +1027,7 @@ namespace ElonMusk
                     Console.WriteLine();
                     Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
                     Console.WriteLine($"MP {Game.game .player.MaxMP}/{Game.game.player.CurMP}");
+                    Console.WriteLine();
                     Console.WriteLine("1. 사용하기");
                     Console.WriteLine("2. 이건 싫다. 다른 건 없나?");
                     Console.WriteLine("0. 나가기");
@@ -1076,7 +1100,26 @@ namespace ElonMusk
                         if (item.Item1.itemType == Item.ItemType.USE)
                         {
                             itemindex.Add(i);
-                            Console.WriteLine($" - {j++} {Game.game.player.items[i].Item1.name}  {Game.game.player.items[i].Item1.desc} ");
+                            string name = item.Item1.name;
+                            string effect = "";
+                                switch (name)
+                                {
+                                    //체력
+                                    case "아이스아메리카노":
+                                    effect = "HP : 10";
+                                        break;
+                                    case "코카콜라(빨간포션)":
+                                    effect = "HP : 30";
+                                    break;
+                                    case "샌드위치":
+                                    effect = "HP : 50";
+                                    break;
+                                    //MP
+                                    case "팹시(파란포션)":
+                                    effect = "MP : 30";
+                                    break;
+                                }
+                            Console.WriteLine($" - {j++} {Game.game.player.items[i].Item1.name}  {Game.game.player.items[i].Item1.desc} | {effect}");
                         }
                     }
                     j = 1;                    
@@ -1097,17 +1140,19 @@ namespace ElonMusk
                                 string name = Game.game.player.items[itemindex[act-1]].Item1.name;
                                 switch (name)
                                 {
-                                    case "코카콜라(빨간포션)":
+                                    //체력
+                                    case "아이스아메리카노":
                                         Game.game.player.SetPlayerHP(10);
                                         break;
-                                    case "팹시(파란포션)":
-                                        Game.game.player.SetPlayerMP(-10);
-                                        break;
-                                    case "아이스아메리카노":
-                                        Game.game.player.SetPlayerMP(-30);
+                                    case "코카콜라(빨간포션)":
+                                        Game.game.player.SetPlayerHP(30);
                                         break;
                                     case "샌드위치":
                                         Game.game.player.SetPlayerHP(50);
+                                        break;
+                                    //MP
+                                    case "팹시(파란포션)":
+                                        Game.game.player.SetPlayerMP(-30);
                                         break;
                                 }
                                 Game.game.player.items.RemoveAt(itemindex[act-1]);
