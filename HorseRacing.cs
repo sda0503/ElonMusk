@@ -218,7 +218,7 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
             if(betHorseNum == winHorse) 
             {
                 Console.WriteLine($"맞추셨습니다! {betGold * 5}만큼 골드를 받습니다.");
-                Game.game.player.gainGold(betGold * 4);
+                Game.game.player.gainGold(betGold * 5);
                 CasinoData.casinoData.horseRacingAchivement._winGold += betGold * 5;
                 betGold = 0;
             }
