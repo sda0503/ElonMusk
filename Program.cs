@@ -38,6 +38,7 @@ namespace Elonmusk
         public Inventory inventory { get; private set; }
         public Opening opening { get; private set; }
         public BTestScene btestScene { get; private set; }
+        public SellScene sellScene { get; private set; }
         public Resume resume { get; private set; }
 
         public Idle idle { get; private set; }
@@ -71,6 +72,7 @@ namespace Elonmusk
             buy = new Buy();
             opening = new Opening();
             btestScene = new BTestScene();
+            sellScene  = new SellScene();
             resume = new Resume();
             quset = new Quest();
             job = new Job();
@@ -151,6 +153,8 @@ namespace Elonmusk
             Console.WriteLine("5. 강원랜드");
             Console.WriteLine("6. 도전과제");
             Console.WriteLine("7. 저장");
+            Console.WriteLine("");
+            Console.WriteLine(Game.game.quset.QusetCnt);
         }
         public override void GetAction(int act)
         {
@@ -360,6 +364,7 @@ namespace Elonmusk
             }
             Console.WriteLine();
             Console.WriteLine("1.아이템 구매");
+            Console.WriteLine("2.아이템 판매");
             Console.WriteLine("0. 나가기");
         }
 
@@ -372,6 +377,9 @@ namespace Elonmusk
                     break;
                 case 1:
                     Game.game.ChangeScene(new BTestScene());
+                    break;
+                case 2:
+                    Game.game.ChangeScene(new SellScene());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -398,6 +406,10 @@ namespace Elonmusk
                     items[index] = (items[index].Item1, false);
                 }
             }
+        }
+        public void TrySellItem(int index)
+        {
+            
         }
     }
 
@@ -533,7 +545,7 @@ namespace Elonmusk
         public List<(Item, bool)> items { get; private set; }
         private(string, bool) playerName;
         public string jobName;
-        public int jobNum;
+        
         public (string, bool) PlayerName{get{ return playerName;}set { playerName = value; } }
         public enum JOB
         {
@@ -558,6 +570,7 @@ namespace Elonmusk
             return jobName;
         }
 
+        public int jobNum;
         public int JobToInt(JOB j)
         {
             switch (j)
@@ -606,7 +619,7 @@ namespace Elonmusk
             CurHP = 100;
             ACC = 100;
             Evade = 10;
-            GOLD = 1500;
+            GOLD = 1500000;
             MaxMP = 100;
             CurMP = 100;
             skills = [new Skill_Teach(), new Skill_Ask(), new Skill_Googling()];
