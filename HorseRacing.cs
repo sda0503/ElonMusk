@@ -1,11 +1,11 @@
 ﻿
-#define TEST
 
 using Elonmusk;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace ElonMusk
 {
 
-    public class HorseRacingLobby : GameLobby
+    public class SpartaMusumeLobby : GameLobby
     {
         public override void ShowInfo()
         {
@@ -31,10 +31,10 @@ namespace ElonMusk
                     Game.game.ChangeScene(new Casino());
                     break;
                 case 1:
-                    Game.game.ChangeScene(new HorseRacingInfo());
+                    Game.game.ChangeScene(new SpartaMusumeInfo());
                     break;
                 case 2:
-                    Game.game.ChangeScene(new HorseRacingGame());
+                    Game.game.ChangeScene(new SpartaMusumeGame());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -53,32 +53,32 @@ MMMMMMM.  M MM  MMMMMMMM M  MMMMM  MM MM  MMMb. ""M MMMM  MMMM M  MMMMM  MM
 M. .MMM'  M MM  MMMMMMMM M  MMMMM  MM MM  MMMMM  M MMMM  MMMM M  MMMMM  MM 
 Mb.     .dM MM  MMMMMMMM M  MMMMM  MM MM  MMMMM  M MMMM  MMMM M  MMMMM  MM 
 MMMMMMMMMMM MMMMMMMMMMMM MMMMMMMMMMMM MMMMMMMMMMMM MMMMMMMMMM MMMMMMMMMMMM 
-     d888ba.88ba  dP     dP .d88888b   88888888b 8888ba.88ba   88888888b 
-     88  `8b  `8b 88     88 88.    ""'  88        88  `8b  `8b  88        
-     88   88   88 88     88 `Y88888b.  888888    88   88   88  888888  
-     88   88   88 88     88       `8b  88        88   88   88  88        
-     88   88   88 Y8.   .8P d8'   .8P  88        88   88   88  88        
-d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
+     d888ba.88ba  dP     dP .d88888b   dP     dP  8888ba.88ba   88888888b 
+     88  `8b  `8b 88     88 88.     '  88     88  88  `8b  `8b  88        
+     88   88   88 88     88 `Y88888b.  88     88  88   88   88  888888  
+     88   88   88 88     88       `8b  88     88  88   88   88  88        
+     88   88   88 Y8.   .8P d8'   .8P  Y8.   .8P  88   88   88  88        
+d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
 ");
         }
     }
 
-    public class HorseRacingInfo : Scene
+    public class SpartaMusumeInfo : Scene
     {
         public override void ShowInfo()
         {
-            HorseRacingLobby.PrintGameTitle();
+            SpartaMusumeLobby.PrintGameTitle();
             Console.WriteLine();
-            Console.WriteLine("스파르타 무스메는 5마리의 열정 넘치는 경기마들 중에서 승리하는 말을 맞추는 게임입니다.");
-            Console.WriteLine("승리하는 말을 맞추면 베팅한 금액의 다섯 배를 얻습니다.");
+            Console.WriteLine("스파르타 무스메는 5마리의 열정 넘치는 경기닭들 중에서 승리하는 닭을 맞추는 게임입니다.");
+            Console.WriteLine("승리하는 닭을 맞추면 베팅한 금액의 다섯 배를 얻습니다.");
             Console.WriteLine("반대로 맞추지 못했을 경우에는 베팅한 금액을 모두 잃습니다.");
-            Console.WriteLine("각 말들의 특징은 다음과 같습니다.");
+            Console.WriteLine("각 닭들의 특징은 다음과 같습니다.");
             Console.WriteLine();
-            Console.WriteLine("첫째 말은 성격이 급해서 처음부터 빠르게 달리고, 이후 점점 지쳐 천천히 달립니다.");
-            Console.WriteLine("둘째 말은 눈치를 봐서 다른 말들의 평균 속도보다 살짝 빠르게 달립니다.");
-            Console.WriteLine("셋째 말은 차분하게 처음부터 끝까지 꾸준한 속도로 달립니다.");
-            Console.WriteLine("넷째 말은 제멋대로라 기분에 따라 달립니다. 정말 빠르게 달릴 수도, 정말 천천히 달릴 수도 있습니다.");
-            Console.WriteLine("다섯째 말은 노력가여서 처음에 천천히 달리다가 점점 더 빠르게 달립니다.");
+            Console.WriteLine("첫째 닭은 성격이 급해서 처음부터 빠르게 달리고, 이후 점점 지쳐 천천히 달립니다.");
+            Console.WriteLine("둘째 닭은 눈치를 봐서 다른 닭들의 평균 속도보다 살짝 빠르게 달립니다.");
+            Console.WriteLine("셋째 닭은 차분하게 처음부터 끝까지 꾸준한 속도로 달립니다.");
+            Console.WriteLine("넷째 닭은 제멋대로라 기분에 따라 달립니다. 정말 빠르게 달릴 수도, 정말 천천히 달릴 수도 있습니다.");
+            Console.WriteLine("다섯째 닭은 노력가여서 처음에 천천히 달리다가 점점 더 빠르게 달립니다.");
             Console.WriteLine();
             Console.WriteLine("0. 돌아간다");
         }
@@ -88,7 +88,7 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
             switch (act)
             {
                 case 0:
-                    Game.game.ChangeScene(new BlackJackLobby());
+                    Game.game.ChangeScene(new SpartaMusumeLobby());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -97,7 +97,7 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
         }
     }
 
-    public class HorseRacingGame : Scene
+    public class SpartaMusumeGame : Scene
     {
 
         bool isRunning = false;
@@ -110,48 +110,59 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
         int betGold = 0;
         int winHorse = 0;
 
+        static int WinStreak = 0;
+
         public override void ShowInfo()
-        {
-            // print
-            HorseRacingLobby.PrintGameTitle();
-
-            Console.WriteLine("1. 게임 시작");
-            Console.WriteLine("0. 돌아가기");
-
-#if TEST
-            Test(100000);
-#endif
-
-            Bet();
-        }
-
-        void Bet() 
         {
             Console.Clear();
             printHorseLane();
             Console.WriteLine();
-            Console.WriteLine("먼저 배팅할 말을 지정해주세요 (1-5번, 0을 입력하면 돌아갑니다)");
+            Console.WriteLine("먼저 배팅할 닭을 지정해주세요 (1-5번, 0을 입력하면 돌아갑니다)");
             Console.WriteLine();
+
             // 배팅할 말 설정
-            int horseNum = -1;
-            do
-            {
-                horseNum = Game.GetPlayerInputInt();
-            }
-            while (!(horseNum >-1 && horseNum < 6));
+#if TEST
+            Test(100000);
+#endif
+        }
 
-            if(horseNum == 0 ) { return; }
-            else 
+        public override void GetAction(int act)
+        {
+            if (!isRunning)
             {
-                this.betHorseNum = horseNum;
+                switch (act)
+                {
+                    case 0:
+                        Game.game.ChangeScene(new SpartaMusumeLobby());
+                        break;
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                        this.betHorseNum = act;
+                        Bet();
+                        break;
+                    default:
+                        Console.WriteLine("유효한 입력이 아닙니다!");
+                        break;
+                }
             }
+        }
 
+
+        void Bet() 
+        {
             // 배팅할 금액 설정
+            Console.Clear();
+            printHorseLane();
             Console.WriteLine();
             Console.WriteLine($"현재 소지 금액 {Game.game.player.GOLD}");
             Console.WriteLine("배팅할 금액을 입력해주세요. (0을 입력하면 나갑니다)");
             Console.WriteLine();
-            
+            Console.WriteLine("원하시는 금액을 선택해주세요.");
+            Console.Write(">> ");
+
             int bet = -1;
             do
             {
@@ -195,23 +206,26 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
 #endif
         void PlayHorseRacing() 
         {
-            Console.WriteLine("경마 시작!");
+            Console.WriteLine("경닭 시작!");
 
             Thread thread = new Thread(new ThreadStart(HorseRacing));
             thread.Start();
             thread.Join();
 
             Console.WriteLine();
-            Console.WriteLine($"경기 종료!! 승리한 말은 {winHorse}번마입니다.");
+            Console.WriteLine($"경기 종료!! 승리한 닭은 {winHorse}번닭입니다.");
 
             if(betHorseNum == winHorse) 
             {
                 Console.WriteLine($"맞추셨습니다! {betGold * 5}만큼 골드를 받습니다.");
-                Game.game.player.gainGold(betGold * 5);
+                Game.game.player.gainGold(betGold * 4);
+                CasinoData.casinoData.horseRacingAchivement._winGold += betGold * 5;
+                betGold = 0;
             }
             else 
             {
-                Console.WriteLine($"승리한 말을 맞추지 못했습니다. 배팅한 금액을 잃습니다.");
+                Console.WriteLine($"승리한 닭을 맞추지 못했습니다. 배팅한 금액을 잃습니다.");
+                CasinoData.casinoData.horseRacingAchivement._loseGold += betGold;
                 betGold = 0;
             }
 
@@ -227,6 +241,9 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
             int act = -1;
             do
             {
+                Console.WriteLine();
+                Console.WriteLine("원하시는 행동을 선택해주세요.");
+                Console.Write(">> ");
                 act = Game.GetPlayerInputInt();
             }
             while (act != 1 && act != 0);
@@ -234,85 +251,114 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
             if (act == 1)
                 Bet();
             else if (act == 0)
-                Game.game.ChangeScene((Scene)Activator.CreateInstance(this.GetType()));
-        }
-
-
-        public override void GetAction(int act)
-        {
-            if (!isRunning)
-            {
-                switch (act)
-                {
-                    case 0:
-                        Game.game.ChangeScene(new HorseRacingLobby());
-                        break;
-                    default:
-                        Console.WriteLine("유효한 입력이 아닙니다!");
-                        break;
-                }
-            }
+                Game.game.ChangeScene(new SpartaMusumeLobby());
         }
 
         void printHorseLane()
         {
-            Console.BackgroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("wvwwwvwvwvwvwvwvwvwvwwvwvwvwwwvwvwvwvwvwvwwvvwwvwvwvwvwvwvwvwvwvwwvwvwvwvw");
-            Console.WriteLine("wwwwvwwvwvwvwvwvwvwvwwvwvwvwvwvwvwvwvwvwvwvvvvwwwwvwwvwwwvwwvwwwvwvwwwwwwv");
-            Console.WriteLine("wvvwvwvwvvvwvwwwvwwvwvwwwvwvwwwvwvwvwvwvwwwwvwvwvwwwwvvwwwvwvwwwvwwvwvwwvw");
+            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            Console.WriteLine("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
+            Console.WriteLine("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine("wvwwwvwvwvwvwvwvwvwvwwvwvwvwwwvwvwvwvwvwvwwvvwwvvwwvvwwvwwvwvwvwvwvwvwvwvwwvwvwv");
+            Console.WriteLine("wwwwvwwvwvwvwvwvwvwvwwvwvwvwvwvwvwvwvwvwvwvvvvwwwwvwwvwwwvwwvwwwvwvwwvwvwwwwwwwv");
+            Console.WriteLine("wvvwvwvwvvvwvwwwvwwvwvwwwvwvwwwvwvwvwvwvwwwwvvvwvwwwvwvwwwwvvwwwvwvwwwvwwvwvwwvw");
+            Console.WriteLine("wwwwvwwvwvwvwvwvwvwvwwvwvvwvwvwvwwvwvwvwvwvwvwvwvvvvwwwwvwwvwwwvwwvwwwvwvwwwwwwv");
 
             Console.ForegroundColor= ConsoleColor.White;
-            Console.WriteLine("==========================================================================");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("wvwwwvwvwvwvwwwvwvwvwwwwvwvwwwvwvwvwvwvwwwvwvwvwwwvwvwwvwvwwvwvwvwwvwwvvww");
-            Console.WriteLine("wvvwvwvwvvvwvwwwvwwvwvwwwvwvwwwvwvwvwvwvwwwwvwvwvwwwwvvwwwvwvwwwvwwvwvwwvw");
-            Console.WriteLine("wwwwvwwvwvwvwvwvwvwvwwvwvwvwvwvwvwvwvwvwvwvvvvwwwwvwwvwwwvwwvwwwvwvwwwwwwv");
+            Console.WriteLine("================================================================================");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine("wvwwwvwvwvvwvwwwvwvwvwwwwvvwvwwwvwwwvwvwvwvwvwwwvwvwvwwwvwvwwvwvwwvwvwvwwvwwvvww");
+            Console.WriteLine("wvvwvwvwvvvwvvwwwvwvwvwwwvwvwwwvwvwwwvwvwvwvwvwwwwvwvwvwwwwvvwwwvwvwwwvwwvwvwwvw");
+            Console.WriteLine("wwwwvwwvwvwvwvwvwvwvvwvwwwwvwvwvvwvwvwvwvwvwvwvwvvvvwwwwvwwvwwwvwwvwwwvwvwwwwwwv");
+            Console.WriteLine("wvvwvwvwvvvwvwwwvwwvwvwwvwvwwwvwvwvwwvwvwvwvwvwwwwvwvwvwwwwvvwwwvwvwwwvwwvwvwwvw");
 
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("==========================================================================");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("vwvwwwvwwwvwvwvwvwwwvwvwwwvwvwvwwwvwwvwwvwvwwvwwwvwwvwvwvwwwvwwwvvwvwwvwvw");
-            Console.WriteLine("wvwwwvwvwvwvwwwvwvwvwwwwvwvwwwvwvwvwvwvwwwvwvwvwwwvwvwwvwvwwvwvwvwwvwwvvww");
-            Console.WriteLine("wwwwvwwvwvwvwvwvwvwvwwvwvwvwvwvwvwvwvwvwvwvvvvwwwwvwwvwwwvwwvwwwvwvwwwwwwv");
+            Console.WriteLine("================================================================================");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine("vwvwwwvwwwvwvwvwvwwwvwvwwwvwvwvwwwvwwvwvwvwwvwwvwvwwvwwwvwwvwvwvwwwvwwwvvwvwwvwv");
+            Console.WriteLine("wvwwwvwvwvwvwwwvwvwvwwwwvwvwwwvwvwvwvwvwwvwwvwwwvwvwvwwwvwvwwvwvwwvwvwvwwvwwvvww");
+            Console.WriteLine("wwwwvwwvwvwvwvwvwvwvwwvwvwvwvwvwvwwvwwvwvwvwvwvwvvvvwwwwvwwvwwwvwwvwwwvwvwwwwwwv");
+            Console.WriteLine("wvwwwvwvwvwvwwwvwwvwwvwvwvwwwwvwvwwwvwvwvwvwvwwwvwvwvwwwvwvwwvwvwwvwvwvwwvwwvvww");
 
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("==========================================================================");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("wwwwvwwvwvwvwvwvwvwvwwvwvwvwvwvwvwvwvwvwvwvvvvwwwwvwwvwwwvwwvwwwvwvwwwwwwv");
-            Console.WriteLine("wvvwvwvwvvvwvwwwvwwvwvwwwvwvwwwvwvwvwvwvwwwwvwvwvwwwwvvwwwvwvwwwvwwvwvwwvw");
-            Console.WriteLine("wvwwwvwvwvwvwvwvwvwvwwvwvwvwwwvwvwvwvwvwvwwvvwwvwvwvwvwvwvwvwvwvwwvwvwvwvw");
+            Console.WriteLine("================================================================================");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine("wwwwvwwvwvwvwvwvwvwvwwvwvwvwvwwvwwvwvwvwvwvwvwvwvvvvwwwwvwwvwwwvwwvwwwvwvwwwwwwv");
+            Console.WriteLine("wvvwvwvwvvvwvwwwvwwvwwvwwvwvwwwvwvwwwvwvwvwvwvwwwwvwvwvwwwwvvwwwvwvwwwvwwvwvwwvw");
+            Console.WriteLine("wvwwwvwvwvwvwvwwvwwvwvwvwvwwvwvwvwwwvwvwvwvwvwvwwvvwwvwvwvwvwvwvwvwvwvwwvwvwvwvw");
+            Console.WriteLine("wvvwvwvwvvvwvwwwvwwvwvwwwwvwwvwvwvwwwvwvwvwvwvwwwwvwvwvwwwwvvwwwvwvwwwvwwvwvwwvw");
 
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("==========================================================================");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("wvvwvwvwvvvwvwwwvwwvwvwwwvwvwwwvwvwvwvwvwwwwvwvwvwwwwvvwwwvwvwwwvwwvwvwwvw");
-            Console.WriteLine("wvwwwvwvwvwvwwwvwvwvwwwwvwvwwwvwvwvwvwvwwwvwvwvwwwvwvwwvwvwwvwvwvwwvwwvvww");
-            Console.WriteLine("wvwwwvwvwvwvwvwvwvwvwwvwvwvwwwvwvwvwvwvwvwwvvwwvwvwvwvwvwvwvwvwvwwvwvwvwvw");
-            
-            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            Console.WriteLine("================================================================================");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine("wvvwvwvwvvvwvwwwvwwvwvwwwvwvwwwvwvwvwwvwwvwvwvwwwwvwvwvwwwwvvwwwvwvwwwvwwvwvwwvw");
+            Console.WriteLine("wvwwwvwvwvwvwwwvwvwvwwwwvwvwwwvwvwwvwwvwvwvwvwwwvwvwvwwwvwvwwvwvwwvwvwvwwvwwvvww");
+            Console.WriteLine("wvwwwvwvwvwvwvwvwwvwwvwvwvwwvwvwvwwwvwvwvwvwvwvwwvvwwvwvwvwvwvwvwvwvwvwwvwvwvwvw");
+            Console.WriteLine("wvwwwvwvwvwvwwwvwvwvwwwwvwvwwwvwvwvwwvwwvwvwvwwwvwvwvwwwvwvwwvwvwwvwvwvwwvwwvvww");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             Console.ResetColor();
+
+            printHorses();
+        }
+
+        void printHorses() 
+        {
+            int origin_x = Console.CursorLeft;
+            int origin_y = Console.CursorTop;
+            if(horses.Count == 0) 
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    // x 위치는 length 비례 : 총 74칸
+                    // length / laneLength * 74;
+                    double position = 0;
+                    Console.SetCursorPosition((int)position, i * 5 + 1);
+                    Horse dummyHorse = new Horse(0);
+                    dummyHorse.PrintChicken(-1);
+                }
+            }
+            else 
+            {
+                for(int i=0; i<horses.Count; i++) 
+                {
+                    // x 위치는 length 비례 : 총 67칸
+                    // length / laneLength * 67;
+                    double position = ((double)horses[i].length / laneLength) * 68;
+                    Console.SetCursorPosition((int)position, i * 5 + 1);
+                    horses[i].PrintChicken((int)position % 4);
+                }
+            }
+            Console.SetCursorPosition(origin_x, origin_y);
         }
 
         void HorseRacing() 
         {
             InitializeHorses();
             bool win = false;
+            int renderCnt = 0;
             int timeCnt = 0;
             List<int> winHorsesIndexes = new List<int>();
 
             while(!win) 
             {
 #if !TEST
-                Console.Clear();
-                printHorseLane();
+                renderCnt++;
+                if(renderCnt > 10) 
+                { 
+                    Console.Clear();
+                    printHorseLane();
+                    renderCnt = 0;
+                }
 #endif
                 foreach (var horse in horses) 
                 {
                     horse.Run();
-#if !TEST
-                    Console.WriteLine($"Horse : Speed = {horse.speed, -5}, Length = {horse.length, -20}");
+#if TEST
+                    // Console.WriteLine($"Horse : Speed = {horse.speed, -5}, Length = {horse.length, -20}");
 #endif
                     if (horse.length > laneLength) win = true;
                 }
@@ -428,6 +474,134 @@ d88888P   dP   dP `Y88888P'  Y88888P   88888888P dP   dP   dP  8888888888b
             public void Run() 
             {
                 length += speed;
+            }
+
+            static string[] chickens = { chicken0, chicken1, chicken2, chicken3 };
+
+            const string chickenIdle = @"
+          ,mm
+         / ' >
+((___.-''   |
+ \__       /
+   \___(__/
+     |_|_
+";
+            const string chicken0 = @"
+           ,mm
+          / ' >
+((___.-'''  /
+ \__       /
+  \__(____/
+     /\_
+";
+            const string chicken1 = @"
+          ,mm
+         / ' >
+((___.-''   /
+ \__       /
+  \_____(_/
+    /_   \_
+";
+
+            const string chicken2 = @"
+         ,mm
+        | ' >
+((___.-''   |
+ \__       /
+  \___(___/
+     /  \_
+";
+            const string chicken3 = @"
+         ,mm
+        | ' >
+((___.-''  ,|
+ \__       /
+  \_(_____/
+    /_    \_
+";
+            public void PrintChicken(int num) 
+            {
+                if(num == -1) 
+                {
+                    DrawChicken(chickenIdle);
+                }
+                else 
+                {
+                    switch(num) 
+                    {
+                        case 0:
+                            DrawChicken(chicken0);
+                            break;
+                        case 1:
+                            DrawChicken(chicken1);
+                            break;
+                        case 2:
+                            DrawChicken(chicken2);
+                            break;
+                        case 3: 
+                            DrawChicken(chicken3);
+                            break;
+                    }
+                }
+            }
+
+            void DrawChicken(string chicken) 
+            {
+                int start_x = Console.GetCursorPosition().Left;
+
+                bool isEmpty = true;
+                foreach(char ch in chicken) 
+                {
+                    if(ch == '\n') 
+                    {
+                        Console.SetCursorPosition(start_x, Console.GetCursorPosition().Top + 1);
+                        isEmpty = true;
+                    }
+                    else if(ch != ' ') 
+                    {
+                        isEmpty = false;
+                        Console.Write(ch);
+                    }
+                    else 
+                    {
+                        if (isEmpty)
+                            Console.SetCursorPosition(Console.GetCursorPosition().Left + 1, Console.GetCursorPosition().Top);
+                        else
+                            Console.Write(ch);
+                    }
+                }
+            }
+        }
+
+        public void CountWinStreak(WINFLAG flag)
+        {
+            if (WinStreak == 0)
+                WinStreak += (int)flag;
+            else if (WinStreak > 0)
+            {
+                if (flag != WINFLAG.WIN)
+                    WinStreak = (int)flag;
+                else
+                {
+                    WinStreak++;
+                    if (WinStreak > CasinoData.casinoData.horseRacingAchivement._maxWinStreak)
+                    {
+                        CasinoData.casinoData.horseRacingAchivement._maxWinStreak = WinStreak;
+                    }
+                }
+            }
+            else
+            {
+                if (flag != WINFLAG.LOSE)
+                    WinStreak = (int)flag;
+                else
+                {
+                    WinStreak--;
+                    if (WinStreak < CasinoData.casinoData.horseRacingAchivement._maxLoseStreak)
+                    {
+                        CasinoData.casinoData.horseRacingAchivement._maxLoseStreak = WinStreak;
+                    }
+                }
             }
         }
     }
