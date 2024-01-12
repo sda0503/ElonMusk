@@ -213,7 +213,7 @@ M#########M                                88
             Console.WriteLine();
             ShowCards();
             int act = -1;
-            do
+            while(CountScore(playerHand) < 21) 
             {
                 Console.WriteLine("당신의 턴입니다. 당신의 행동을 선택하세요.");
                 Console.WriteLine("1. 카드 뽑기");
@@ -221,7 +221,8 @@ M#########M                                88
 
                 act = Game.GetPlayerInputInt();
 
-                if (act == 1) { 
+                if (act == 1)
+                {
                     playerHand.Add(DrawCard());
                     Console.Clear();
                     Console.WriteLine();
@@ -232,8 +233,6 @@ M#########M                                88
                 if (act == 0)
                     break;
             }
-            while (CountScore(playerHand) < 21);
-
             Console.WriteLine("당신의 턴이 끝났습니다.");
             Console.WriteLine();
         }
@@ -406,7 +405,6 @@ M#########M                                88
             int num = 0;
             if (Int32.TryParse(numString, out num))
             {
-                // Console.WriteLine($"{cardVisualFormat.GetLength(0)}, {numString}, {num}");
                 return String.Format(cardVisualFormat[num-1], numString, PatternToString(pattern));
             }
             else 
