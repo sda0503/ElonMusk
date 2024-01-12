@@ -37,8 +37,10 @@ namespace Elonmusk
         public Buy buy { get; private set; }
         public Inventory inventory { get; private set; }
         public Opening opening { get; private set; }
+
         public BTestScene btestScene { get; private set; }
         public SellScene sellScene { get; private set; }
+
         public Resume resume { get; private set; }
 
         public Idle idle { get; private set; }
@@ -71,6 +73,7 @@ namespace Elonmusk
             equipment = new Equipment();
             buy = new Buy();
             opening = new Opening();
+
             btestScene = new BTestScene();
             sellScene  = new SellScene();
             resume = new Resume();
@@ -78,7 +81,7 @@ namespace Elonmusk
             job = new Job();
             casino = new Casino();
 
-            curScene = new Opening();
+            curScene = new Idle();
         }
 
         void Loop()
@@ -148,13 +151,13 @@ namespace Elonmusk
             Console.WriteLine("0. 상태창");
             Console.WriteLine("1. 가방");
             Console.WriteLine("2. 상점");
-            Console.WriteLine("3. 일하기");
+            Console.WriteLine("3. 발표하기");
             Console.WriteLine("4. 인사평가");
-            Console.WriteLine("5. 강원랜드");
-            Console.WriteLine("6. 도전과제");
-            Console.WriteLine("7. 저장");
-            Console.WriteLine("");
-            Console.WriteLine(Game.game.quset.QusetCnt);
+            Console.WriteLine("5. 발표하기");
+            Console.WriteLine("6. 강원랜드");
+            Console.WriteLine("7. 도전과제");
+            Console.WriteLine("8. 저장");
+
         }
         public override void GetAction(int act)
         {
@@ -171,22 +174,30 @@ namespace Elonmusk
                     Game.game.ChangeScene(new Shop());
                     break;
                 case 3: //일하기
-                    Game.game.ChangeScene(new Idle());
+                    Game.game.ChangeScene(new Dungeon());
                     break;
                 case 4: //인사평가
                     Game.game.ChangeScene(new Job());
                     break;
-                case 5: //강원래드
+
+                case 5: //던전입장
+                    Game.game.ChangeScene(new Dungeon());
+                    break;
+                case 6: //강원래드
                     Game.game.ChangeScene(new Casino());
                     break;
-                case 6: //퀘스트
-                    Game.game.ChangeScene(new Quest());
+                case 7: //퀘스트
+                    Game.game.ChangeScene(new Idle());
+
                     break;
-                case 7: //저장
+                case 8: //저장
                     Game.game.ChangeScene(new Idle());
                     break;
                 case 99:
                     Game.game.ChangeScene(new Resume());
+                    break;
+                case 34:
+                    Game.game.ChangeScene(new BTestScene());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -238,6 +249,7 @@ namespace Elonmusk
                 (Item, bool) item = Game.game.player.items[i];
                 String strEquipped = (item.Item2) ? "[E]" : String.Empty;
                 Console.WriteLine($"- {i + 1} {strEquipped}{item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}");
+                Console.WriteLine(item.Item1.itemType);
             }
             Console.WriteLine();
             Console.WriteLine("1. 장착관리");
@@ -286,7 +298,6 @@ namespace Elonmusk
             }
             else if (act > 0 && act < Game.game.player.items.Count + 1)
             {
-                string itenType = Game.game.player.items[act - 1].Item1.itemType.ToString();
                 Game.game.player.EquipOrDequip(act - 1);
             }
             else
@@ -376,7 +387,7 @@ namespace Elonmusk
                     Game.game.ChangeScene(new Idle());
                     break;
                 case 1:
-                    Game.game.ChangeScene(new BTestScene());
+                    Game.game.ChangeScene(new Buy());
                     break;
                 case 2:
                     Game.game.ChangeScene(new SellScene());
@@ -543,6 +554,7 @@ namespace Elonmusk
     public class Player : Unit
     {
         public List<(Item, bool)> items { get; private set; }
+        public List<Item> equipedItems {  get; private set; }
         private(string, bool) playerName;
         public string jobName;
         
@@ -609,6 +621,7 @@ namespace Elonmusk
         public Player()
         {
             items = new List<(Item, bool)>();
+            equipedItems = new List<Item> ();
             playerName.Item2 = false;
             name = "Victor";
             level = 1;
@@ -619,7 +632,9 @@ namespace Elonmusk
             CurHP = 100;
             ACC = 100;
             Evade = 10;
+
             GOLD = 1500000;
+
             MaxMP = 100;
             CurMP = 100;
             skills = [new Skill_Teach(), new Skill_Ask(), new Skill_Googling()];
@@ -705,21 +720,28 @@ namespace Elonmusk
         }     
         public void EquipOrDequip(int index)
         {
-            items[index] = (items[index].Item1, !(items[index].Item2));
+            var selectedItem = items[index];
+
+            if (selectedItem.Item2)
+            {
+                items[index] = (selectedItem.Item1, false);
+                Console.WriteLine($"{selectedItem.Item1.name}이(가) 해제되었습니다.");
+            }
+            else
+            {
+                var itemType = selectedItem.Item1.itemType;
+                foreach (var i in items.Where(i => i.Item2 && i.Item1.itemType == itemType).ToList())
+                {
+                    items[items.IndexOf(i)] = (i.Item1, false);
+                    Console.WriteLine($"{i.Item1.name}이(가) 해제되었습니다.");
+                }
+                items[index] = (selectedItem.Item1, true);
+                Console.WriteLine($"{selectedItem.Item1.name}이(가) 장착되었습니다.");
+            }
         }
         public void AddItem(Item item)
         {
             items.Add((new Item(item), false));
-        }
-        public void CheckEquiped(string itemType, int index)
-        {
-            foreach(var i in items)
-            {
-                if(i.Item1.itemType.ToString().Equals(itemType) && i.Item2 ==true)
-                {
-                    Console.WriteLine("동일한 장비를 제거해주세요");
-                }
-            }
         }
     }
 }
