@@ -155,16 +155,44 @@ namespace ElonMusk
         }
     }
 
+    public class Investor : Monster //보스
+    {
+        public Investor()
+        {
+            Name = "\"THE\" 투자자";
+            Level = 15;
+            Health = 150;
+            ATK = 20;
+            ACC = 16;
+            Evade = 13;
+            Description = "여러분에게 관심이 있는 투자자입니다. 투자자를 설득하고 더 큰 바다로 나아가세요.";
+        }
+
+        public override void TakeDamage(int damage)
+        {
+            //base.TakeDamage(damage);
+            Health -= damage;
+            if (Health <= 0)
+            {
+                Health = 0;
+                IsDead = true;
+                Forsave.isGameclear = true; // 보스 잡을 때 엔딩분기 가르기용으로 작성됨.
+            }
+        }
+    }
+
     public enum Doing { Idle, beforebattle, battle_ing, beforeDungeon } //상태보기 선택지가 많아서 내가 어디서 왔는 지 구분하기 위해 작성됨
 
     public class Forsave()
     {
         public static bool Dungeonfirst; //던전 첫 입장인지 확인
-        public static bool isdungeonclear; 
+        public static bool isdungeonclear;
+        public static bool isGameclear;
         public static int dungeonposx;
         public static int dungeonposy;
         public static int dungeonClearCnt; //던전 클리어 횟수 - 둘다 퀘스트나 전직에 사용
         public static int KillCnt; //몹 잡은 횟수
+        public static int potion = 3; //포션 개수
         public static Dictionary<int, string> isclear;
         public static int[,] dungeon = new int[3, 3]; // 0 : 미클리어 - 전투, 1 : 미클리어 - 함정, 2 : 미클리어 - 보상, 3 : 클리어, 4 : 현재위치, 5 : 보스방
         public static void dungeonsetting()
@@ -377,7 +405,7 @@ namespace ElonMusk
             static Random rand = new Random();
             static List<Monster> spawnlist = new List<Monster>(4); //몬스터 최대 4마리까지
             static int BfHp = 0; //전투 시작 전 체력
-            static int potion = 3;
+            
 
             //static int turn = 0;
 
@@ -443,8 +471,10 @@ namespace ElonMusk
                         }
                     }
                 }
-                else if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == 5)
+                else if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == 5) //일반보스 조건 더걸기
                     spawnlist.Add(new UncontrollableBug());
+                //else if (Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] == 5) //찐보스 조건 더걸기
+                    //spawnlist.Add(new Investor());
 
                 Game.game.ChangeScene(new Battle_myturn());
             }
@@ -844,7 +874,7 @@ namespace ElonMusk
                     Console.WriteLine();
                     PrintTextWithHighlighst(ConsoleColor.Green, "", "디버깅 완료!", "");
                     Forsave.KillCnt += spawnlist.Count;
-                    if (!(spawnlist[0] is UncontrollableBug)) //보스 판별
+                    if (!(spawnlist[0] is UncontrollableBug) && !(spawnlist[0] is Investor)) //보스 판별
                     {
                         Console.WriteLine();
                         Console.WriteLine($"디버깅에서 오류 {spawnlist.Count}개를 수정했습니다.");
@@ -871,6 +901,16 @@ namespace ElonMusk
                         Console.ResetColor();
                         togo = "회사로 돌아가기";
                     }
+                    else if (spawnlist[0] is Investor)
+                    {
+                        Console.WriteLine("축하합니다! 투자 유치를 성공적으로 마쳤습니다!");
+                        Console.WriteLine("당신의 발표에 감동한 투자자가 엄청난 투자를 약속했습니다!");
+                        Console.WriteLine("수많은 버그를 뚫고 이뤄낸 성과!");
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine("당신은 영웅입니다!");
+                        Console.ResetColor();
+                        //여기서 엔딩으로 넘어가면 될 듯
+                    }
 
                     foreach (Monster mob in spawnlist)
                     {
@@ -885,7 +925,16 @@ namespace ElonMusk
                     Console.WriteLine($"exp {Game.game.player.EXP} -> {Game.game.player.EXP + sumexp}");
                     Console.WriteLine();
                     Console.WriteLine("[획득 아이템]");
-                    PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{spawnlist.Count*150}");
+                    PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{spawnlist.Count*150} G");
+                    int getpotion = rand.Next(100);
+                    if (getpotion >= 60)
+                    {
+                        Console.Write("포션 ");
+                        Console.ForegroundColor= ConsoleColor.Magenta;
+                        Console.Write($"{Forsave.potion} -> {Forsave.potion+1}");
+                        Console.ResetColor();
+                        Forsave.potion++;
+                    }
                     Game.game.player.gainGold(spawnlist.Count * 150);
                     Game.game.player.Addexp(sumexp);
                     Game.game.player.LevelCal();
@@ -951,7 +1000,7 @@ namespace ElonMusk
                     Console.WriteLine("■■■■■■■■■■■■■■");
                     ShowHighlithtesText("원기 회복");
                     Console.WriteLine("■■■■■■■■■■■■■■");
-                    Console.WriteLine("비밀의 드링크를 사용하면 체력을 30 회복 할 수 있습니다.  (남은 드링크 : {0})", potion);
+                    Console.WriteLine("비밀의 드링크를 사용하면 체력을 30 회복 할 수 있습니다.  (남은 드링크 : {0})", Forsave.potion);
                     Console.WriteLine();
                     Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
                     Console.WriteLine($"MP {Game.game .player.MaxMP}/{Game.game.player.CurMP}");
@@ -972,13 +1021,13 @@ namespace ElonMusk
                                 Game.game.ChangeScene(new Battle_myturn());
                             break;
                         case 1:
-                            if (potion > 0 && Game.game.player.CurHP != 100)
+                            if (Forsave.potion > 0 && Game.game.player.CurHP != 100)
                             {
                                 Console.Clear();
-                                potion--;
+                                Forsave.potion--;
                                 int temp = Game.game.player.CurHP;
                                 Game.game.player.UsePotion();
-                                Console.WriteLine($"체력을 회복하였습니다. (남은 드링크 : {potion})");
+                                Console.WriteLine($"체력을 회복하였습니다. (남은 드링크 : {Forsave.potion})");
                                 Console.WriteLine($"HP : {temp} -> {Game.game.player.CurHP}");
                                 Console.ReadLine();
                                 if (doing == Doing.beforebattle)
@@ -986,13 +1035,13 @@ namespace ElonMusk
                                 else if (doing == Doing.battle_ing)
                                     Game.game.ChangeScene(new Battle_myturn());
                             }
-                            else if (potion < 1)
+                            else if (Forsave.potion < 1)
                             {
                                 Console.Clear();
                                 Console.WriteLine($"드링크가 부족합니다.");
                                 Console.ReadLine();
                             }
-                            else if (potion > 0 && Game.game.player.CurHP == 100)
+                            else if (Forsave.potion > 0 && Game.game.player.CurHP == 100)
                             {
                                 Console.Clear();
                                 Console.WriteLine("이미 체력이 가득 차 있습니다.");
