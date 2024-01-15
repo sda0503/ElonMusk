@@ -102,7 +102,7 @@ M#########M                                88
             Console.WriteLine($"현재까지 블랙잭에서 번 돈 : {CasinoData.casinoData.blackJackAchievement._winGold}");
             Console.WriteLine($"현재까지 블랙잭에서 잃은 돈 : {CasinoData.casinoData.blackJackAchievement._loseGold}");
             Console.WriteLine($"블랙잭에서 달성한 최대 연승 : {CasinoData.casinoData.blackJackAchievement._maxWinStreak}");
-            Console.WriteLine($"블랙잭에서 달성한 최대 연패 : {CasinoData.casinoData.blackJackAchievement._maxLoseStreak}");
+            Console.WriteLine($"블랙잭에서 달성한 최대 연패 : {CasinoData.casinoData.blackJackAchievement._maxLoseStreak * -1}");
             Console.WriteLine();
             Console.WriteLine("0. 돌아간다");
         }
@@ -399,32 +399,35 @@ M#########M                                88
 
         public void CountWinStreak(WINFLAG flag) 
         {
-            if (WinStreak == 0)
-                WinStreak += (int)flag;
-            else if(WinStreak > 0) 
+            if (flag == WINFLAG.DRAW)
+                WinStreak = 0;
+            else if(flag == WINFLAG.WIN) 
             {
-                if(flag != WINFLAG.WIN)
-                    WinStreak = (int)flag;
-                else 
-                {
+                if (WinStreak >= 0) { 
                     WinStreak++;
-                    if(WinStreak > CasinoData.casinoData.blackJackAchievement._maxWinStreak) 
+                    if (WinStreak > CasinoData.casinoData.blackJackAchievement._maxWinStreak)
                     {
                         CasinoData.casinoData.blackJackAchievement._maxWinStreak = WinStreak;
                     }
                 }
+                else 
+                {
+                    WinStreak = 1;
+                }
             }
-            else 
+            else if(flag == WINFLAG.LOSE) 
             {
-                if (flag != WINFLAG.LOSE)
-                    WinStreak = (int)flag;
-                else
+                if (WinStreak <= 0)
                 {
                     WinStreak--;
                     if (WinStreak < CasinoData.casinoData.blackJackAchievement._maxLoseStreak)
                     {
                         CasinoData.casinoData.blackJackAchievement._maxLoseStreak = WinStreak;
                     }
+                }
+                else 
+                {
+                    WinStreak = -1;
                 }
             }
         }

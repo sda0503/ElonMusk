@@ -111,7 +111,7 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
             Console.WriteLine($"현재까지 스파르타무스메에서 번 돈 : {CasinoData.casinoData.horseRacingAchivement._winGold}");
             Console.WriteLine($"현재까지 스파르타무스메에서 잃은 돈 : {CasinoData.casinoData.horseRacingAchivement._loseGold}");
             Console.WriteLine($"스파르타무스메에서 달성한 최대 연승 : {CasinoData.casinoData.horseRacingAchivement._maxWinStreak}");
-            Console.WriteLine($"스파르타무스메에서 달성한 최대 연패 : {CasinoData.casinoData.horseRacingAchivement._maxLoseStreak}");
+            Console.WriteLine($"스파르타무스메에서 달성한 최대 연패 : {CasinoData.casinoData.horseRacingAchivement._maxLoseStreak * -1}");
             Console.WriteLine();
             Console.WriteLine("0. 돌아간다");
         }
@@ -202,8 +202,16 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
                 bet = Game.GetPlayerInputInt();
                 if (bet > Game.game.player.GOLD)
                 {
-                    Console.WriteLine("입력한 금액이 보유하고 있는 금액보다 많습니다!");
                     bet = -1;
+                    Console.Clear();
+                    printHorseLane();
+                    Console.WriteLine();
+                    Console.WriteLine("입력한 금액이 보유하고 있는 금액보다 많습니다!");
+                    Console.WriteLine($"현재 소지 금액 {Game.game.player.GOLD}");
+                    Console.WriteLine("배팅할 금액을 입력해주세요. (0을 입력하면 나갑니다)");
+                    Console.WriteLine();
+                    Console.WriteLine("원하시는 금액을 선택해주세요.");
+                    Console.Write(">> ");
                 }
             }
             while (bet < 0);
@@ -237,12 +245,14 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
                 Console.WriteLine($"맞추셨습니다! {betGold * 5}만큼 골드를 받습니다.");
                 Game.game.player.gainGold(betGold * 5);
                 CasinoData.casinoData.horseRacingAchivement._winGold += betGold * 5;
+                CountWinStreak(WINFLAG.WIN);
                 betGold = 0;
             }
             else 
             {
                 Console.WriteLine($"승리한 닭을 맞추지 못했습니다. 배팅한 금액을 잃습니다.");
                 CasinoData.casinoData.horseRacingAchivement._loseGold += betGold;
+                CountWinStreak(WINFLAG.LOSE);
                 betGold = 0;
             }
 
@@ -601,13 +611,9 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
 
         public void CountWinStreak(WINFLAG flag)
         {
-            if (WinStreak == 0)
-                WinStreak += (int)flag;
-            else if (WinStreak > 0)
+            if (flag == WINFLAG.WIN)
             {
-                if (flag != WINFLAG.WIN)
-                    WinStreak = (int)flag;
-                else
+                if (WinStreak >= 0)
                 {
                     WinStreak++;
                     if (WinStreak > CasinoData.casinoData.horseRacingAchivement._maxWinStreak)
@@ -615,18 +621,24 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
                         CasinoData.casinoData.horseRacingAchivement._maxWinStreak = WinStreak;
                     }
                 }
-            }
-            else
-            {
-                if (flag != WINFLAG.LOSE)
-                    WinStreak = (int)flag;
                 else
+                {
+                    WinStreak = 1;
+                }
+            }
+            else if (flag == WINFLAG.LOSE)
+            {
+                if (WinStreak <= 0)
                 {
                     WinStreak--;
                     if (WinStreak < CasinoData.casinoData.horseRacingAchivement._maxLoseStreak)
                     {
                         CasinoData.casinoData.horseRacingAchivement._maxLoseStreak = WinStreak;
                     }
+                }
+                else
+                {
+                    WinStreak = -1;
                 }
             }
         }

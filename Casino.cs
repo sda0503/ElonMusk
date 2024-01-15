@@ -46,7 +46,6 @@ MMMMMMMMMMM MMMMMMMMMMMM MMMMMMMMMMM MMMM MMMMMMMMMMM MMMMMMMMMMM
 #if CASINO_DATA_TEST
             Console.WriteLine($"CasinoSpendWinMoney : {CasinoData.casinoData.blackJackAchievement._winGold + CasinoData.casinoData.horseRacingAchivement._winGold}");
             Console.WriteLine($"CasinoSpendLoseMoney : {CasinoData.casinoData.blackJackAchievement._loseGold + CasinoData.casinoData.horseRacingAchivement._loseGold}");
-
 #endif
         }
 
