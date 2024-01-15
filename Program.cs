@@ -645,7 +645,7 @@ namespace Elonmusk
             GOLD = 1500000;
             MaxMP = 100;
             CurMP = 100;
-            skills = [new Skill_Teach(), new Skill_Ask(), new Skill_Googling()];
+            skills = [new Skill_Ask(), new Skill_Googling(), new Skill_Teach()];
         }
 
         public void ShowPlayerProfile()
