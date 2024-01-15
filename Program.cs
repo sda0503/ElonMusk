@@ -154,6 +154,7 @@ namespace Elonmusk
             {
                 // Scene을 이동할 때에는 Game.game.ChangeScene(new 씬이름()); 을 사용하면 됨
                 case 0: //상태창
+                    Dungeon.doing = Doing.Idle;
                     Game.game.ChangeScene(new PlayerInfo());
                     break;
                 case 1: //가방
@@ -208,7 +209,7 @@ namespace Elonmusk
                         Game.game.ChangeScene(new Dungeon.Battle());
                     else if (Dungeon.doing == Doing.beforeDungeon)
                         Game.game.ChangeScene(new Dungeon());
-                    else
+                    else if (Dungeon.doing == Doing.Idle)
                         Game.game.ChangeScene(Game.game.idle);
                     break;
                 default:
@@ -661,6 +662,14 @@ namespace Elonmusk
                 IsDead = true;
             }
         }
+        public void Revive()
+        {
+            if (IsDead == true)
+            {
+                IsDead = false;
+                SetPlayerHP(1);
+            }
+        }
 
         public void SetPlayerMP(int value)
         {
@@ -683,6 +692,7 @@ namespace Elonmusk
 
         public void Levelup(int value)
         {
+            
             Console.WriteLine("레벨 업!");
             Console.WriteLine($"Lv. {level} -> {level + 1} {name}");
             level++;

@@ -6,6 +6,8 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using static Elonmusk.Item;
+using System.Xml.Linq;
 
 
 namespace ElonMusk
@@ -103,7 +105,7 @@ namespace ElonMusk
             Name = "연결끊김";
             Level = 7;
             Health = 20;
-            ATK = 8;
+            ATK = 35;
             ACC = 14;
             Evade = 12;
             Description = "인터넷이 끊겼습니다. 재앙이 아닐 수 없군요. 당신은 가진 지식으로 문제를 헤쳐나가야 합니다.";
@@ -118,7 +120,7 @@ namespace ElonMusk
             Name = "TypeError";
             Level = 5;
             Health = 25;
-            ATK = 7;
+            ATK = 30;
             ACC = 15;
             Evade = 8;
             Description = "암시적 형변환으로 충분치 않을 때 발생합니다. int num = (int)10.5f 처럼 명시적으로 작성해보세요.";
@@ -133,7 +135,7 @@ namespace ElonMusk
             Name = "runtime error";
             Level = 9;
             Health = 30;
-            ATK = 10;
+            ATK = 37;
             ACC = 16;
             Evade = 12;
             Description = "갖은 이유로 실행 중 발생한 오류입니다. 오류 코드를 잘 읽고 디버깅 해보도록 합시다.";
@@ -180,9 +182,9 @@ namespace ElonMusk
         {
             Name = "\"관객 공포증\" 버그";
             Level = 10;
-            Health = 70;
-            ATK = 15;
-            ACC = 16;
+            Health = Game.game.player.level*35;
+            ATK = Game.game.player.level*20;
+            ACC = 20;
             Evade = 9;
             Description = "컨트롤 할 수 없는, 중요한 자리에서 발생한 버그입니다.";
             turn = 0;
@@ -211,8 +213,8 @@ namespace ElonMusk
             Name = "\"THE\" 투자자";
             Level = 15;
             Health = 150;
-            ATK = 20;
-            ACC = 16;
+            ATK = 50;
+            ACC = 20;
             Evade = 13;
             Description = "여러분에게 관심이 있는 투자자입니다. 투자자를 설득하고 더 큰 바다로 나아가세요.";
             turn = 0;
@@ -245,6 +247,10 @@ namespace ElonMusk
         public static int potion = 3; //포션 개수
         public static Dictionary<int, string> isclear;
         public static int[,] dungeon = new int[3, 3]; // 0 : 미클리어 - 전투, 1 : 미클리어 - 함정, 2 : 미클리어 - 보상, 3 : 클리어, 4 : 현재위치, 5 : 보스방
+        public static Item DungeonArmor = new Item("코딩수트 Mk.30", "코딩에 의해, 코딩을 위해 태어난 수트입니다.", 0, 20, 0, ItemType.ARMOR);
+        public static Item DungeonWeapon = new Item("인체공학 키보드&마우스 세트", "인체에 최적화 된 쓰기 편한 키보드와 마우스 세트입니다.", 20, 0, 0, ItemType.WEAPON); //상점무기 끝이랑 바꿀 예정
+        public static Item DungeonAccessory = new Item("르탄이(?)", "어딘가 친숙한 인형입니다.", 10,10 , 0, ItemType.ACCESSORY);
+        public static Item Dungeontrophy = new Item("우수 발표상", "우수한 발표자에게 주는 상입니다.", 0, 0, 0, ItemType.NONE);
         public static void dungeonsetting()
         {
             isdungeonclear = false;
@@ -324,7 +330,7 @@ namespace ElonMusk
         }
 
         public class Dungeon_move : Scene
-        {
+        {            
             public override void ShowInfo()
             {
                 Board();
@@ -334,6 +340,7 @@ namespace ElonMusk
                 Console.WriteLine("0. 돌아가기");
                 Console.WriteLine();
             }
+           
             public override void GetAction(int act)
             {
                 switch (act)
@@ -404,7 +411,7 @@ namespace ElonMusk
                         Game.game.ChangeScene(new Battle());
                         break;
                     default:
-                        break;
+                        break;                        
                 }
             }
             static void Board()
@@ -678,7 +685,8 @@ namespace ElonMusk
                     int Evade = mob.Evade + rand.Next(20);
                     if (ACC >=Evade)
                     {
-                        if (rand.Next(100) > 84)
+                        int Crit = rand.Next(100);
+                        if (Crit> 84)
                         {
                             damage = (int)MathF.Ceiling(damage * 1.6f);
                             mob.TakeDamage(damage);
@@ -928,7 +936,7 @@ namespace ElonMusk
                             //if (Game.game.player.Evade + rand.Next(20) < mob.ACC + rand.Next(20))
                             int Evade = Game.game.player.Evade + rand.Next(20);
                             int ACC = mob.ACC + rand.Next(20);
-                            int damage = mob.ATK - Game.game.player.DEF;
+                            int damage = mob.ATK- Game.game.player.DEF ;
                             if (damage < 0)
                                 damage = 0;
                             
@@ -985,7 +993,6 @@ namespace ElonMusk
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("{0}", Forsave.dungeonClearCnt);
                         Console.ResetColor();
-
                         Console.Write("현재까지 잡은 버그 갯수 : ");
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("{0}", Forsave.KillCnt);
@@ -1020,21 +1027,29 @@ namespace ElonMusk
 
                     PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{sumDropGold} G");
                     Game.game.player.gainGold(sumDropGold);
-                    //if (!(spawnlist[0] is UncontrollableBug) && !(spawnlist[0] is Investor))
-                    //{
-                    //    PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{spawnlist.Count * 150} G");
-                    //    Game.game.player.gainGold(spawnlist.Count * 150);
-                    //}
-                    //else if (spawnlist[0] is UncontrollableBug)
-                    //{
-                    //    PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{spawnlist.Count * 5000} G");
-                    //    Game.game.player.gainGold(spawnlist.Count * 5000);
-                    //}
-                    //else if (spawnlist[0] is Investor)
-                    //{
-                    //    PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{spawnlist.Count * 300000} G");
-                    //    Game.game.player.gainGold(spawnlist.Count * 300000);
-                    //}
+
+                    else if (spawnlist[0] is UncontrollableBug)
+                    {
+                        switch (Forsave.dungeonClearCnt)
+                        {
+                            case 1:
+                                Game.game.player.AddItem(Forsave.DungeonWeapon);
+                                Console.WriteLine($"{Forsave.DungeonWeapon.name}  {Forsave.DungeonWeapon.desc} 공격력 : {Forsave.DungeonWeapon.ATK}");
+                                break;
+                            case 2:
+                                Game.game.player.AddItem(Forsave.DungeonArmor);
+                                Console.WriteLine($"{Forsave.DungeonArmor.name}  {Forsave.DungeonArmor.desc} 방어력 : {Forsave.DungeonArmor.DEF}");
+                                break;
+                            case 3:
+                                Game.game.player.AddItem(Forsave.DungeonAccessory);
+                                Console.WriteLine($"{Forsave.DungeonAccessory.name}  {Forsave.DungeonAccessory.desc} ");
+                                break;
+                            default:
+                                Game.game.player.AddItem(Forsave.Dungeontrophy);
+                                Console.WriteLine($"{Forsave.Dungeontrophy.name}  {Forsave.Dungeontrophy.desc}");
+                                break;
+                        }
+                    }
                     int getpotion = rand.Next(100);
                     if (getpotion >= 80)
                     {
@@ -1048,8 +1063,7 @@ namespace ElonMusk
                     Game.game.player.Addexp(sumexp);
                     Game.game.player.LevelCal();
                     spawnlist.Clear();
-                    Console.WriteLine();
-                    //Console.WriteLine("[획득 아이템]"); //확률에 따라서 그냥 랜덤 아이템 레어도 가격 낮은 걸로 드랍.
+                    Console.WriteLine();                    
                     sumexp = 0;
                     Console.WriteLine($"0. {togo}");
                 }
@@ -1102,6 +1116,7 @@ namespace ElonMusk
                     switch (act)
                     {
                         default:
+                            Game.game.player.Revive();
                             Game.game.ChangeScene(Game.game.idle);
                             break;
                     }
@@ -1267,7 +1282,10 @@ namespace ElonMusk
                     Console.WriteLine();
                     PrintTextWithHighlighst(ConsoleColor.Magenta, "Lv. ", $"{Game.game.player.level} ", $" {Game.game.player.PlayerName.Item1}");
                     Console.WriteLine();
-                    Console.WriteLine($"HP {Game.game.player.CurHP} -> {Game.game.player.CurHP-10}");
+                    if (Game.game.player.CurHP -10 <0)
+                        Console.WriteLine($"HP {Game.game.player.CurHP} -> 0");
+                    else
+                        Console.WriteLine($"HP {Game.game.player.CurHP} -> {Game.game.player.CurHP - 10}");
                     Game.game.player.SetPlayerHP(-10);
                     Console.WriteLine(); 
                     Console.WriteLine("0. 돌아가기");
@@ -1279,7 +1297,10 @@ namespace ElonMusk
                     {
                         case 0:
                             Forsave.dungeon[Forsave.dungeonposx, Forsave.dungeonposy] = 4;
-                            Game.game.ChangeScene(new Dungeon_move());
+                            if (Game.game.player.IsDead == true)
+                                Game.game.ChangeScene(new Dungeon.Battle.BattleEnd_Lose());
+                            else
+                                Game.game.ChangeScene(new Dungeon_move());
                             break;
                         default:
                             break;
