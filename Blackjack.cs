@@ -100,7 +100,7 @@ M#########M                                88
             Console.WriteLine();
             Console.WriteLine("플레이어가 블랙잭 게임에서 달성한 기록들입니다.");
             Console.WriteLine($"현재까지 블랙잭에서 번 돈 : {CasinoData.casinoData.blackJackAchievement._winGold}");
-            Console.WriteLine($"현재까지 블랙잭에서 번 돈 : {CasinoData.casinoData.blackJackAchievement._loseGold}");
+            Console.WriteLine($"현재까지 블랙잭에서 잃은 돈 : {CasinoData.casinoData.blackJackAchievement._loseGold}");
             Console.WriteLine($"블랙잭에서 달성한 최대 연승 : {CasinoData.casinoData.blackJackAchievement._maxWinStreak}");
             Console.WriteLine($"블랙잭에서 달성한 최대 연패 : {CasinoData.casinoData.blackJackAchievement._maxLoseStreak}");
             Console.WriteLine();

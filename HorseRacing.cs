@@ -109,7 +109,7 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
             Console.WriteLine();
             Console.WriteLine("플레이어가 스파르타무스메 게임에서 달성한 기록들입니다.");
             Console.WriteLine($"현재까지 스파르타무스메에서 번 돈 : {CasinoData.casinoData.horseRacingAchivement._winGold}");
-            Console.WriteLine($"현재까지 스파르타무스메에서 번 돈 : {CasinoData.casinoData.horseRacingAchivement._loseGold}");
+            Console.WriteLine($"현재까지 스파르타무스메에서 잃은 돈 : {CasinoData.casinoData.horseRacingAchivement._loseGold}");
             Console.WriteLine($"스파르타무스메에서 달성한 최대 연승 : {CasinoData.casinoData.horseRacingAchivement._maxWinStreak}");
             Console.WriteLine($"스파르타무스메에서 달성한 최대 연패 : {CasinoData.casinoData.horseRacingAchivement._maxLoseStreak}");
             Console.WriteLine();
