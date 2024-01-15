@@ -42,6 +42,8 @@ namespace Elonmusk
         public SellScene sellScene { get; private set; }
 
         public Resume resume { get; private set; }
+        public BTestScene bTestScene { get; private set; }
+        public SpartaMusumeGame sparta {get; private set; }
 
         public Idle idle { get; private set; }
         public Equipment equipment { get; private set; }
