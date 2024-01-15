@@ -936,7 +936,7 @@ namespace ElonMusk
                             //if (Game.game.player.Evade + rand.Next(20) < mob.ACC + rand.Next(20))
                             int Evade = Game.game.player.Evade + rand.Next(20);
                             int ACC = mob.ACC + rand.Next(20);
-                            int damage = mob.ATK- Game.game.player.DEF ;
+                            int damage = mob.ATK- (Game.game.player.DEF+Game.game.player.EquipmentStat.DEF) ;
                             if (damage < 0)
                                 damage = 0;
                             
