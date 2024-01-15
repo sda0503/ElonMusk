@@ -27,4 +27,4 @@ body - 내용적기
 - 
 
 -------------------
-[1]
+[1]: https://github.com/BakGuno/Bak-s-study
