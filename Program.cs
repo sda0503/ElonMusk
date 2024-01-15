@@ -784,7 +784,7 @@ namespace Elonmusk
         {
             
             Console.WriteLine("레벨 업!");
-            Console.WriteLine($"Lv. {level} -> {level + 1} {name}");
+            Console.WriteLine($"Lv. {level} -> {level + 1} {playerName.Item1}");
             level++;
             ATK += 0.5f;
             DEF += 1;

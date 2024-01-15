@@ -1055,7 +1055,7 @@ namespace ElonMusk
                     {
                         Console.Write("포션 ");
                         Console.ForegroundColor= ConsoleColor.Magenta;
-                        Console.Write($"{Forsave.potion} -> {Forsave.potion+1}");
+                        Console.WriteLine($"{Forsave.potion} -> {Forsave.potion+1}");
                         Console.ResetColor();
                         Forsave.potion++;
                     }
