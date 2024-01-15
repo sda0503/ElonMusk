@@ -184,7 +184,7 @@ namespace Elonmusk
                     Game.game.ChangeScene(new Job());
                     break;
 
-                case 5: //던전입장
+                case 5: //휴식하기
                     Game.game.ChangeScene(new Rest());
                     break;
                 case 6: //강원래드
