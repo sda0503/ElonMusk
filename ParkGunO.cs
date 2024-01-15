@@ -622,7 +622,7 @@ namespace ElonMusk
                     j = 1;
                     Console.WriteLine();
                     Console.WriteLine("[내 정보]");
-                    Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
+                    Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.PlayerName.Item1}");
                     Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
                     Console.WriteLine($"MP {Game.game.player.MaxMP}/{Game.game.player.CurMP}");
                     Console.WriteLine();
@@ -690,7 +690,7 @@ namespace ElonMusk
                         {
                             damage = (int)MathF.Ceiling(damage * 1.6f);
                             mob.TakeDamage(damage);
-                            Console.WriteLine($"{Game.game.player.name}의 오류 수정!");
+                            Console.WriteLine($"{Game.game.player.PlayerName.Item1}의 오류 수정!");
                             Console.WriteLine();
                             Console.WriteLine($"Lv.{mob.Level} {mob.Name} 을(를) 맞췄습니다. [데미지 : {damage}] - 치명타 공격!!");
                             Console.WriteLine($"Lv.{mob.Level} {mob.Name}");
@@ -701,7 +701,7 @@ namespace ElonMusk
                         else
                         {
                             mob.TakeDamage(damage);
-                            Console.WriteLine($"{Game.game.player.name}의 오류 수정!");
+                            Console.WriteLine($"{Game.game.player.PlayerName.Item1}의 오류 수정!");
                             Console.WriteLine();
                             Console.WriteLine($"Lv.{mob.Level} {mob.Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
                             Console.WriteLine($"Lv.{mob.Level} {mob.Name}");
@@ -749,7 +749,7 @@ namespace ElonMusk
                     j = 1;
                     Console.WriteLine();
                     Console.WriteLine("[내 정보]");
-                    Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
+                    Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.PlayerName.Item1}");
                     Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
                     Console.WriteLine($"MP {Game.game.player.MaxMP}/{Game.game.player.CurMP}");
                     Console.WriteLine();
@@ -802,7 +802,7 @@ namespace ElonMusk
                     }
                     Console.WriteLine();
                     Console.WriteLine("[내 정보]");
-                    Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
+                    Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.PlayerName.Item1}");
                     Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
                     Console.WriteLine($"MP {Game.game.player.MaxMP}/{Game.game.player.CurMP}");
                     Console.WriteLine();
@@ -872,7 +872,7 @@ namespace ElonMusk
                     Console.WriteLine();
                     enemyattack();
 
-                    Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
+                    Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.PlayerName.Item1}");
                     Console.WriteLine($"HP {temp} -> {Game.game.player.CurHP}");
                     Console.WriteLine();
                     Console.WriteLine("0. 다음");
@@ -944,7 +944,7 @@ namespace ElonMusk
                             {
                                 Game.game.player.SetPlayerHP(-damage);
                                 Console.WriteLine($"Lv.{mob.Level} {mob.Name}의 공격!");
-                                Console.WriteLine($"{Game.game.player.name} 을(를) 맞췄습니다. [데미지 : {damage}]");
+                                Console.WriteLine($"{Game.game.player.PlayerName.Item1} 을(를) 맞췄습니다. [데미지 : {damage}]");
                                 Console.WriteLine();
                             }
                             else
@@ -1020,7 +1020,7 @@ namespace ElonMusk
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     Console.Write($"{Game.game.player.level} ");
                     Console.ResetColor();
-                    Console.WriteLine($" {Game.game.player.name}");
+                    Console.WriteLine($" {Game.game.player.PlayerName.Item1}");
                     Console.WriteLine($"exp {Game.game.player.EXP} -> {Game.game.player.EXP + sumexp}");
                     Console.WriteLine();
                     Console.WriteLine("[획득 아이템]");
@@ -1107,7 +1107,7 @@ namespace ElonMusk
                     spawnlist.Clear();
                     Console.WriteLine("준비해서 다시 도전합시다.");
                     Console.WriteLine();
-                    Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
+                    Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.PlayerName.Item1}");
                     Console.WriteLine($"Hp {BfHp} -> {Game.game.player.CurHP}");
                     Console.WriteLine("0. 회사로 돌아가기");
                 }
