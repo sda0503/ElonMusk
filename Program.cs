@@ -33,7 +33,7 @@ namespace Elonmusk
         public Player player { get; private set; }
 
         public PlayerInfo playerInfo { get; private set; }
-        public Shop shop { get; private set; }
+        public Shop shop { get; set; }
         public Buy buy { get; private set; }
         public Inventory inventory { get; private set; }
         public Opening opening { get; private set; }
@@ -428,6 +428,11 @@ namespace Elonmusk
         public void TrySellItem(int index)
         {
             Game.game.player.RemoveItem(index);
+        }
+
+        public void SetBool(int index)
+        {
+            items[index] = (items[index].Item1, false);
         }
     }
 
@@ -844,6 +849,10 @@ namespace Elonmusk
 
         public void RemoveItem(int index)
         {
+            double setGold = items[index].Item1.GOLD * 0.85;
+            Game.game.player.gainGold((int)setGold);
+            int shopIndex = Game.game.shop.items.FindIndex(x=>x.Item1.name == items[index].Item1.name);
+            Game.game.shop.SetBool(shopIndex);
             items.RemoveAt(index);
         }
     }
