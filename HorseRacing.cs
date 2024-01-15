@@ -21,6 +21,7 @@ namespace ElonMusk
             Console.WriteLine();
             Console.WriteLine("1. 게임 설명을 듣는다.");
             Console.WriteLine("2. 게임을 플레이 하러 간다.");
+            Console.WriteLine("3. 스파르타 무스메의 업적을 확인하러 간다.");
             Console.WriteLine("0. 돌아간다");
         }
         public override void GetAction(int act)
@@ -35,6 +36,9 @@ namespace ElonMusk
                     break;
                 case 2:
                     Game.game.ChangeScene(new SpartaMusumeGame());
+                    break;
+                case 3:
+                    Game.game.ChangeScene(new SpartaMusumeBoard());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -79,6 +83,36 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
             Console.WriteLine("셋째 닭은 차분하게 처음부터 끝까지 꾸준한 속도로 달립니다.");
             Console.WriteLine("넷째 닭은 제멋대로라 기분에 따라 달립니다. 정말 빠르게 달릴 수도, 정말 천천히 달릴 수도 있습니다.");
             Console.WriteLine("다섯째 닭은 노력가여서 처음에 천천히 달리다가 점점 더 빠르게 달립니다.");
+            Console.WriteLine();
+            Console.WriteLine("0. 돌아간다");
+        }
+
+        public override void GetAction(int act)
+        {
+            switch (act)
+            {
+                case 0:
+                    Game.game.ChangeScene(new SpartaMusumeLobby());
+                    break;
+                default:
+                    Console.WriteLine("유효한 입력이 아닙니다!");
+                    break;
+            }
+        }
+    }
+
+    public class SpartaMusumeBoard : Scene 
+    {
+        public override void ShowInfo()
+        {
+            SpartaMusumeLobby.PrintGameTitle();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("플레이어가 스파르타무스메 게임에서 달성한 기록들입니다.");
+            Console.WriteLine($"현재까지 스파르타무스메에서 번 돈 : {CasinoData.casinoData.horseRacingAchivement._winGold}");
+            Console.WriteLine($"현재까지 스파르타무스메에서 번 돈 : {CasinoData.casinoData.horseRacingAchivement._loseGold}");
+            Console.WriteLine($"스파르타무스메에서 달성한 최대 연승 : {CasinoData.casinoData.horseRacingAchivement._maxWinStreak}");
+            Console.WriteLine($"스파르타무스메에서 달성한 최대 연패 : {CasinoData.casinoData.horseRacingAchivement._maxLoseStreak}");
             Console.WriteLine();
             Console.WriteLine("0. 돌아간다");
         }
