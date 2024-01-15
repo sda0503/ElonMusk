@@ -256,6 +256,8 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
                 betGold = 0;
             }
 
+            horses.Clear();
+
             RegameOrExit();
         }
 
@@ -276,7 +278,7 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
             while (act != 1 && act != 0);
 
             if (act == 1)
-                Bet();
+                return;
             else if (act == 0)
                 Game.game.ChangeScene(new SpartaMusumeLobby());
         }
