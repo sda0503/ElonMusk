@@ -1,13 +1,13 @@
 ![image](https://github.com/sda0503/ElonMusk/assets/56661597/def1fb70-b621-40b1-ba2f-0177c1f23237)
 
-# 스파르타 던전 (Text 게임) 만들기
-#### <span style="color:blue"> 참여인원 밑 역할 </span>
-* 📘박건오 - 전투, 몬스터, 던전
+# 🎮스파르타 던전 (Text 게임) 만들기
+#### <span style="color:blue"> 🧑‍🤝‍🧑참여인원 밑 역할 </span>
+* 박건오 - 전투, 몬스터, 던전
 * 유호진 - 미니게임(카지노 > 경마, 블랙잭)
 * 윤재현(팀장) - 상점, 도전과제, 인사평가 
 * 이주환 - 전투, 스킬
 * 최보훈 - 플레이어, 상태관리
-#### <span style="color:orange"> 컨밴션 규칙 </span>
+#### <span style="color:orange"> 📝컨밴션 규칙 </span>
 type
 - 코드수정 [Modify]
 - 추가 [Add]
