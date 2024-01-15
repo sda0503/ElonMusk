@@ -178,7 +178,7 @@ namespace ElonMusk
             int tempPlayerHP = Game.game.player.CurHP;
             Game.game.player.SetPlayerHP(totalDamage);
             Console.WriteLine($"체력을 {totalDamage}만큼 회복");
-            Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
+            Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.PlayerName.Item1}");
             Console.WriteLine($"Hp {tempPlayerHP} -> {Game.game.player.CurHP}");
 
 
