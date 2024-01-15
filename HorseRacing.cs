@@ -616,14 +616,14 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
                 if (WinStreak >= 0)
                 {
                     WinStreak++;
-                    if (WinStreak > CasinoData.casinoData.horseRacingAchivement._maxWinStreak)
-                    {
-                        CasinoData.casinoData.horseRacingAchivement._maxWinStreak = WinStreak;
-                    }
                 }
                 else
                 {
                     WinStreak = 1;
+                }
+                if (WinStreak > CasinoData.casinoData.horseRacingAchivement._maxWinStreak)
+                {
+                    CasinoData.casinoData.horseRacingAchivement._maxWinStreak = WinStreak;
                 }
             }
             else if (flag == WINFLAG.LOSE)
@@ -631,14 +631,14 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
                 if (WinStreak <= 0)
                 {
                     WinStreak--;
-                    if (WinStreak < CasinoData.casinoData.horseRacingAchivement._maxLoseStreak)
-                    {
-                        CasinoData.casinoData.horseRacingAchivement._maxLoseStreak = WinStreak;
-                    }
                 }
                 else
                 {
                     WinStreak = -1;
+                }
+                if (WinStreak < CasinoData.casinoData.horseRacingAchivement._maxLoseStreak)
+                {
+                    CasinoData.casinoData.horseRacingAchivement._maxLoseStreak = WinStreak;
                 }
             }
         }

@@ -405,14 +405,14 @@ M#########M                                88
             {
                 if (WinStreak >= 0) { 
                     WinStreak++;
-                    if (WinStreak > CasinoData.casinoData.blackJackAchievement._maxWinStreak)
-                    {
-                        CasinoData.casinoData.blackJackAchievement._maxWinStreak = WinStreak;
-                    }
                 }
                 else 
                 {
                     WinStreak = 1;
+                }
+                if (WinStreak > CasinoData.casinoData.blackJackAchievement._maxWinStreak)
+                {
+                    CasinoData.casinoData.blackJackAchievement._maxWinStreak = WinStreak;
                 }
             }
             else if(flag == WINFLAG.LOSE) 
@@ -420,14 +420,14 @@ M#########M                                88
                 if (WinStreak <= 0)
                 {
                     WinStreak--;
-                    if (WinStreak < CasinoData.casinoData.blackJackAchievement._maxLoseStreak)
-                    {
-                        CasinoData.casinoData.blackJackAchievement._maxLoseStreak = WinStreak;
-                    }
                 }
                 else 
                 {
                     WinStreak = -1;
+                }
+                if (WinStreak < CasinoData.casinoData.blackJackAchievement._maxLoseStreak)
+                {
+                    CasinoData.casinoData.blackJackAchievement._maxLoseStreak = WinStreak;
                 }
             }
         }
