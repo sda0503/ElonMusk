@@ -72,6 +72,8 @@ namespace Elonmusk
                     Game.game.player.job = Game.game.player.job + 1;
                     Console.WriteLine("진급에 성공하였습니다.");
                     Console.WriteLine("당신의 직급은 " + Game.game.player.JobToString(Game.game.player.job) + "입니다.");
+                    Thread.Sleep(2000);
+                    Game.game.ChangeScene(Game.game.idle);
                 }
                 else
                 {
