@@ -87,7 +87,7 @@ namespace Elonmusk
 
         public bool checkPlayerInfo()
         {
-            if(Game.game.player.GOLD > currentGold && Forsave.KillCnt > killCount && Forsave.dungeonClearCnt> cleraDungoen && Game.game.player.QusetCnt> cleraQuest)
+            if(Game.game.player.GOLD >= currentGold && Forsave.KillCnt >= killCount && Forsave.dungeonClearCnt>= cleraDungoen && Game.game.player.QusetCnt>= cleraQuest)
                 return true;
             else
                 return false;
