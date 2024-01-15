@@ -42,7 +42,15 @@ namespace ElonMusk
         public override void ShowInfo()
         {
             Console.Clear();
-            Console.WriteLine("몰려오는 버그들을 모두 해결해 (주)스파르타에 평호가 찾아왔습니다!!");
+            Console.WriteLine("성공적으로 투자를 유치한 (주)스파르타는 게임을 출시하게 되고");
+            Console.ReadLine();
+            Console.WriteLine("출시한 게임이 엄청난 성공을 거두며 대기업으로 성장하게 된다.");
+            Console.ReadLine();
+            Console.WriteLine($"{Game.game.player.PlayerName.Item1} 또한 그 공로를 인정받아 임원 자리를 얻게 되지만,");
+            Console.ReadLine();
+            Console.WriteLine($"새로운 도전을 좋아하는 {Game.game.player.PlayerName.Item1}은");
+            Console.ReadLine();
+            Console.WriteLine("자리를 마다하고 새로운 게임 개발 여정을 시작하게 되는데...");
             Console.WriteLine("---Happy Endding---");
             Console.WriteLine();
             Console.WriteLine("새 게임 시작?");

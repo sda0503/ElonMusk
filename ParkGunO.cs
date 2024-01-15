@@ -1077,7 +1077,7 @@ namespace ElonMusk
                             else if (Forsave.isdungeonclear && Forsave.isGameclear)
                             {
                                 {
-                                    //Game.game.ChangeScene(new Dungeon()); //엔딩으로 넘어가기
+                                    Game.game.ChangeScene(new HappyEndding()); //엔딩으로 넘어가기
                                     Forsave.isdungeonclear = false;
                                     Forsave.Dungeonfirst = false;
                                 }
