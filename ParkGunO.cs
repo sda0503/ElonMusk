@@ -1028,7 +1028,7 @@ namespace ElonMusk
                     PrintTextWithHighlighst(ConsoleColor.Magenta, "", $"{sumDropGold} G");
                     Game.game.player.gainGold(sumDropGold);
 
-                    else if (spawnlist[0] is UncontrollableBug)
+                    if (spawnlist[0] is UncontrollableBug)
                     {
                         switch (Forsave.dungeonClearCnt)
                         {
