@@ -37,13 +37,20 @@ namespace Elonmusk
         public Buy buy { get; private set; }
         public Inventory inventory { get; private set; }
         public Opening opening { get; private set; }
+
+        public BTestScene btestScene { get; private set; }
+        public SellScene sellScene { get; private set; }
+
         public Resume resume { get; private set; }
-        public BTestScene bTestScene { get; private set; }
 
         public Idle idle { get; private set; }
         public Equipment equipment { get; private set; }
 
         public Quest quset { get; private set; }
+
+        public Job job { get; private set; }
+
+        public Casino casino { get; private set; }
 
         public Game()
         {
@@ -66,9 +73,13 @@ namespace Elonmusk
             equipment = new Equipment();
             buy = new Buy();
             opening = new Opening();
+
+            btestScene = new BTestScene();
+            sellScene  = new SellScene();
             resume = new Resume();
             quset = new Quest();
-            bTestScene = new BTestScene();
+            job = new Job();
+            casino = new Casino();
 
             curScene = new Idle();
         }
@@ -121,7 +132,6 @@ namespace Elonmusk
             Console.WriteLine("(주)스파르타에 오신 여러분 환영합니다.");
             Console.WriteLine("");
             Console.WriteLine("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ");
-
             Console.WriteLine("           __________                                 ");
             Console.WriteLine("         .'----------`.                              ");
             Console.WriteLine("         | .--------. |                             ");
@@ -147,6 +157,7 @@ namespace Elonmusk
             Console.WriteLine("6. 강원랜드");
             Console.WriteLine("7. 도전과제");
             Console.WriteLine("8. 저장");
+
         }
         public override void GetAction(int act)
         {
@@ -163,19 +174,21 @@ namespace Elonmusk
                     Game.game.ChangeScene(new Shop());
                     break;
                 case 3: //일하기
-                    Game.game.ChangeScene(new Idle());
+                    Game.game.ChangeScene(new Dungeon());
                     break;
                 case 4: //인사평가
-                    Game.game.ChangeScene(new Idle());
+                    Game.game.ChangeScene(new Job());
                     break;
+
                 case 5: //던전입장
                     Game.game.ChangeScene(new Dungeon());
                     break;
                 case 6: //강원래드
-                    Game.game.ChangeScene(new Idle());
+                    Game.game.ChangeScene(new Casino());
                     break;
                 case 7: //퀘스트
-                    Game.game.ChangeScene(new Idle());
+                    Game.game.ChangeScene(new Quest());
+
                     break;
                 case 8: //저장
                     Game.game.ChangeScene(new Idle());
@@ -350,7 +363,7 @@ namespace Elonmusk
             Console.WriteLine($" [장신구]");
             foreach (var item in items)
             {
-                if (item.Item1.itemType.ToString() == "ACC")
+                if (item.Item1.itemType.ToString() == "ACCESSORY")
                 {
                     Console.WriteLine($"- {item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}G");
                 }
@@ -366,6 +379,7 @@ namespace Elonmusk
             }
             Console.WriteLine();
             Console.WriteLine("1.아이템 구매");
+            Console.WriteLine("2.아이템 판매");
             Console.WriteLine("0. 나가기");
         }
 
@@ -378,6 +392,9 @@ namespace Elonmusk
                     break;
                 case 1:
                     Game.game.ChangeScene(new Buy());
+                    break;
+                case 2:
+                    Game.game.ChangeScene(new SellScene());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -396,6 +413,7 @@ namespace Elonmusk
                     Game.game.player.AddItem(items[index].Item1);
                     Console.WriteLine("구매를 완료했습니다.");
                     items[index] = (items[index].Item1, true);
+                    Game.game.player.ConsumeGold(items[index].Item1.GOLD);
                 }
                 else Console.WriteLine("골드가 부족합니다.");
                 if (items[index].Item1.itemType.ToString() == "USE")
@@ -403,6 +421,10 @@ namespace Elonmusk
                     items[index] = (items[index].Item1, false);
                 }
             }
+        }
+        public void TrySellItem(int index)
+        {
+            Game.game.player.RemoveItem(index);
         }
     }
 
@@ -457,6 +479,7 @@ namespace Elonmusk
             name = "Item";
             desc = "ItemDescription";
         }
+
 
         public Item(string name, string desc, int ATK, int DEF, int GOLD, ItemType thisType)
         {
@@ -538,6 +561,8 @@ namespace Elonmusk
         public List<Item> equipedItems {  get; private set; }
         private(string, bool) playerName;
         public string jobName;
+        public int QusetCnt =0;
+
         public (string, bool) PlayerName{get{ return playerName;}set { playerName = value; } }
         public enum JOB
         {
@@ -560,6 +585,19 @@ namespace Elonmusk
                 case JOB.SeniorProgrammer: jobName = "시니어개발자"; break;
             }
             return jobName;
+        }
+
+        public int jobNum;
+        public int JobToInt(JOB j)
+        {
+            switch (j)
+            {
+                case JOB.Intern: jobNum = 0; break;
+                case JOB.Assistant: jobNum = 1; break;
+                case JOB.JuniorProgrammer: jobNum = 2; break;
+                case JOB.SeniorProgrammer: jobNum = 3; break;
+            }
+            return jobNum;
         }
 
         public Stat EquipmentStat
@@ -599,7 +637,9 @@ namespace Elonmusk
             CurHP = 100;
             ACC = 100;
             Evade = 10;
-            GOLD = 1000000;
+
+            GOLD = 1500000;
+
             MaxMP = 100;
             CurMP = 100;
             skills = [new Skill_Teach(), new Skill_Ask(), new Skill_Googling()];
@@ -707,6 +747,11 @@ namespace Elonmusk
         public void AddItem(Item item)
         {
             items.Add((new Item(item), false));
+        }
+
+        public void RemoveItem(int index)
+        {
+            items.RemoveAt(index);
         }
     }
 }

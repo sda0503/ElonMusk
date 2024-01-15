@@ -96,6 +96,7 @@ M#########M                                88
         List<(Pattern, string)> dealerHand = new List<(Pattern, string)>();
 
         int betGold = 0;
+        static int WinStreak = 0;
 
         public enum Pattern
         {
@@ -182,17 +183,22 @@ M#########M                                88
             if (playerScore > 21 || (dealerScore <= 21 && dealerScore >= playerScore))
             {
                 Console.WriteLine("딜러가 승리했습니다! 베팅한 골드를 잃습니다.");
+                CasinoData.casinoData.blackJackAchievement._loseGold += betGold;
+                CountWinStreak(WINFLAG.LOSE);
                 betGold = 0;
             }
             else if (dealerScore > 21 || playerScore > dealerScore)
             {
                 Console.WriteLine($"당신이 승리했습니다! {betGold * 2}만큼 골드를 받습니다.");
+                CasinoData.casinoData.blackJackAchievement._winGold += betGold;
                 Game.game.player.gainGold(betGold * 2);
+                CountWinStreak(WINFLAG.WIN);
             }
             else
             {
                 Console.WriteLine("비겼습니다! 베팅한 골드를 돌려받습니다.");
                 Game.game.player.gainGold(betGold);
+                CountWinStreak(WINFLAG.DRAW);
                 betGold = 0;
             }
 
@@ -360,6 +366,37 @@ M#########M                                88
             return score;
         }
 
+        public void CountWinStreak(WINFLAG flag) 
+        {
+            if (WinStreak == 0)
+                WinStreak += (int)flag;
+            else if(WinStreak > 0) 
+            {
+                if(flag != WINFLAG.WIN)
+                    WinStreak = (int)flag;
+                else 
+                {
+                    WinStreak++;
+                    if(WinStreak > CasinoData.casinoData.blackJackAchievement._maxWinStreak) 
+                    {
+                        CasinoData.casinoData.blackJackAchievement._maxWinStreak = WinStreak;
+                    }
+                }
+            }
+            else 
+            {
+                if (flag != WINFLAG.LOSE)
+                    WinStreak = (int)flag;
+                else
+                {
+                    WinStreak--;
+                    if (WinStreak < CasinoData.casinoData.blackJackAchievement._maxLoseStreak)
+                    {
+                        CasinoData.casinoData.blackJackAchievement._maxLoseStreak = WinStreak;
+                    }
+                }
+            }
+        }
     }
 
     public static class CardVisualizer 

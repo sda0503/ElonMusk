@@ -1,6 +1,9 @@
-﻿using Elonmusk;
+﻿#define CASINO_DATA_TEST
+
+using Elonmusk;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,13 +37,18 @@ MMMMMMMMMMM MMMMMMMMMMMM MMMMMMMMMMM MMMM MMMMMMMMMMM MMMMMMMMMMM
             Console.WriteLine("스파르타 카지노에 오신걸 환영합니다.");
             Console.WriteLine("여기서는 보유한 소지금을 걸고 다양한 게임들을 할 수 있습니다.");
             Console.WriteLine();
-            // 플레이어 소지금 출력
-            // Console.WriteLine($"[소지금 : {Game.game.player.GOLD} G]");
+            Console.WriteLine($"[소지금 : {Game.game.player.GOLD} G]");
             Console.WriteLine();
             Console.WriteLine("[게임 목록]");
             ShowGameList();
             Console.WriteLine();
             Console.WriteLine("0. 돌아가기");
+
+#if CASINO_DATA_TEST
+            Console.WriteLine($"CasinoSpendWinMoney : {CasinoData.casinoData.blackJackAchievement._winGold + CasinoData.casinoData.horseRacingAchivement._winGold}");
+            Console.WriteLine($"CasinoSpendLoseMoney : {CasinoData.casinoData.blackJackAchievement._loseGold + CasinoData.casinoData.horseRacingAchivement._loseGold}");
+
+#endif
         }
 
         public override void GetAction(int act)
@@ -80,5 +88,114 @@ MMMMMMMMMMM MMMMMMMMMMMM MMMMMMMMMMM MMMM MMMMMMMMMMM MMMMMMMMMMM
 
     public abstract class GameLobby : Scene
     {
+    }
+
+    public enum WINFLAG 
+    {
+        WIN = 1, DRAW = 0, LOSE = -1
+    }
+
+    // 카지노의 데이터를 기록하고 저장할 장소
+    public class CasinoData
+    {
+        CasinoData() { }
+
+        static CasinoData _casinoData = null;
+
+        public static CasinoData casinoData { get {
+                if (_casinoData == null)
+                    _casinoData = new CasinoData();
+                return _casinoData; } }
+
+        CasinoAchivement blackJackAchievementData = null;
+        CasinoAchivement horseRacingAchievementData = null;
+
+        public CasinoAchivement blackJackAchievement 
+        {
+            get 
+            {
+                if(blackJackAchievementData == null) 
+                {
+                    blackJackAchievementData = new CasinoAchivement("Blackjack");
+                    blackJackAchievementData.LoadCasinoData();
+                }
+                return blackJackAchievementData;
+            }
+        }
+
+        public CasinoAchivement horseRacingAchivement 
+        {
+            get 
+            {
+                if(horseRacingAchievementData == null) 
+                {
+                    horseRacingAchievementData = new CasinoAchivement("HorseRacing");
+                    horseRacingAchievementData.LoadCasinoData();
+                }
+                return horseRacingAchievementData;
+            }
+        }
+    }
+
+    public class CasinoAchivement
+    {
+        string gameName;
+        string path { get { return Directory.GetCurrentDirectory() + string.Format("\\{0}.txt", gameName); } }
+        public CasinoAchivement(string gameName)
+        {
+            this.gameName = gameName;
+            LoadCasinoData();
+        }
+
+        int winGold = 0;
+        int loseGold = 0;
+        int maxWinStreak = 0;
+        int maxLoseStreak = 0;
+
+        public int _winGold { get { return winGold; } set { winGold = value; SaveCasinoData(); } }
+        public int _loseGold { get { return loseGold; } set { loseGold = value; SaveCasinoData(); } }
+        public int _maxWinStreak { get { return maxWinStreak; } set { maxWinStreak = value; SaveCasinoData(); } }
+        public int _maxLoseStreak { get { return maxLoseStreak; } set { maxLoseStreak = value; SaveCasinoData(); } }
+
+
+        public void LoadCasinoData()
+        {
+            string[] datas;
+
+            if (File.Exists(path))
+            {
+                datas = File.ReadAllLines(path);
+            }
+            else 
+            {
+                File.Create(path).Close();
+                SaveCasinoData();
+                datas = File.ReadAllLines(path);
+            }
+
+            winGold = int.Parse(datas[0]);
+            loseGold = int.Parse(datas[1]);
+            maxWinStreak = int.Parse(datas[2]);
+            maxLoseStreak = int.Parse(datas[3]);
+        }
+
+        public void SaveCasinoData()
+        {
+            List<string> datas = new List<string>();
+            datas.Add(winGold.ToString());
+            datas.Add(loseGold.ToString());
+            datas.Add(maxWinStreak.ToString());
+            datas.Add(maxLoseStreak.ToString());
+
+            if (File.Exists(path))
+            {
+                File.WriteAllLines(path, datas, Encoding.Default);
+            }
+            else
+            {
+                File.Create(path).Close();
+                File.WriteAllLines(path, datas, Encoding.Default);
+            }
+        }
     }
 }
