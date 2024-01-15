@@ -84,7 +84,7 @@ namespace Elonmusk
             job = new Job();
             casino = new Casino();
 
-            curScene = new Dungeon();
+            curScene = new Opening();
         }
 
         void Loop()
@@ -253,7 +253,6 @@ namespace Elonmusk
                 (Item, bool) item = Game.game.player.items[i];
                 String strEquipped = (item.Item2) ? "[E]" : String.Empty;
                 Console.WriteLine($"- {i + 1} {strEquipped}{item.Item1.name} | {item.Item1.GetEffectScript()} | {item.Item1.desc} | {item.Item1.GOLD}");
-                Console.WriteLine(item.Item1.itemType);
             }
             Console.WriteLine();
             Console.WriteLine("1. 장착관리");
