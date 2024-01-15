@@ -91,7 +91,7 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
             switch (act)
             {
                 case 0:
-                    Game.game.ChangeScene(new HorseRacingLobby());
+                    Game.game.ChangeScene(new SpartaMusumeLobby());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
