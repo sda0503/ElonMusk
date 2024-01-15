@@ -52,6 +52,7 @@ namespace Elonmusk
 
         public Casino casino { get; private set; }
 
+
         public Game()
         {
             game = this;
@@ -81,7 +82,7 @@ namespace Elonmusk
             job = new Job();
             casino = new Casino();
 
-            curScene = new Idle();
+            curScene = new Opening();
         }
 
         void Loop()
