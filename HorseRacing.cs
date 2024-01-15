@@ -1,4 +1,3 @@
-﻿
 
 using Elonmusk;
 using System;
@@ -88,7 +87,7 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
             switch (act)
             {
                 case 0:
-                    Game.game.ChangeScene(new SpartaMusumeLobby());
+                    Game.game.ChangeScene(new HorseRacingLobby());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -568,6 +567,38 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
                             Console.SetCursorPosition(Console.GetCursorPosition().Left + 1, Console.GetCursorPosition().Top);
                         else
                             Console.Write(ch);
+                    }
+                }
+            }
+        }
+
+        public void CountWinStreak(WINFLAG flag)
+        {
+            if (WinStreak == 0)
+                WinStreak += (int)flag;
+            else if (WinStreak > 0)
+            {
+                if (flag != WINFLAG.WIN)
+                    WinStreak = (int)flag;
+                else
+                {
+                    WinStreak++;
+                    if (WinStreak > CasinoData.casinoData.horseRacingAchivement._maxWinStreak)
+                    {
+                        CasinoData.casinoData.horseRacingAchivement._maxWinStreak = WinStreak;
+                    }
+                }
+            }
+            else
+            {
+                if (flag != WINFLAG.LOSE)
+                    WinStreak = (int)flag;
+                else
+                {
+                    WinStreak--;
+                    if (WinStreak < CasinoData.casinoData.horseRacingAchivement._maxLoseStreak)
+                    {
+                        CasinoData.casinoData.horseRacingAchivement._maxLoseStreak = WinStreak;
                     }
                 }
             }
