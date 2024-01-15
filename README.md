@@ -4,11 +4,11 @@
 #### <span style="color:blue"> 🧑‍🤝‍🧑참여인원 밑 역할 </span>
 |팀원|직책|깃헙 링크|
 |------|---|---|
-|박건오|팀원|[1](https://github.com/BakGuno/Bak-s-study)|
-|유호진|팀원|[2](https://github.com/siryu2409)|
-|윤재현|팀장|[3](https://github.com/sda0503)|
-|이주환|팀원|[4](https://github.com/leejh0469)|
-|최보훈|팀원|[5](https://github.com/iou-bohun)|
+|박건오|팀원|[BakGuno](https://github.com/BakGuno/Bak-s-study)|
+|유호진|팀원|[SIRYU](https://github.com/siryu2409)|
+|윤재현|팀장|[yoon](https://github.com/sda0503)|
+|이주환|팀원|[이주환](https://github.com/leejh0469)|
+|최보훈|팀원|[bohun](https://github.com/iou-bohun)|
 * 박건오 - 전투, 몬스터, 던전
 * 유호진 - 미니게임(카지노 > 경마, 블랙잭)
 * 윤재현(팀장) - 상점, 도전과제, 인사평가 
@@ -27,4 +27,3 @@ body - 내용적기
 - 
 
 -------------------
-[1]: https://github.com/BakGuno/Bak-s-study
