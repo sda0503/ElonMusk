@@ -630,37 +630,5 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
                 }
             }
         }
-
-        public void CountWinStreak(WINFLAG flag)
-        {
-            if (WinStreak == 0)
-                WinStreak += (int)flag;
-            else if (WinStreak > 0)
-            {
-                if (flag != WINFLAG.WIN)
-                    WinStreak = (int)flag;
-                else
-                {
-                    WinStreak++;
-                    if (WinStreak > CasinoData.casinoData.horseRacingAchivement._maxWinStreak)
-                    {
-                        CasinoData.casinoData.horseRacingAchivement._maxWinStreak = WinStreak;
-                    }
-                }
-            }
-            else
-            {
-                if (flag != WINFLAG.LOSE)
-                    WinStreak = (int)flag;
-                else
-                {
-                    WinStreak--;
-                    if (WinStreak < CasinoData.casinoData.horseRacingAchivement._maxLoseStreak)
-                    {
-                        CasinoData.casinoData.horseRacingAchivement._maxLoseStreak = WinStreak;
-                    }
-                }
-            }
-        }
     }
 }
