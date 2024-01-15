@@ -82,9 +82,9 @@ namespace Elonmusk
             menu.Clear();
             if (Forsave.KillCnt > 0) { menu.Add(new("퍼스트블러드", "버그를 처음 해결하였을 때", true)); Game.game.player.QusetCnt += 1; }
             else menu.Add(new("퍼스트블러드", "버그를 처음 해결하였을 때", false));
-            if (Forsave.KillCnt > 300) { menu.Add(new("팬타킬", "버그를 5마리 이상 해결하였을 때", true)); Game.game.player.QusetCnt += 1; }
+            if (Forsave.KillCnt > 5) { menu.Add(new("팬타킬", "버그를 5마리 이상 해결하였을 때", true)); Game.game.player.QusetCnt += 1; }
             else menu.Add(new("팬타킬", "버그를 5마리 이상 해결하였을 때", false));
-            if (Forsave.KillCnt > 5) { menu.Add(new("스파르타", "버그는 잡아도 잡아도 계속 나오네요", true)); Game.game.player.QusetCnt += 1; }
+            if (Forsave.KillCnt > 300) { menu.Add(new("스파르타", "버그는 잡아도 잡아도 계속 나오네요", true)); Game.game.player.QusetCnt += 1; }
             else menu.Add(new("스파르타", "버그는 잡아도 잡아도 계속 나오네요", false));
             if (Forsave.dungeonClearCnt > 0) { menu.Add(new("승리", "던전을 처음 클리어 하였을 때", true)); Game.game.player.QusetCnt += 1; }
             else menu.Add(new("승리", "던전을 처음 클리어 하였을 때", false));
