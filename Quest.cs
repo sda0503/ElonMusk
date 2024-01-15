@@ -70,7 +70,6 @@ namespace Elonmusk
         public override void GetAction(int act)
         {
             if (act == 0) Game.game.ChangeScene(Game.game.idle);
-            else if (act == 1) Game.game.shop.TryBuyItem(act - 1);
             else
             {
                 Console.WriteLine("잘못된 입력입니다.");
