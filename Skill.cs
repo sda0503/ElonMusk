@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Elonmusk.Player;
 
 namespace ElonMusk
 {
@@ -19,6 +20,9 @@ namespace ElonMusk
         public abstract void UseSkill(List<Monster> spawnList);
     }
 
+
+    // 플레이어 스킬
+    #region
     public class Skill_Ask : Skill
     {
         public Skill_Ask()
@@ -31,17 +35,13 @@ namespace ElonMusk
 
         public override void UseSkill(List<Monster> spawnList)
         {
-            
+
             Draw(spawnList);
             int index;
             while (true)
             {
                 index = Game.GetPlayerInputInt();
-                if(index == 0)
-                {
-                    return;
-                }
-                else if (index <= spawnList.Count && index > 0)
+                if (index <= spawnList.Count && index > 0)
                 {
                     if (spawnList[index - 1].IsDead)
                     {
@@ -56,11 +56,13 @@ namespace ElonMusk
                     continue;
                 }
             }
-            
+
             Game.game.player.SetPlayerMP(Cost);
-            int damage = Game.game.player.ATK * 2;
+
+            int damage = (int)((Game.game.player.ATK+Game.game.player.EquipmentStat.ATK) * 2);
             int temp = spawnList[index-1].Health;
             spawnList[index-1].TakeDamage(damage);
+
             Console.Clear();
             Console.WriteLine($"플레이어의 '{Name}' 스킬 사용");
             Console.WriteLine();
@@ -73,24 +75,7 @@ namespace ElonMusk
 
         public void Draw(List<Monster> spawnList)
         {
-            Console.Clear();
-            Console.WriteLine("Battle!!");
-            Console.WriteLine();
-            int j = 1;
-            foreach (Monster mob in spawnList)
-            {
-                if (mob.IsDead == true)
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine($"{j++} Lv.{mob.Level} {mob.Name}  HP {mob.Health}");
-                Console.ResetColor();
-            }
-            j = 1;
-            Console.WriteLine();
-            Console.WriteLine("[내 정보]");
-            Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
-            Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
-            Console.WriteLine();
-            Console.WriteLine("0. 돌아가기");
+            ConsoleDraw.DrawEnemyChoose(spawnList);
         }
     }
 
@@ -106,17 +91,12 @@ namespace ElonMusk
 
         public override void UseSkill(List<Monster> spawnList)
         {
-            
             Draw(spawnList);
             int index;
             while (true)
             {
                 index = Game.GetPlayerInputInt();
-                if (index == 0)
-                {
-                    return;
-                }
-                else if (index <= spawnList.Count && index > 0)
+                if (index <= spawnList.Count && index > 0)
                 {
                     if (spawnList[index - 1].IsDead)
                     {
@@ -137,13 +117,13 @@ namespace ElonMusk
 
             if (random.Next(0, 2) == 0)
             {
-                damage = (int)Math.Ceiling(Game.game.player.ATK * 1.5);
+                damage = (int)Math.Ceiling((Game.game.player.ATK+Game.game.player.EquipmentStat.ATK) * 1.5);
             }
             else
             {
-                damage = Game.game.player.ATK * 3;
+                damage = (int)MathF.Ceiling((Game.game.player.ATK + Game.game.player.EquipmentStat.ATK) * 3);
             }
-            
+
             int temp = spawnList[index - 1].Health;
             spawnList[index - 1].TakeDamage(damage);
 
@@ -159,24 +139,7 @@ namespace ElonMusk
 
         public void Draw(List<Monster> spawnList)
         {
-            Console.Clear();
-            Console.WriteLine("Battle!!");
-            Console.WriteLine();
-            int j = 1;
-            foreach (Monster mob in spawnList)
-            {
-                if (mob.IsDead == true)
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine($"{j++} Lv.{mob.Level} {mob.Name}  HP {mob.Health}");
-                Console.ResetColor();
-            }
-            j = 1;
-            Console.WriteLine();
-            Console.WriteLine("[내 정보]");
-            Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
-            Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
-            Console.WriteLine();
-            Console.WriteLine("0. 돌아가기");
+            ConsoleDraw.DrawEnemyChoose(spawnList);
         }
     }
 
@@ -192,7 +155,7 @@ namespace ElonMusk
 
         public override void UseSkill(List<Monster> spawnList)
         {
-            int damage = Game.game.player.ATK;
+            int damage = (int)MathF.Ceiling(Game.game.player.ATK+ Game.game.player.EquipmentStat.ATK);
             Game.game.player.SetPlayerMP(Cost);
             Console.Clear();
             Console.WriteLine($"플레이어의 '{Name}' 스킬 사용");
@@ -221,6 +184,156 @@ namespace ElonMusk
 
             Console.WriteLine();
             Console.ReadLine();
+        }
+    }
+    #endregion
+
+    // 보스 스킬
+    #region
+    public class Skill_SpawnError : Skill
+    {
+        public Skill_SpawnError()
+        {
+            Name = "관련 에러 소환";
+            Description1 = "관련 에러 두 개를 발생시킵니다.";
+        }
+        public override void UseSkill(List<Monster> spawnList)
+        {
+            Monster boss = null;
+            foreach (var monster in spawnList)
+            {
+                if (monster is UncontrollableBug)
+                {
+                    boss = (UncontrollableBug)monster;
+                }
+            }
+            Console.WriteLine($"Lv.{boss.Level} {boss.Name}의 {Name}!");
+            Console.WriteLine(Description1);
+            Console.WriteLine();
+            spawnList.Add(new RelatedError());
+            spawnList.Add(new RelatedError());
+        }
+    }
+
+    public class Skill_ErrorIncrease : Skill
+    {
+        public Skill_ErrorIncrease()
+        {
+            Name = "에러 증식";
+            Description1 = "에러가 걷잡을 수 없이 커집니다. 얼른 해결해야겠네요.";
+            Description1 = "자신의 공격력 + 10, 명중률 + 10";
+        }
+        public override void UseSkill(List<Monster> spawnList)
+        {
+            Monster boss = null;
+            foreach (var monster in spawnList)
+            {
+                if (monster is UncontrollableBug)
+                {
+                    boss = (UncontrollableBug)monster;
+                }
+            }
+            Console.WriteLine($"Lv.{boss.Level} {boss.Name}의 {Name}!");
+            Console.WriteLine(Description1);
+            Console.WriteLine(Description2);
+            Console.WriteLine();
+
+            int tempATK = boss.ATK;
+            int tempACC = boss.ACC;
+            boss.ATK += 10;
+            boss.ACC += 10;
+            Console.WriteLine($"공격력: {tempATK} -> {boss.ATK}");
+            Console.WriteLine($"명중률: {tempACC} -> {boss.ACC}");
+            Console.WriteLine();
+        }
+    }
+
+    public class Skill_Interrogation : Skill
+    {
+        public Skill_Interrogation()
+        {
+            Name = "질문 공세";
+            Description1 = "엄청난 질문들이 날아온다.";
+            Description2 = "압박 질문 두 개를 소환합니다.";
+        }
+        public override void UseSkill(List<Monster> spawnList)
+        {
+            Monster boss = null;
+            foreach (var monster in spawnList)
+            {
+                if (monster is Investor)
+                {
+                    boss = (Investor)monster;
+                }
+            }
+            Console.WriteLine($"Lv.{boss.Level} {boss.Name}의 {Name}!");
+            Console.WriteLine(Description1);
+            Console.WriteLine(Description2);
+            Console.WriteLine();
+            spawnList.Add(new Question());
+            spawnList.Add(new Question());
+        }
+    }
+
+    public class Skill_Pressure : Skill
+    {
+        public Skill_Pressure()
+        {
+            Name = "압박감 주기";
+            Description1 = "굉장한 압박감이 느껴진다. 아무것도 하지 못한 채 턴이 넘어갔다.";
+        }
+        public override void UseSkill(List<Monster> spawnList)
+        {
+            Monster boss = null;
+            foreach (var monster in spawnList)
+            {
+                if (monster is Investor)
+                {
+                    boss = (Investor)monster;
+                }
+            }
+            Console.WriteLine($"Lv.{boss.Level} {boss.Name}의 {Name}!");
+            Console.WriteLine(Description1);
+            Console.WriteLine();
+        }
+    }
+
+    #endregion
+    public static class ConsoleDraw
+    {
+        public static void DrawEnemyChoose(List<Monster> spawnList)
+        {
+            Console.Clear();
+            Console.WriteLine("■■■■■■■■■■■■■■");
+            Dungeon.Battle.ShowHighlithtesText("오류 수정!! - 플레이어 턴");
+            Console.WriteLine("■■■■■■■■■■■■■■");
+            Console.WriteLine();
+            int j = 1;
+            foreach (Monster mob in spawnList)
+            {
+                if (mob.IsDead == true)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.Write($"[{j++}] ");
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.Write($"[{j++}] ");
+                    Console.ResetColor();
+                }
+                Console.Write($"Lv.{mob.Level} ");
+                Console.Write(Dungeon.Battle.PadRightForMixedText(mob.Name, 20));
+                Console.WriteLine($"HP {mob.Health}");
+                Console.ResetColor();
+            }
+            j = 1;
+            Console.WriteLine();
+            Console.WriteLine("[내 정보]");
+            Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
+            Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
+            Console.WriteLine();
+            Console.WriteLine("0. 돌아가기");
         }
     }
 }

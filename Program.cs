@@ -82,7 +82,7 @@ namespace Elonmusk
             job = new Job();
             casino = new Casino();
 
-            curScene = new Opening();
+            curScene = new Dungeon();
         }
 
         void Loop()
@@ -166,6 +166,7 @@ namespace Elonmusk
             {
                 // Scene을 이동할 때에는 Game.game.ChangeScene(new 씬이름()); 을 사용하면 됨
                 case 0: //상태창
+                    Dungeon.doing = Doing.Idle;
                     Game.game.ChangeScene(new PlayerInfo());
                     break;
                 case 1: //가방
@@ -225,7 +226,7 @@ namespace Elonmusk
                         Game.game.ChangeScene(new Dungeon.Battle());
                     else if (Dungeon.doing == Doing.beforeDungeon)
                         Game.game.ChangeScene(new Dungeon());
-                    else
+                    else if (Dungeon.doing == Doing.Idle)
                         Game.game.ChangeScene(Game.game.idle);
                     break;
                 default:
@@ -517,12 +518,13 @@ namespace Elonmusk
         public string name { get; protected set; }
         public int level { get; protected set; }
 
-        public int ATK { get; protected set; }
+        public float ATK { get; protected set; }
         public int DEF { get; protected set; }
         public int ACC { get; protected set; }
         public int Evade { get; protected set; }
 
         public int GOLD { get; protected set; }
+        public int EXP { get; protected set; }
 
         public bool IsDead { get; protected set; }
 
@@ -574,7 +576,7 @@ namespace Elonmusk
             Manager                 //과장
         }
 
-        public JOB job;
+        public JOB job;        
 
         public string JobToString(JOB j)
         {
@@ -630,17 +632,15 @@ namespace Elonmusk
             equipedItems = new List<Item> ();
             playerName.Item2 = false;
             name = "Victor";
-            level = 1;
-            job = JOB.Intern;
+            level = 5;
+            job = JOB.SeniorProgrammer;
             ATK = 10;
             DEF = 5;
             MaxHP = 100;
-            CurHP = 100;
+            CurHP = 100; 
             ACC = 100;
             Evade = 10;
-
             GOLD = 1500000;
-
             MaxMP = 100;
             CurMP = 100;
             skills = [new Skill_Teach(), new Skill_Ask(), new Skill_Googling()];
@@ -688,16 +688,7 @@ namespace Elonmusk
             {
                 this.GOLD -= gold;
             }
-        }
-        public void TakeDamage(int damage)
-        {
-            CurHP -= damage;
-            if (CurHP <= 0)
-            {
-                CurHP = 0;
-                IsDead = true;
-            }
-        }
+        }        
 
         public void SetPlayerHP(int value)
         {
@@ -710,10 +701,65 @@ namespace Elonmusk
                 IsDead = true;
             }
         }
+        public void Revive()
+        {
+            if (IsDead == true)
+            {
+                IsDead = false;
+                SetPlayerHP(1);
+            }
+        }
 
         public void SetPlayerMP(int value)
         {
             CurMP -= value;
+            if (CurMP >= MaxMP)
+                CurMP = MaxMP;
+            else if (CurMP <= 0)
+            {
+                CurMP = 0;                
+            }
+        }
+
+        public void Addexp(int value)
+        {
+            if (EXP <= 100)
+                EXP += value;
+            else if (EXP > 100)
+                EXP = 100;
+        }
+
+        public void Levelup(int value)
+        {
+            
+            Console.WriteLine("레벨 업!");
+            Console.WriteLine($"Lv. {level} -> {level + 1} {name}");
+            level++;
+            ATK += 0.5f;
+            DEF += 1;
+        }
+
+        public void LevelCal()
+        {
+            switch (level)
+            {
+                case 1:
+                    if (EXP >= 10)
+                        Levelup(level);
+                    break;
+                case 2:
+                    if (EXP >= 35)
+                        Levelup(level);
+                    break;
+                case 3:
+                    if (EXP >= 65)
+                        Levelup(level);
+                    break;
+                case 4:
+                    if (EXP >= 100)
+                        Levelup(level);
+                    break;
+            }
         }
 
         public void UsePotion()
