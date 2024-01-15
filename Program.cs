@@ -156,7 +156,7 @@ namespace Elonmusk
             Console.WriteLine("2. 상점");
             Console.WriteLine("3. 일하기");
             Console.WriteLine("4. 인사평가");
-            Console.WriteLine("5. 발표하기");
+            Console.WriteLine("5. 휴식하기");
             Console.WriteLine("6. 강원랜드");
             Console.WriteLine("7. 도전과제");
             Console.WriteLine("8. 저장");
@@ -185,7 +185,7 @@ namespace Elonmusk
                     break;
 
                 case 5: //던전입장
-                    Game.game.ChangeScene(new Dungeon());
+                    Game.game.ChangeScene(new Rest());
                     break;
                 case 6: //강원래드
                     Game.game.ChangeScene(new Casino());
@@ -467,7 +467,52 @@ namespace Elonmusk
                 Console.WriteLine("잘못된 입력입니다.");
             }
         }
+    }
 
+    public class Rest : Scene
+    {
+        public override void ShowInfo()
+        {
+            Console.WriteLine("찜질방");
+            Console.WriteLine();
+            Console.WriteLine("너무 피곤한 나머지 잠시 쉬러 왔습니다.");
+            Console.WriteLine("1회 이용에 500 G 입니다.");
+            Console.WriteLine();
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{Game.game.player.GOLD}");
+            Console.WriteLine();
+            Console.WriteLine("[현재 체력]");
+            Console.WriteLine($"{Game.game.player.MaxHP} / {Game.game.player.CurHP}");
+            Console.WriteLine("[현재 마나]");
+            Console.WriteLine($"{Game.game.player.MaxMP} / {Game.game.player.CurMP}");
+            Console.WriteLine();
+            Console.WriteLine("쉬시겠습니까?");
+            Console.WriteLine();
+            Console.WriteLine("0. 나가기");
+            Console.WriteLine("1. 땀 빼기");
+        }
+
+        public override void GetAction(int act)
+        {
+            switch (act)
+            {
+                case 0:
+                    Game.game.ChangeScene(Game.game.idle);
+                    break;
+                case 1:
+                    Console.Clear();
+                    Console.WriteLine("좀 쉬고나니 몸이 개운해졌습니다.");
+                    Game.game.player.SetPlayerHP(100);
+                    Game.game.player.SetPlayerMP(-100);
+                    Console.WriteLine($"[체력] {Game.game.player.MaxHP} / {Game.game.player.CurHP}");
+                    Console.WriteLine($"[마나] {Game.game.player.MaxMP} / {Game.game.player.CurMP}");
+                    Console.WriteLine($"[보유 골드] {Game.game.player.GOLD} -> {Game.game.player.GOLD-500}");
+                    Game.game.player.ConsumeGold(500);
+                    Console.ReadLine();
+                    Game.game.ChangeScene(Game.game.idle);
+                    break;
+            }
+        }
     }
 
     public class Item : Stat

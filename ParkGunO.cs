@@ -248,7 +248,7 @@ namespace ElonMusk
         public static Dictionary<int, string> isclear;
         public static int[,] dungeon = new int[3, 3]; // 0 : 미클리어 - 전투, 1 : 미클리어 - 함정, 2 : 미클리어 - 보상, 3 : 클리어, 4 : 현재위치, 5 : 보스방
         public static Item DungeonArmor = new Item("코딩수트 Mk.30", "코딩에 의해, 코딩을 위해 태어난 수트입니다.", 0, 20, 0, ItemType.ARMOR);
-        public static Item DungeonWeapon = new Item("인체공학 키보드&마우스 세트", "인체에 최적화 된 쓰기 편한 키보드와 마우스 세트입니다.", 20, 0, 0, ItemType.WEAPON); //상점무기 끝이랑 바꿀 예정
+        public static Item DungeonWeapon = new Item("무소음 키보드&마우스 세트", "소음이 적은 키보드와 마우스 세트입니다.", 20, 0, 0, ItemType.WEAPON); //상점무기 끝이랑 바꿀 예정
         public static Item DungeonAccessory = new Item("르탄이(?)", "어딘가 친숙한 인형입니다.", 10,10 , 0, ItemType.ACCESSORY);
         public static Item Dungeontrophy = new Item("우수 발표상", "우수한 발표자에게 주는 상입니다.", 0, 0, 0, ItemType.NONE);
         public static void dungeonsetting()
