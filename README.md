@@ -15,15 +15,15 @@
 * 이주환 - 전투, 스킬
 * 최보훈 - 플레이어, 상태관리
 #### <span style="color:orange"> 📝컨밴션 규칙 </span>
-type
-- 코드수정 [Modify]
-- 추가 [Add]
-- 오류해결 [Fix]
+  type
+  - 코드수정 [Modify]
+  - 추가 [Add]
+  - 오류해결 [Fix]
   
-body 
-- 내용적기
+  body 
+  - 내용적기
 
-예시) [Add] 휴식 기능 추가
+  예시) [Add] 휴식 기능 추가
 
 ### 추가 구현내용
 - 
