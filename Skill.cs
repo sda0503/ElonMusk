@@ -330,7 +330,7 @@ namespace ElonMusk
             j = 1;
             Console.WriteLine();
             Console.WriteLine("[내 정보]");
-            Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.name}");
+            Console.WriteLine($"Lv.{Game.game.player.level} {Game.game.player.PlayerName.Item1}");
             Console.WriteLine($"HP {Game.game.player.MaxHP}/{Game.game.player.CurHP}");
             Console.WriteLine();
             Console.WriteLine("0. 돌아가기");
