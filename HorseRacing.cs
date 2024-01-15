@@ -20,6 +20,7 @@ namespace ElonMusk
             Console.WriteLine();
             Console.WriteLine("1. 게임 설명을 듣는다.");
             Console.WriteLine("2. 게임을 플레이 하러 간다.");
+            Console.WriteLine("3. 스파르타 무스메의 업적을 확인하러 간다.");
             Console.WriteLine("0. 돌아간다");
         }
         public override void GetAction(int act)
@@ -34,6 +35,9 @@ namespace ElonMusk
                     break;
                 case 2:
                     Game.game.ChangeScene(new SpartaMusumeGame());
+                    break;
+                case 3:
+                    Game.game.ChangeScene(new SpartaMusumeBoard());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -96,6 +100,36 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
         }
     }
 
+    public class SpartaMusumeBoard : Scene 
+    {
+        public override void ShowInfo()
+        {
+            SpartaMusumeLobby.PrintGameTitle();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("플레이어가 스파르타무스메 게임에서 달성한 기록들입니다.");
+            Console.WriteLine($"현재까지 스파르타무스메에서 번 돈 : {CasinoData.casinoData.horseRacingAchivement._winGold}");
+            Console.WriteLine($"현재까지 스파르타무스메에서 번 돈 : {CasinoData.casinoData.horseRacingAchivement._loseGold}");
+            Console.WriteLine($"스파르타무스메에서 달성한 최대 연승 : {CasinoData.casinoData.horseRacingAchivement._maxWinStreak}");
+            Console.WriteLine($"스파르타무스메에서 달성한 최대 연패 : {CasinoData.casinoData.horseRacingAchivement._maxLoseStreak}");
+            Console.WriteLine();
+            Console.WriteLine("0. 돌아간다");
+        }
+
+        public override void GetAction(int act)
+        {
+            switch (act)
+            {
+                case 0:
+                    Game.game.ChangeScene(new SpartaMusumeLobby());
+                    break;
+                default:
+                    Console.WriteLine("유효한 입력이 아닙니다!");
+                    break;
+            }
+        }
+    }
+
     public class SpartaMusumeGame : Scene
     {
 
@@ -149,7 +183,7 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
             }
         }
 
-
+        #region GamePlayLoop
         void Bet() 
         {
             // 배팅할 금액 설정
@@ -187,22 +221,6 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
             }
         }
 
-#if TEST
-        void Test(int test) 
-        {
-            int[] winHorese = new int[5];
-
-            for(int i=0; i< test; i++) 
-            {
-                HorseRacing();
-                winHorese[winHorse-1]++;
-            }
-
-            Console.WriteLine($"{winHorese[0]},{winHorese[1]},{winHorese[2]},{winHorese[3]},{winHorese[4]}");
-
-            int act = Game.GetPlayerInputInt();
-        }
-#endif
         void PlayHorseRacing() 
         {
             Console.WriteLine("경닭 시작!");
@@ -217,7 +235,7 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
             if(betHorseNum == winHorse) 
             {
                 Console.WriteLine($"맞추셨습니다! {betGold * 5}만큼 골드를 받습니다.");
-                Game.game.player.gainGold(betGold * 4);
+                Game.game.player.gainGold(betGold * 5);
                 CasinoData.casinoData.horseRacingAchivement._winGold += betGold * 5;
                 betGold = 0;
             }
@@ -252,7 +270,28 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
             else if (act == 0)
                 Game.game.ChangeScene(new SpartaMusumeLobby());
         }
+        #endregion
 
+        #region FunctionsForTest
+#if TEST
+        void Test(int test) 
+        {
+            int[] winHorese = new int[5];
+
+            for(int i=0; i< test; i++) 
+            {
+                HorseRacing();
+                winHorese[winHorse-1]++;
+            }
+
+            Console.WriteLine($"{winHorese[0]},{winHorese[1]},{winHorese[2]},{winHorese[3]},{winHorese[4]}");
+
+            int act = Game.GetPlayerInputInt();
+        }
+#endif
+        #endregion
+
+        #region DrawConsoleWindow
         void printHorseLane()
         {
             Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
@@ -312,10 +351,7 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    // x 위치는 length 비례 : 총 74칸
-                    // length / laneLength * 74;
-                    double position = 0;
-                    Console.SetCursorPosition((int)position, i * 5 + 1);
+                    Console.SetCursorPosition(0, i * 5 + 1);
                     Horse dummyHorse = new Horse(0);
                     dummyHorse.PrintChicken(-1);
                 }
@@ -333,7 +369,9 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
             }
             Console.SetCursorPosition(origin_x, origin_y);
         }
+        #endregion
 
+        #region FunctionsForThreading
         void HorseRacing() 
         {
             InitializeHorses();
@@ -422,17 +460,10 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
         {
             Random random = new Random();
             
-
             // 1번마
-            // 1번마의 속도는 확률 평균 300부터 시작해서 최소 100 이하로 감소
-            // 랜덤한 값을 감소시켜 평균을 100으로 만듬
-            // 매번 최소 20의 값을 감소시키면 됨 - 단 0이나 음수가 되지 않도록
             horses[0].speed -= random.Next(20, 35);
 
             // 2번마
-            // 2번마의 속도는 확률 평균 200부터 시작하지만 3번마보다는 편차가 큼
-            // 2번마는 본인의 length가 가장 작으면 확률평균 300으로 달리고
-            // 본인의 length가 가장 크면 확률평균 100으로 달림
             int avg = 0;
             foreach(var horse in horses) 
             {
@@ -444,22 +475,18 @@ d88888P   dP   dP `Y88888P'  Y88888P   `Y88888P'  dP   dP   dP  8888888888b
 
 
             // 3번마
-            // 3번마는 확률 평균 200
             horses[2].speed = random.Next(190, 225);
 
             // 4번마
-            // 4번마는 확률 평균 200이지만 편차가 매우큼
             horses[3].speed = random.Next(0, 375);
 
             // 5번마
-            // 5번마는 확률 평균 100에서 시작해서 300 + a까지 올라감
-            // 매번 최소 20의 값을 증가
             horses[4].speed += random.Next(20, 30);
         }
+        #endregion
 
         class Horse 
         {
-            // 최대 길이는 200000
             public int length { get; private set; }
 
             // 기본 속도는 100

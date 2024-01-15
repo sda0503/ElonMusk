@@ -17,6 +17,7 @@ namespace ElonMusk
             Console.WriteLine();
             Console.WriteLine("1. 게임 설명을 듣는다.");
             Console.WriteLine("2. 게임을 플레이 하러 간다.");
+            Console.WriteLine("3. 블랙잭 게임의 업적을 확인하러 간다.");
             Console.WriteLine("0. 돌아간다");
         }
         public override void GetAction(int act)
@@ -31,6 +32,9 @@ namespace ElonMusk
                     break;
                 case 2:
                     Game.game.ChangeScene(new BlackJackGame());
+                    break;
+                case 3:
+                    Game.game.ChangeScene(new BlackJackBoard());
                     break;
                 default:
                     Console.WriteLine("유효한 입력이 아닙니다!");
@@ -71,6 +75,34 @@ M#########M                                88
             Console.WriteLine("단, 21을 넘어갈 시에 반드시 패배합니다.");
             Console.WriteLine("두 사람의 합이 같은 경우 합이 21인 경우를 제외하고 딜러가 승리합니다.");
             Console.WriteLine("승리하면 배팅한 금액의 2배를 얻고, 패배하면 배팅한 금액을 모두 잃습니다.");
+            Console.WriteLine();
+            Console.WriteLine("0. 돌아간다");
+        }
+        public override void GetAction(int act)
+        {
+            switch (act)
+            {
+                case 0:
+                    Game.game.ChangeScene(new BlackJackLobby());
+                    break;
+                default:
+                    Console.WriteLine("유효한 입력이 아닙니다!");
+                    break;
+            }
+        }
+    }
+
+    public class BlackJackBoard : Scene
+    {
+        public override void ShowInfo()
+        {
+            BlackJackLobby.PrintGameTitle();
+            Console.WriteLine();
+            Console.WriteLine("플레이어가 블랙잭 게임에서 달성한 기록들입니다.");
+            Console.WriteLine($"현재까지 블랙잭에서 번 돈 : {CasinoData.casinoData.blackJackAchievement._winGold}");
+            Console.WriteLine($"현재까지 블랙잭에서 번 돈 : {CasinoData.casinoData.blackJackAchievement._loseGold}");
+            Console.WriteLine($"블랙잭에서 달성한 최대 연승 : {CasinoData.casinoData.blackJackAchievement._maxWinStreak}");
+            Console.WriteLine($"블랙잭에서 달성한 최대 연패 : {CasinoData.casinoData.blackJackAchievement._maxLoseStreak}");
             Console.WriteLine();
             Console.WriteLine("0. 돌아간다");
         }
@@ -213,7 +245,7 @@ M#########M                                88
             Console.WriteLine();
             ShowCards();
             int act = -1;
-            do
+            while(CountScore(playerHand) < 21) 
             {
                 Console.WriteLine("당신의 턴입니다. 당신의 행동을 선택하세요.");
                 Console.WriteLine("1. 카드 뽑기");
@@ -221,7 +253,8 @@ M#########M                                88
 
                 act = Game.GetPlayerInputInt();
 
-                if (act == 1) { 
+                if (act == 1)
+                {
                     playerHand.Add(DrawCard());
                     Console.Clear();
                     Console.WriteLine();
@@ -232,8 +265,6 @@ M#########M                                88
                 if (act == 0)
                     break;
             }
-            while (CountScore(playerHand) < 21);
-
             Console.WriteLine("당신의 턴이 끝났습니다.");
             Console.WriteLine();
         }
@@ -406,7 +437,6 @@ M#########M                                88
             int num = 0;
             if (Int32.TryParse(numString, out num))
             {
-                // Console.WriteLine($"{cardVisualFormat.GetLength(0)}, {numString}, {num}");
                 return String.Format(cardVisualFormat[num-1], numString, PatternToString(pattern));
             }
             else 

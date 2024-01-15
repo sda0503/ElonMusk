@@ -1,5 +1,4 @@
-﻿#define CASINO_DATA_TEST
-
+﻿
 using Elonmusk;
 using System;
 using System.Collections.Generic;
